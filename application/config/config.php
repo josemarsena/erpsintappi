@@ -15,7 +15,7 @@ if (file_exists(APPPATH . 'config/app-config.php')) {
     $install_url .= '://' . $_SERVER['HTTP_HOST'];
     $install_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
     $install_url .= 'install';
-    echo '<h1>I3FLEX CRM não instalado</h1>';
+    echo '<h1>SyngliaCRM não instalado</h1>';
     echo '<p>1. Para usar a ferramenta de instalação automática do Flex CRM clique <a href="' . $install_url . '">here (' . $install_url . ')</a></p>';
     echo '<p>2. Se você estiver instalando manualmente, renomeie o arquivo de configuração localizado em application/config/app-config-sample.php to app-config.php and populate the defined fields.</p>';
     die();
