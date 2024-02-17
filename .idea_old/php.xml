@@ -120,13 +120,6 @@
       <path value="$PROJECT_DIR$/application/vendor/league/oauth2-client" />
       <path value="$PROJECT_DIR$/application/vendor/league/oauth2-google" />
       <path value="$PROJECT_DIR$/application/vendor/stevenmaguire/oauth2-microsoft" />
-      <path value="$PROJECT_DIR$/modules/backup/vendor/backup-manager/backup-manager" />
-      <path value="$PROJECT_DIR$/modules/backup/vendor/composer" />
-      <path value="$PROJECT_DIR$/modules/backup/vendor/symfony/process" />
-      <path value="$PROJECT_DIR$/modules/backup/vendor/league/flysystem" />
-      <path value="$PROJECT_DIR$/modules/saas/vendor/composer" />
-      <path value="$PROJECT_DIR$/modules/saas/vendor/greenlion/php-sql-parser" />
-      <path value="$PROJECT_DIR$/modules/saas/vendor/athlon1600/php-proxy" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.4">

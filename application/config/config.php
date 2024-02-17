@@ -1,15 +1,17 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-defined('APP_MINIMUM_REQUIRED_PHP_VERSION', '7.4');
+const APP_MINIMUM_REQUIRED_PHP_VERSION = '7.3';
 
 if (file_exists(APPPATH . 'config/app-config.php')) {
     if (version_compare(PHP_VERSION, APP_MINIMUM_REQUIRED_PHP_VERSION) === -1) {
-        echo '<h1>Minimum required PHP version is <b>' . APP_MINIMUM_REQUIRED_PHP_VERSION . '</b>. Consider upgrading to a newer PHP version.</h4>';
-        echo '<h3>You are using ' . PHP_VERSION . ', you should consult with your hosting provider to help you to change your PHP version to ' . APP_MINIMUM_REQUIRED_PHP_VERSION . ' or higher, after you upgrade the PHP version this message will disappear.</h3>';
+        echo '<h1>A versão minima do PHP exigida é <b>' . APP_MINIMUM_REQUIRED_PHP_VERSION . '</b>. Consider upgrading to a newer PHP version.</h4>';
+        echo '<h3>Voce está usando ' . PHP_VERSION . ', you should consult with your hosting provider to help you to change your PHP version to ' . APP_MINIMUM_REQUIRED_PHP_VERSION . ' or higher, after you upgrade the PHP version this message will disappear.</h3>';
         exit;
     }
     include_once(APPPATH . 'config/app-config.php');
+    echo(APPPATH . 'config/app-config.php');
+    echo (APP_BASE_URL);
 } else {
     $install_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
     $install_url .= '://' . $_SERVER['HTTP_HOST'];
@@ -47,6 +49,8 @@ if (!function_exists('db_prefix')) {
 | environments.
 |
 */
+
+echo(PHP_VERSION);
 
 $config['base_url'] = APP_BASE_URL;
 
