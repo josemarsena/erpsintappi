@@ -84,9 +84,6 @@ if (defined('APP_DB_ENCRYPT')) {
     $db_encrypt = $app_db_encrypt;
 }
 
-if (!isset($database_name)) $database_name = 'i3flex';
-
-
 $db['default'] = array_merge([
     'dsn'          => '', // Not Supported
     'hostname'     => APP_DB_HOSTNAME,

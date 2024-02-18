@@ -32,13 +32,7 @@ class Authentication extends App_Controller
     {
         if (is_staff_logged_in()) {
             redirect(admin_url());
-    }
-
-    if (is_client_logged_in()){
-            //           redirect(site_url('clients/logout'));
-            //          echo("Usario logado: " . is_client_logged_in() . site_url());
-            redirect(site_url('clients'));
-    }
+        }
 
         $this->form_validation->set_rules('password', _l('admin_auth_login_password'), 'required');
         $this->form_validation->set_rules('email', _l('admin_auth_login_email'), 'trim|required|valid_email');
@@ -49,23 +43,7 @@ class Authentication extends App_Controller
             if ($this->form_validation->run() !== false) {
                 $email    = $this->input->post('email');
                 $password = $this->input->post('password', false);
-                $empresa = $this->input->post('nome_empresa', false);
                 $remember = $this->input->post('remember');
-
-
-                echo($empresa);
-
-                if ($empresa == 'i3flex')
-                    $database_name = 'i3flex';
-
-                if ($empresa == 'i3flexofnit')
-                    $database_name = 'i3flexofnit';
-
-                if ($empresa == 'i3flexht')
-                    $database_name = 'i3flexht';
-
-                if ($empresa == 'i3flexthrek')
-                    $database_name = 'i3flexthrek';
 
                 $data = $this->Authentication_model->login($email, $password, $remember, true);
 
@@ -91,35 +69,8 @@ class Authentication extends App_Controller
                         redirect(admin_url('authentication/two_factor/app'));
                     }
                 } elseif ($data == false) {
-                    // Verifica se o é um Cliente Cadastrado ou ainves de Staff
-                    $this->load->model('Authentication_model');
-
-                    $success = $this->Authentication_model->login(
-                        $this->input->post('email'),
-                        $this->input->post('password', false),
-                        $this->input->post('remember'),
-                        false
-                    );
-
-                    if (is_array($success) && isset($success['memberinactive'])) {
-                        set_alert('danger', _l('inactive_account'));
-                        redirect(site_url('authentication/login'));
-                    } elseif ($success == false) {
-                        set_alert('danger', _l('client_invalid_username_or_password'));
-                        redirect(site_url('authentication/login'));
-                    }
-
-                    if ($this->input->post('language') && $this->input->post('language') != '') {
-                        set_contact_language($this->input->post('language'));
-                    }
-
-                    $this->load->model('announcements_model');
-                    $this->announcements_model->set_announcements_as_read_except_last_one(get_contact_user_id());
-
-                    hooks()->do_action('after_contact_login');
-
-                    maybe_redirect_to_previous_url();    //esta logado
-                    redirect(site_url('clients'));
+                    set_alert('danger', _l('admin_auth_invalid_email_or_password'));
+                    redirect(admin_url('authentication'));
                 }
 
                 $this->load->model('announcements_model');

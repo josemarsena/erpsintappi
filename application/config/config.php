@@ -1,25 +1,23 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-const APP_MINIMUM_REQUIRED_PHP_VERSION = '7.3';
+define('APP_MINIMUM_REQUIRED_PHP_VERSION', '7.4');
 
 if (file_exists(APPPATH . 'config/app-config.php')) {
     if (version_compare(PHP_VERSION, APP_MINIMUM_REQUIRED_PHP_VERSION) === -1) {
-        echo '<h1>A versão minima do PHP exigida é <b>' . APP_MINIMUM_REQUIRED_PHP_VERSION . '</b>. Consider upgrading to a newer PHP version.</h4>';
-        echo '<h3>Voce está usando ' . PHP_VERSION . ', you should consult with your hosting provider to help you to change your PHP version to ' . APP_MINIMUM_REQUIRED_PHP_VERSION . ' or higher, after you upgrade the PHP version this message will disappear.</h3>';
+        echo '<h1>Minimum required PHP version is <b>' . APP_MINIMUM_REQUIRED_PHP_VERSION . '</b>. Consider upgrading to a newer PHP version.</h4>';
+        echo '<h3>You are using ' . PHP_VERSION . ', you should consult with your hosting provider to help you to change your PHP version to ' . APP_MINIMUM_REQUIRED_PHP_VERSION . ' or higher, after you upgrade the PHP version this message will disappear.</h3>';
         exit;
     }
     include_once(APPPATH . 'config/app-config.php');
-    echo(APPPATH . 'config/app-config.php');
-    echo (APP_BASE_URL);
 } else {
     $install_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on' ? 'https' : 'http';
     $install_url .= '://' . $_SERVER['HTTP_HOST'];
     $install_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
     $install_url .= 'install';
-    echo '<h1>SyngliaCRM não instalado</h1>';
-    echo '<p>1. Para usar a ferramenta de instalação automática do Flex CRM clique <a href="' . $install_url . '">here (' . $install_url . ')</a></p>';
-    echo '<p>2. Se você estiver instalando manualmente, renomeie o arquivo de configuração localizado em application/config/app-config-sample.php to app-config.php and populate the defined fields.</p>';
+    echo '<h1>Perfex CRM not installed</h1>';
+    echo '<p>1. To you use the automatic Perfex CRM installation tool click <a href="' . $install_url . '">here (' . $install_url . ')</a></p>';
+    echo '<p>2. If you are installing manually rename the config file located in application/config/app-config-sample.php to app-config.php and populate the defined fields.</p>';
     die();
 }
 
@@ -27,11 +25,9 @@ if (file_exists(APPPATH . 'config/app-config.php')) {
  * Database Tables Prefix
  * @return string
  */
-if (!function_exists('db_prefix')) {
-    function db_prefix()
-    {
-        return defined('APP_DB_PREFIX') ? APP_DB_PREFIX : 'tbl';
-    }
+function db_prefix()
+{
+    return defined('APP_DB_PREFIX') ? APP_DB_PREFIX : 'tbl';
 }
 /*
 |--------------------------------------------------------------------------
@@ -49,8 +45,6 @@ if (!function_exists('db_prefix')) {
 | environments.
 |
 */
-
-echo(PHP_VERSION);
 
 $config['base_url'] = APP_BASE_URL;
 
@@ -491,7 +485,7 @@ $config['csrf_token_name']   = defined('APP_CSRF_TOKEN_NAME') ? APP_CSRF_TOKEN_N
 $config['csrf_cookie_name']  = defined('APP_CSRF_COOKIE_NAME') ? APP_CSRF_COOKIE_NAME : 'csrf_cookie_name';
 $config['csrf_expire']       = defined('APP_CSRF_EXPIRE') ? APP_CSRF_EXPIRE : 3660;
 $config['csrf_regenerate']   = false;
-$config['csrf_exclude_uris'] = ['admin/custom_email_and_sms_notifications/email_sms/sendEmailSms', 'forms/wtl/[0-9a-z]+', 'forms/ticket', 'forms/quote/[0-9a-z]+', 'admin/tasks/timer_tracking', 'api\/.+'];
+$config['csrf_exclude_uris'] = ['admin/custom_email_and_sms_notifications/email_sms/sendEmailSms', 'forms/wtl/[0-9a-z]+', 'forms/ticket', 'forms/quote/[0-9a-z]+', 'admin/tasks/timer_tracking', 'api\/.+', 'razorpay/success\/.+'];
 
 if (isset($app_csrf_exclude_uris)) {
     $config['csrf_exclude_uris'] = array_merge($config['csrf_exclude_uris'], $app_csrf_exclude_uris);
