@@ -38,4 +38,4 @@ Thumbs.db
 # Configurações do App
 app-config.php
 phpunit.xml
-log*.php
+
