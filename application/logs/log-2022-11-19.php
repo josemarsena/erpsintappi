@@ -1,0 +1,31 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "crm_dashboard"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "crm_report"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "crm_setting"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "financeiro_dashboard"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "financeiro_report"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "financeiro_setting"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "helpdesk_dashboard"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "helpdesk_report"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "helpdesk_setting"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "servicedesk_dashboard"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "servicedesk_report"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "servicedesk_setting"
+ERROR - 2022-11-19 08:45:48 --> Could not find the language line "Ultimate Theme Config"
+ERROR - 2022-11-19 08:45:48 --> Severity: User Notice --> Hook after_render_top_search is <strong>deprecated</strong> since version 3.0.0! Use admin_navbar_start instead. C:\xampp\htdocs\i3flex\application\helpers\deprecated_helper.php 48
+ERROR - 2022-11-19 08:45:49 --> Severity: Warning --> call_user_func_array() expects parameter 1 to be a valid callback, function 'helpdesk_load_js' not found or invalid function name C:\xampp\htdocs\i3flex\application\vendor\bainternet\php-hooks\php-hooks.php 362
+ERROR - 2022-11-19 08:45:49 --> Severity: Warning --> call_user_func_array() expects parameter 1 to be a valid callback, function 'servicedesk_load_js' not found or invalid function name C:\xampp\htdocs\i3flex\application\vendor\bainternet\php-hooks\php-hooks.php 362
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "crm_dashboard"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "crm_report"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "crm_setting"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "financeiro_dashboard"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "financeiro_report"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "financeiro_setting"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "helpdesk_dashboard"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "helpdesk_report"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "helpdesk_setting"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "servicedesk_dashboard"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "servicedesk_report"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "servicedesk_setting"
+ERROR - 2022-11-19 08:45:49 --> Could not find the language line "Ultimate Theme Config"

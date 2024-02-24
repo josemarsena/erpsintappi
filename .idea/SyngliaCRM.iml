@@ -123,6 +123,12 @@
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/psr/simple-cache" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea_old/shelf" />
+      <excludeFolder url="file://$MODULE_DIR$/assets/plugins/elFinder/files/.trash" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/backup-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

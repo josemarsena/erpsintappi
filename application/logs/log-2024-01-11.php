@@ -1,0 +1,10 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+ERROR - 2024-01-11 06:52:36 --> Severity: 8192 --> Optional parameter $path declared before required parameter $idea_id is implicitly treated as a required parameter /var/www/html/i3flex/modules/idea_hub/helpers/idea_hub_helper.php 456
+ERROR - 2024-01-11 06:52:52 --> Severity: 8192 --> Optional parameter $path declared before required parameter $idea_id is implicitly treated as a required parameter /var/www/html/i3flex/modules/idea_hub/helpers/idea_hub_helper.php 456
+ERROR - 2024-01-11 06:52:53 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at /var/www/html/i3flex/system/core/Exceptions.php:271) /var/www/html/i3flex/system/libraries/Session/Session_driver.php 142
+ERROR - 2024-01-11 06:52:53 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at /var/www/html/i3flex/system/core/Exceptions.php:271) /var/www/html/i3flex/system/helpers/url_helper.php 564
+ERROR - 2024-01-11 06:54:38 --> Severity: 8192 --> Optional parameter $path declared before required parameter $idea_id is implicitly treated as a required parameter /var/www/html/i3flex/modules/idea_hub/helpers/idea_hub_helper.php 456
+ERROR - 2024-01-11 06:54:52 --> Severity: 8192 --> Optional parameter $path declared before required parameter $idea_id is implicitly treated as a required parameter /var/www/html/i3flex/modules/idea_hub/helpers/idea_hub_helper.php 456
+ERROR - 2024-01-11 06:54:52 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at /var/www/html/i3flex/system/core/Exceptions.php:271) /var/www/html/i3flex/system/libraries/Session/Session_driver.php 142
+ERROR - 2024-01-11 06:54:53 --> Severity: Warning --> Cannot modify header information - headers already sent by (output started at /var/www/html/i3flex/system/core/Exceptions.php:271) /var/www/html/i3flex/system/helpers/url_helper.php 564
