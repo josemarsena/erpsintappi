@@ -88,20 +88,6 @@ function helpdesk_module_init_menu_items()
 {
     $CI = &get_instance();
 
-
-// Criar o itens do Menu
-// Contas a Pagar/Pagas	
-// Contas a Receber/Recebidas
-// Dashboard
-// Plano de Contas Financeiro
-// Bancos
-// Contas Bancárias
-// Cartões de Crédito
-// Seleção de Pagamento
-// Fluxo de Caixa Financeiro
-// Pagamentos
-
-
     if (has_permission('helpdesk_dashboard', '', 'view') || has_permission('helpdesk_report', '', 'view') || has_permission('helpdesk_setting', '', 'view')) {
         $CI->app_menu->add_sidebar_menu_item('helpdesk', [
             'name'     => _l('als_helpdesk'),
@@ -129,7 +115,7 @@ function helpdesk_module_init_menu_items()
             ]);
         }
 
-
+        // Habilita o Suporte Remoto Contrato
         if (has_permission('helpdesk_ticket', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('helpdesk', [
                 'slug'     => 'helpdesk_ticket',
@@ -139,12 +125,13 @@ function helpdesk_module_init_menu_items()
                 'position' => 3,
             ]);
         }
-		
+
+        // Habilita o Suporte Remoto Avulso
 		if (has_permission('helpdesk_suporteremoto', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('helpdesk', [
                 'slug'     => 'helpdesk_suporteremoto',
                 'name'     => _l('suporteremoto'),
-                'icon'     => 'fa fa-ticket',
+                'icon'     => 'fa fa-headphones',
                 'href'     => admin_url('helpdesk/suporteremoto'),
                 'position' => 4,
             ]);
