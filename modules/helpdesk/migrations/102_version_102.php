@@ -6,11 +6,6 @@ class Migration_Version_102 extends App_module_migration
 {
      public function up()
      {
-        $CI = &get_instance();
-        
-        
-        //Version 1.0.2
-
-
+         $CI = &get_instance();
      }
 }

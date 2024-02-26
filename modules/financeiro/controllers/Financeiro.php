@@ -12,9 +12,6 @@ class Financeiro extends AdminController
             $this->financeiro_model->add_default_account();
         }
 
- //       if(get_option('acc_add_default_account_new') == 0){
- //           $this->financeiro_model->add_default_account_new();
- //       }
     }
 
     /**

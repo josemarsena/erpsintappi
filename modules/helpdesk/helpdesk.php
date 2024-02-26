@@ -6,8 +6,8 @@ Module Name: Helpdesk
 Description: Gestão de Usuários com Contrato
 Version: 1.0.2
 Requires at least: 1.0.*
-Author: I3Software
-Author URI: https://i3software.i3c.com.br
+Author: Synglia
+Author URI: https://synglia.com.br
 */
 
 // Define o nome do Módulo

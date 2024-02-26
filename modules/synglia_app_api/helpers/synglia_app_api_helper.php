@@ -12,16 +12,16 @@ Requires at least: 2.3.2
 /*
  * Check if can have permissions then apply new tab in settings
  */
-if (is_admin() && get_option(PERFEX_MOBILE_APP_API . '_enabled') == '1') {
-    hooks()->add_action('admin_init', PERFEX_MOBILE_APP_API . '_settings_tab');
+if (is_admin() && get_option(SYNGLIA_APP_API . '_enabled') == '1') {
+    hooks()->add_action('admin_init', SYNGLIA_APP_API . '_settings_tab');
 }
 
-function perfex_mobile_app_api_settings_tab()
+function synglia_app_api_settings_tab()
 {
     $CI = &get_instance();
-    $CI->app_tabs->add_settings_tab(PERFEX_MOBILE_APP_API . '-settings', [
-        'name' => _l(PERFEX_MOBILE_APP_API . '_settings_name'),
-        'view' => PERFEX_MOBILE_APP_API . '/settings',
+    $CI->app_tabs->add_settings_tab(SYNGLIA_APP_API . '-settings', [
+        'name' => _l(SYNGLIA_APP_API . '_settings_name'),
+        'view' => SYNGLIA_APP_API . '/settings',
         'position' => 37,
         'icon' => 'fa-mobile',
     ]);

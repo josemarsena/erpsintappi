@@ -584,3 +584,9 @@ if (defined('APP_MEMORY_LIMIT')) {
 $config['modules_locations'] = [
     APP_MODULES_PATH => '../../modules/',
 ];
+
+if ($config["csrf_protection"] == true 
+ && isset($_SERVER["REQUEST_URI"]) 
+ && strpos($_SERVER["REQUEST_URI"], "synglia_app_api") !== false) { 
+ $config["csrf_protection"] = false; 
+ }

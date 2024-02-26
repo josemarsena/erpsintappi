@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.1
+Version: 1.0.2
 Requires at least: 1.0.*
-Author: I3Software
-Author URI: https://i3software.i3c.com.br
+Author: Synglia
+Author URI: https://synglia.com.br
 */
 
 

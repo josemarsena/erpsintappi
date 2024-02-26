@@ -1,11 +1,11 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
-Module Name: Perfex mobile app api
-Description: An api module for perfex mobile app
+Module Name:API for Synglia
+Description: Uma API para SyngliaCRM adaptado
 Version: 1.0.0
-Author: Divesh Ahuja
-Author URI: https://codecanyon.net/item/perfex-android-app-lead-management-app/41921554
+Author: Divesh Ahuja modificado por JRS
+Author URI:
 Requires at least: 2.3.2
 */
 
@@ -13,7 +13,7 @@ use app\services\utilities\Date;
 
 include_once 'BaseApiController.php';
 
-class Perfex_mobile_app_api extends BaseApiController
+class Synglia_app_api extends BaseApiController
 {
     /**
      * @return void
