@@ -7,7 +7,7 @@ Description: Gerencia a Eissão de NFe/NFS-e, CT-e, etc, etc
 Version: 1.0.1
 Requires at least: 1.0.*
 Author: I3Software
-Author URI: https://i3software.i3c.com.br
+Author URI: https:/singlia.com.br
 */
 
 

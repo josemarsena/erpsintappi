@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Financeiro extends AdminController
+class Fiscal extends AdminController
 {
 	public function __construct()
     {

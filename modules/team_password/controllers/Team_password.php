@@ -24,6 +24,7 @@ class Team_password extends AdminController
         }
 
         $data['title'] = _l('category_managements');
+
         if ($this->input->post()) {
             $message          = '';
             $data             = $this->input->post();

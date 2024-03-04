@@ -1,5 +1,5 @@
 <?php 
-$lang['als_financeiro']  = 'Gestão Financeira';
+$lang['als_financeiro']  = 'Gestão Fiscal';
 $lang['bancos']  = 'Bancos';
 $lang['contasbancarias']  = 'Contas Bancárias';
 $lang['planocontas']  = 'Plano de Contas';

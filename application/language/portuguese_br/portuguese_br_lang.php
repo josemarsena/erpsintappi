@@ -3890,7 +3890,7 @@ $lang['created_by']                                        = 'Criado por';
 
 $lang['staff_related_ticket_notification_to_assignee_only']      = 'Enviar notificações de tickets relacionadas à equipe apenas para o destinatário do ticket';
 $lang['staff_related_ticket_notification_to_assignee_only_help'] = 'Se esta opção estiver definida como Sim e o ticket não tiver um cessionário, a notificação será enviada a todos os funcionários que pertencem ao departamento de tickets';
-$lang['import_expenses']                                         = 'Despesas de Importação';
+$lang['import_expenses']                                         = 'Importação de Despesas';
 $lang['show_pdf_signature_proposal']                             = 'Mostrar assinatura do PDF na proposta';
 $lang['enable_honeypot_spam_validation']                         = 'Habilita validação de SPAM Honeypot';
 
@@ -3930,8 +3930,8 @@ $lang['filter_unmark_as_default'] = 'Desmarque como Padrão';
 $lang['filter_save'] = 'Salvar Filtro';
 $lang['filter_name'] = 'Nome do Filtro';
 $lang['filter_apply'] = 'Aplicar';
-$lang['filter_apply_and_save'] = 'Aplicar e Salvar';
-$lang['filter_use_dynamic_dates'] = 'Use Datas Dinamicas';
+$lang['filter_apply_and_save'] = "Aplicar e Salvar";
+$lang['filter_use_dynamic_dates'] = "Use Datas Dinâmicas";
 $lang['filter_new'] = 'Novo Filtro';
 $lang['filter_clear_active'] = 'Limpa Filtro';
 $lang['filter_edit'] = 'Editar';

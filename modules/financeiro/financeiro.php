@@ -130,7 +130,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_bancos',
                 'name'     => _l('bancos'),
-                'icon'     => 'fa fa-piggy',
+                'icon'     => 'fa fa-ban',
                 'href'     => admin_url('financeiro/bancos'),
                 'position' => 2,
             ]);
@@ -141,7 +141,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contasbancarias',
                 'name'     => _l('contasbancarias'),
-                'icon'     => 'fa money-check-dollar',
+                'icon'     => 'fa fa-credit-card',
                 'href'     => admin_url('financeiro/contasbancarias'),
                 'position' => 3,
             ]);
@@ -161,7 +161,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contaspagar',
                 'name'     => _l('contaspagar'),
-                'icon'     => 'fa file-invoice-dollar',
+                'icon'     => 'fa fa-paypal',
                 'href'     => admin_url('financeiro/contaspagar'),
                 'position' => 5,
             ]);
@@ -171,7 +171,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contasreceber',
                 'name'     => _l('contasreceber'),
-                'icon'     => 'fa file-invoice',
+                'icon'     => 'fa fa-usd',
                 'href'     => admin_url('financeiro/contasreceber'),
                 'position' => 6,
             ]);
@@ -181,7 +181,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_selecacopagamento',
                 'name'     => _l('selecaopagamento'),
-                'icon'     => 'fa money-check-dollar',
+                'icon'     => 'fa fa-spinner',
                 'href'     => admin_url('financeiro/selecaopagamento'),
                 'position' => 7,
             ]);
