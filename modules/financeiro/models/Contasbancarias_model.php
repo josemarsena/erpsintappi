@@ -2,7 +2,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Bancos_model extends App_Model
+class Contasbancarias_model extends App_Model
 {
     public function __construct()
     {
@@ -15,11 +15,11 @@ class Bancos_model extends App_Model
         $data['datacriacao'] = date('Y-m-d H:i:s');
         $data['criadopor'] = get_staff_user_id();
 
-        $this->db->insert(db_prefix().'fin_bancos', $data);
+        $this->db->insert(db_prefix().'fin_contabancaria', $data);
         $insert_id = $this->db->insert_id();
         if ($insert_id)
         {
-            log_activity('Banco Adicionado [ ID:'.$insert_id.' ID Equipe '.get_staff_user_id().' ]');
+            log_activity('Conta Bancária [ ID:'.$insert_id.' ID Equipe '.get_staff_user_id().' ]');
             return $insert_id;
         }
 

@@ -55,8 +55,8 @@ class Migration_Version_102 extends App_module_migration
               `endereco` VARCHAR(255) NOT NULL,   
               `telefone` VARCHAR(20) NOT NULL,
               `saldoinicial` DECIMAL(15,2) NULL,    
-              `datasaldoinicial` DECIMAL(15,2) NOT NULL,    
-              `saldoatual` DATETIME NULL,    
+              `datasaldoinicial` DATETIME NULL,        
+              `saldoatual` DECIMAL(15,2) NOT NULL,
               `criadopor` INT(11) NULL,
               `datacriacao` DATETIME NULL,
               PRIMARY KEY (`id`)

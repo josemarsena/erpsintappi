@@ -11,6 +11,7 @@ $aColumns = [
 $sIndexColumn = 'departmentid';
 $sTable       = db_prefix() . 'departments';
 
+// Obtem o resultado do Data_Tables_Init
 $result  = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [], ['email', 'hidefromclient', 'host', 'encryption', 'password', 'delete_after_import', 'imap_username', 'folder']);
 $output  = $result['output'];
 $rResult = $result['rResult'];
