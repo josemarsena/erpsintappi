@@ -88,7 +88,7 @@ switch (ENVIRONMENT)
 	break;
 
 	default:
-		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		header('HTTP/1.1 503 Servico Indisponivel.', TRUE, 503);
 		echo 'A ambiente da aplicação não está configurado corretamente.';
 		exit(1); // EXIT_ERROR
 }
@@ -118,6 +118,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
+
 	$application_folder = 'application';
 
 /*

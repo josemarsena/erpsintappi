@@ -6,11 +6,11 @@ $table_data = [
     'Agência',
     'Conta',
     'Gerente',
-    'Endereco',
     'Telefone',
     'Saldo Inicial',
     'Data Inicio',
     'Saldo Atual',
+    'Ativo',
 ];
 
 

@@ -14,7 +14,9 @@ class Contasbancarias_model extends App_Model
     {
         $data['datacriacao'] = date('Y-m-d H:i:s');
         $data['criadopor'] = get_staff_user_id();
-
+     //   $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
+      //  fwrite($myfile, var_dump($data));
+     //   fclose($myfile);
         $this->db->insert(db_prefix().'fin_contabancaria', $data);
         $insert_id = $this->db->insert_id();
         if ($insert_id)

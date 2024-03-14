@@ -16,7 +16,7 @@
 <?php init_tail(); ?>
 <script>
 $(function(){
-	init_invoice();
+	init_contasreceber();
 });
 </script>
 </body>

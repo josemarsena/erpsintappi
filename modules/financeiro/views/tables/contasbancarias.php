@@ -10,11 +10,11 @@ $aColumns = array_merge($aColumns, [
     'agencia',
     'conta',
     'gerente',
-    'endereco',
     'telefone',
     'saldoinicial',
     'datasaldoinicial',
     'saldoatual',
+    'ativo',
 ]);
 
 $sIndexColumn = 'id';

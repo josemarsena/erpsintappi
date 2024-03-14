@@ -9,6 +9,7 @@ class Financeiro extends AdminController
         parent::__construct();
         $this->load->model('financeiro_model');
         $this->load->model('bancos_model');
+        $this->load->model('contasbancarias_model');
 
     }
 
@@ -100,7 +101,7 @@ class Financeiro extends AdminController
         }
 
         $data['title'] = 'Contas Bancárias';
-        $this->load->model('contasbancarias_model');
+
         if ($this->input->post()) {
             $message          = '';
             $data             = $this->input->post();
@@ -178,10 +179,10 @@ class Financeiro extends AdminController
         $this->load->model('invoices_model');
         $this->load->model('credit_notes_model');
 
-        if (staff_cant('view', 'invoices')
-            && staff_cant('view_own', 'invoices')
-            && get_option('allow_staff_view_invoices_assigned') == '0') {
-            access_denied('invoices');
+        if (staff_cant('view', 'contasreceber')
+            && staff_cant('view_own', 'contasreceber')
+            && get_option('allow_staff_view_contasreceber_assigned') == '0') {
+            access_denied('contasreceber');
         }
 
         close_setup_menu();
@@ -189,13 +190,13 @@ class Financeiro extends AdminController
         $this->load->model('payment_modes_model');
         $data['payment_modes']        = $this->payment_modes_model->get('', [], true);
         $data['invoiceid']            = $id;
-        $data['title']                = 'Contas a Pagar';
+        $data['title']                = 'Contas a Receber';
         $data['invoices_years']       = $this->invoices_model->get_invoices_years();
         $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
         $data['invoices_statuses']    = $this->invoices_model->get_statuses();
         $data['invoices_table'] = App_table::find('invoices');
         $data['bodyclass']            = 'invoices-total-manual';
-        $this->load->view('contaspagar/manage', $data);
+        $this->load->view('contasreceber/gerenciar', $data);
 
     }
 
@@ -299,10 +300,10 @@ class Financeiro extends AdminController
                 }
                 $id = $this->contasbancarias_model->add($this->input->post());
                 if ($id) {
-                    set_alert('success', _l('added_successfully', _l('expense')));
+                    set_alert('success', _l('added_successfully', 'Conta Bancária'));
                     echo json_encode([
-                        'url'       => admin_url('expenses/list_expenses/' . $id),
-                        'expenseid' => $id,
+                        'url'       => admin_url('financeiro/contasbancarias' . $id),
+                        'id' => $id,
                     ]);
                     die;
                 }
@@ -323,7 +324,7 @@ class Financeiro extends AdminController
                 set_alert('success', _l('updated_successfully', _l('expense')));
             }
             echo json_encode([
-                'url'       => admin_url('expenses/list_expenses/' . $id),
+                'url'       => admin_url('financeiro/contasbancarias/' . $id),
                 'id' => $id,
             ]);
             die;
@@ -348,5 +349,17 @@ class Financeiro extends AdminController
         $data['title']      = $title;
 
         $this->load->view('financeiro/contasbancarias/adicionar_contabancaria', $data);
+    }
+
+    public function planocontas(){
+        if (!has_permission('planocontas', '', 'view')) {
+            access_denied('planocontas');
+        }
+
+        $data['title'] = 'Plano de Contas Gerencial';
+     //   $data['account_types'] = $this->accounting_model->get_account_types();
+     //   $data['detail_types'] = $this->accounting_model->get_account_type_details();
+     //   $data['accounts'] = $this->accounting_model->get_accounts();
+        $this->load->view('planocontas/gerenciar', $data);
     }
 }

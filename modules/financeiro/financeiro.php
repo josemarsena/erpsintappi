@@ -60,6 +60,11 @@ function financeiro_add_head_component()
         echo '<link href="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/css/box_loading.css') . '?v=' . FINANCEIRO_REVISION. '"  rel="stylesheet" type="text/css" />';
         echo '<link href="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/css/dashboard.css') . '?v=' . FINANCEIRO_REVISION. '"  rel="stylesheet" type="text/css" />';
     }
+
+
+    if(!(strpos($viewuri,'admin/financeiro/planocontas') === false)){
+        echo '<link href="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/css/chart_of_accounts.css') . '?v=' . ACCOUTING_REVISION. '"  rel="stylesheet" type="text/css" />';
+    }
 }
 
 /**
@@ -82,6 +87,7 @@ function financeiro_load_js()
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/modules/accessibility.js') . '"></script>';
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/modules/exporting.js') . '"></script>';
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/highcharts-3d.js') . '"></script>';
+        echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/js/financeiro.js') . '"></script>';
 	}
 }
 

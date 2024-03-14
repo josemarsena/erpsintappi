@@ -38,8 +38,22 @@
                         <div class="col-md-6">
                             <?php echo render_date_input('datasaldoinicial', 'Data do Saldo Inicial', _d($value)); ?></div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->ativo : ''); ?>
-                        <?php echo render_yes_no_option('ativo', 'Ativo?'); ?>
-
+                        <div class="col-md-6 row">
+                            <div class="row">
+                                <div class="col-md-6 mtop10 border-right">
+                                    <span><?php echo 'Conta Bancária Ativa?'; ?></span>
+                                </div>
+                                <div class="col-md-6 mtop10">
+                                    <div class="onoffswitch">
+                                        <input type="checkbox" id="conta_ativa" data-perm-id="1"
+                                               class="onoffswitch-checkbox" <?php if (isset($contabancaria) && $contabancaria->ativo == '1') {
+                                            echo 'checked';
+                                        } ?> value="conta_ativa" name="conta_ativa">
+                                        <label class="onoffswitch-label" for="conta_ativa"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="btn-bottom-toolbar text-right">
                             <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
                         </div>

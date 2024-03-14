@@ -235,7 +235,7 @@ class Migration_Version_231 extends CI_Migration
              [
                 'find'    => 'customeradmins WHERE ',
                 'replace' => 'customer_admins WHERE ',
-                'path'    => VIEWPATH . 'admin/clients/manage.php',
+                'path'    => VIEWPATH . 'admin/clients/gerenciar.php',
             ],
              [
                 'find'    => 'ticketstatus ON',
@@ -450,7 +450,7 @@ class Migration_Version_231 extends CI_Migration
         $projectMembersReplace = [
             VIEWPATH . 'admin/clients/groups/projects.php',
             VIEWPATH . 'admin/dashboard/widgets/top_stats.php',
-            VIEWPATH . 'admin/projects/manage.php',
+            VIEWPATH . 'admin/projects/gerenciar.php',
             VIEWPATH . 'admin/tables/projects.php',
             VIEWPATH . 'admin/tables/staff_projects.php',
             VIEWPATH . 'admin/tasks/view_task_template.php',
