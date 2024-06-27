@@ -101,7 +101,7 @@ $(function() {
             extensions: app.options.allowed_files.split(','),
         }));
     }
-
+    //
     /* Customer profile tickets table */
     $('.table-tickets-single').find('#th-submitter').removeClass('toggleable');
 
