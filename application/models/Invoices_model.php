@@ -27,6 +27,13 @@ class Invoices_model extends App_Model
         self::STATUS_DRAFT,
     ];
 
+    private $status_naopagos = [
+        self::STATUS_UNPAID,
+        self::STATUS_PARTIALLY,
+        self::STATUS_OVERDUE,
+        self::STATUS_DRAFT,
+    ];
+
     private $shipping_fields = [
         'shipping_street',
         'shipping_city',
@@ -45,6 +52,13 @@ class Invoices_model extends App_Model
     {
         return $this->statuses;
     }
+
+
+    public function get_status_naopagos()
+    {
+        return $this->status_naopagos;
+    }
+
 
     public function get_sale_agents()
     {

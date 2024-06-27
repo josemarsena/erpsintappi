@@ -14,6 +14,7 @@ $result       = data_tables_init($aColumns, $sIndexColumn, $sTable, [], [], [
     'thousand_separator',
     'decimal_separator',
 ]);
+
 $output  = $result['output'];
 $rResult = $result['rResult'];
 foreach ($rResult as $aRow) {

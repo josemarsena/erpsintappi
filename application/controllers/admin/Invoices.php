@@ -81,6 +81,30 @@ class Invoices extends AdminController
         }
     }
 
+    public function table_contrato($clientid = '', $contrato_id = '')
+    {
+        if (staff_cant('view', 'invoices')
+            && staff_cant('view_own', 'invoices')
+            && get_option('allow_staff_view_invoices_assigned') == '0') {
+            ajax_access_denied();
+        }
+
+        $this->load->model('payment_modes_model');
+        $data['payment_modes'] = $this->payment_modes_model->get('', [], true);
+
+        if($this->input->get('recurring')) {
+            $this->app->get_table_data('recurring_invoices', [
+                'data'     => $data,
+            ]);
+        } else {
+            App_table::find('invoices')->output([
+                'clientid' => $clientid,
+                'contrato_id' => $contrato_id,
+                'data'     => $data,
+            ]);
+        }
+    }
+
     public function client_change_data($customer_id, $current_invoice = '')
     {
         if ($this->input->is_ajax_request()) {

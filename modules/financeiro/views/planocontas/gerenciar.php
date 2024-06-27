@@ -11,16 +11,16 @@
           </div>
           <div class="row">
             <div class="col-md-3">
-              <?php echo render_select('ft_account',$accounts,array('id','name', 'account_type_name'),'acc_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_account',$contas,array('id','name', 'account_type_name'),'acc_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
-              <?php echo render_select('ft_parent_account',$accounts,array('id','name', 'account_type_name'),'parent_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_parent_account',$contas,array('id','name', 'account_type_name'),'parent_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
-              <?php echo render_select('ft_type',$account_types,array('id','name'),'type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_type',$tipos_contas,array('id','name'),'type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
-              <?php echo render_select('ft_detail_type',$detail_types,array('id','name'),'detail_type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_detail_type',$tipos_detalhes,array('id','name'),'detail_type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
               <?php $active = [ 
@@ -64,7 +64,7 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title"><?php echo _l('acc_account')?></h4>
       </div>
-      <?php echo form_open_multipart(admin_url('accounting/account'),array('id'=>'account-form'));?>
+      <?php echo form_open_multipart(admin_url('financeiro/conta'),array('id'=>'account-form'));?>
       <?php echo form_hidden('id'); ?>
       <?php echo form_hidden('update_balance'); ?>
       <div class="modal-body">

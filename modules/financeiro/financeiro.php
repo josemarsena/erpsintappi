@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.2
+Version: 1.0.4
 Requires at least: 1.0.*
 Author: Synglia
 Author URI: https://synglia.com.br
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'financeiro_load_js');
 hooks()->add_action('admin_init', 'financeiro_module_init_menu_items');
 hooks()->add_action('admin_init', 'financeiro_permissions');
 
-define('FINANCEIRO_REVISION', 101);
+define('FINANCEIRO_REVISION', 104);
 
 
 /**
@@ -128,7 +128,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('dashboard'),
                 'icon'     => 'fa fa-home',
                 'href'     => admin_url('financeiro/dashboard'),
-                'position' => 1,
+                'position' => 10,
             ]);
         }
 
@@ -138,7 +138,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('bancos'),
                 'icon'     => 'fa fa-ban',
                 'href'     => admin_url('financeiro/bancos'),
-                'position' => 2,
+                'position' => 20,
             ]);
         }
 
@@ -149,17 +149,37 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('contasbancarias'),
                 'icon'     => 'fa fa-credit-card',
                 'href'     => admin_url('financeiro/contasbancarias'),
-                'position' => 3,
+                'position' => 30,
             ]);
         }
-		
+
+        if (has_permission('financeiro_contacaixa', '', 'view')) {
+            $CI->app_menu->add_sidebar_children_item('financeiro', [
+                'slug'     => 'financeiro_contacaixa',
+                'name'     => _l('contacaixa'),
+                'icon'     => 'fa fa-credit-card',
+                'href'     => admin_url('financeiro/contacaixa'),
+                'position' => 31,
+            ]);
+        }
+
+        if (has_permission('financeiro_cartaocredito', '', 'view')) {
+            $CI->app_menu->add_sidebar_children_item('financeiro', [
+                'slug'     => 'financeiro_cartaocredito',
+                'name'     => _l('cartaocredito'),
+                'icon'     => 'fa fa-credit-card',
+                'href'     => admin_url('financeiro/cartaocredito'),
+                'position' => 32,
+            ]);
+        }
+
 		if (has_permission('financeiro_planocontas', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_planocontas',
                 'name'     => _l('planocontas'),
                 'icon'     => 'fa fa-list-ol',
                 'href'     => admin_url('financeiro/planocontas'),
-                'position' => 4,
+                'position' => 40,
             ]);
         }
 
@@ -169,7 +189,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('contaspagar'),
                 'icon'     => 'fa fa-paypal',
                 'href'     => admin_url('financeiro/contaspagar'),
-                'position' => 5,
+                'position' => 50,
             ]);
         }
 
@@ -179,7 +199,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('contasreceber'),
                 'icon'     => 'fa fa-usd',
                 'href'     => admin_url('financeiro/contasreceber'),
-                'position' => 6,
+                'position' => 60,
             ]);
         }
 		
@@ -189,7 +209,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('selecaopagamento'),
                 'icon'     => 'fa fa-spinner',
                 'href'     => admin_url('financeiro/selecaopagamento'),
-                'position' => 7,
+                'position' => 70,
             ]);
         }
 
@@ -199,7 +219,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('faturas'),
                 'icon'     => 'fa fa-file-invoice',
                 'href'     => admin_url('financeiro/faturas'),
-                'position' => 8,
+                'position' => 80,
             ]);
         }		
 
@@ -209,7 +229,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('fluxocaixa'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/fluxocaixa'),
-                'position' => 9,
+                'position' => 90,
             ]);
         }		
 		
@@ -219,7 +239,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('conciliacaobancaria'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/conciliacaobancaria'),
-                'position' => 10,
+                'position' => 100,
             ]);
         }	
 
@@ -229,7 +249,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('budget'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/budget'),
-                'position' => 11,
+                'position' => 110,
             ]);
         }			
 		
@@ -239,7 +259,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('relatoriosfinanceiros'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/relatorios'),
-                'position' => 12,
+                'position' => 120,
             ]);
         }		
 
@@ -250,7 +270,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('configuracoes'),
                 'icon'     => 'fa fa-cog',
                 'href'     => admin_url('financeiro/configuracoes'),
-                'position' => 13,
+                'position' => 130,
             ]);
         }
     }

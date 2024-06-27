@@ -48,7 +48,7 @@ function pdf_logo_url()
     $logoUrl                   = '';
 
     if ($width == '') {
-        $width = 120;
+        $width = 250;    // modificado Synglia
     }
 
     if ($custom_pdf_logo_image_url != '') {

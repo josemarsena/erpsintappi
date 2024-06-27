@@ -48,14 +48,16 @@
                                 data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
                                 <?php echo isset($contract) && $isSignedOrMarkedSigned ? ' disabled' : ''; ?>>
                                 <?php $selected = (isset($contract) ? $contract->client : '');
-                        if ($selected == '') {
-                            $selected = (isset($customer_id) ? $customer_id: '');
-                        }
-                       if ($selected != '') {
-                           $rel_data = get_relation_data('customer', $selected);
-                           $rel_val  = get_relation_values($rel_data, 'customer');
-                           echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
-                       } ?>
+
+                                if ($selected == '') {
+                                    $selected = (isset($customer_id) ? $customer_id: '');
+                                }
+                               if ($selected != '')
+                               {
+                                   $rel_data = get_relation_data('customer', $selected);
+                                   $rel_val  = get_relation_values($rel_data, 'customer');
+                                   echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
+                                    } ?>
                             </select>
                         </div>
                         <div class="form-group select-placeholder projects-wrapper<?php if ((!isset($contract)) || (isset($contract) && !customer_has_projects($contract->client))) {
@@ -68,10 +70,11 @@
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>"
                                     <?php echo isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
                                     <?php
-                      if (isset($contract) && $contract->project_id) {
-                          echo '<option value="' . $contract->project_id . '" selected>' . get_project_name_by_id($contract->project_id) . '</option>';
-                      }
-                     ?>
+                                     if (isset($contract) && $contract->project_id)
+                                     {
+                                          echo '<option value="' . $contract->project_id . '" selected>' . get_project_name_by_id($contract->project_id) . '</option>';
+                                     }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -80,6 +83,12 @@
                         <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
                             title="<?php echo _l('contract_subject_tooltip'); ?>"></i>
                         <?php echo render_input('subject', 'contract_subject', $value); ?>
+
+                        <?php $propostas       = get_all_proposals();
+                        $selected = (isset($contract) ? $contract->proposta_id : '');
+                        echo render_select('proposta_id', $propostas, [ 'id', [ 'subject']], 'Proposta Relacionada', $selected, ['data-none-selected-text' => _l('dropdown_non_selected_tex')]);
+                        ?>
+
                         <div class="form-group">
                             <label for="contract_value"><?php echo _l('contract_value'); ?></label>
                             <div class="input-group" data-toggle="tooltip"
@@ -124,6 +133,7 @@
                         <?php echo render_textarea('description', 'contract_description', $value, ['rows' => 10]); ?>
                         <?php $rel_id = (isset($contract) ? $contract->id : false); ?>
                         <?php echo render_custom_fields('contracts', $rel_id); ?>
+
 
                         <div class="btn-bottom-toolbar text-right">
                             <button type="submit" class="btn btn-primary">
@@ -251,6 +261,17 @@
                                             <?php echo _l('contract_content'); ?>
                                         </a>
                                     </li>
+
+
+                                    <li role="presentation" class="<?php if ($this->input->get('tab') == 'faturas') {
+                                        echo 'active';
+                                    } ?>">
+                                        <a href="#faturas" aria-controls="faturas" role="tab" data-toggle="tab">
+                                            <?php echo 'Faturas'; ?>
+                                        </a>
+                                    </li>
+
+
                                     <li role="presentation" class="<?php if ($this->input->get('tab') == 'attachments') {
                                   echo 'active';
                               } ?>">
@@ -440,6 +461,36 @@
                                 <hr />
                                 <div class="mtop20" id="sales_notes_area"></div>
                             </div>
+
+                            <div role="tabpanel" class="tab-pane" id="faturas">
+                                <div role="tabpanel" class="tab-pane" id="faturas_contrato">
+                                    <?php if (isset($contract)) { ?>
+                                        <?php if (staff_can('create',  'invoices')) { ?>
+                                            <a href="<?php echo admin_url('invoices/invoice?customer_id=' . $contract->client); ?>"
+                                               class="btn btn-primary mbot15<?php echo $contract->active == 0 ? ' disabled' : ''; ?>">
+                                                <i class="fa-regular fa-plus tw-mr-1"></i>
+                                                <?php echo _l('create_new_invoice'); ?>
+                                            </a>
+                                        <?php } ?>
+                                        <?php if (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
+                                            <div id="invoices_total" class="tw-mb-5"></div>
+                                            <?php
+                                            $table_data = ['Fatura'];
+
+                                            $table_data     = array_merge($table_data, ['Proposta', 'Vencimento', 'Valor', 'Status']);
+                                            $custom_fields = get_custom_fields('invoices', ['show_on_table' => 1]);
+                                            foreach ($custom_fields as $field) {
+                                                array_push($table_data, [
+                                                    'name'     => $field['name'],
+                                                    'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
+                                                ]);
+                                            }
+                                            echo render_datatable($table_data, 'faturas_contrato'); ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
                             <div role="tabpanel" class="tab-pane" id="tab_comments">
                                 <div class="row contract-comments mtop15">
                                     <div class="col-md-12">
@@ -452,9 +503,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') == 'attachments') {
-                    echo ' active';
-                } ?>" id="attachments">
+                            <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') == 'attachments') { echo ' active'; } ?>" id="attachments">
                                 <?php echo form_open(admin_url('contracts/add_contract_attachment/' . $contract->id), ['id' => 'contract-attachments-form', 'class' => 'dropzone mtop15']); ?>
                                 <?php echo form_close(); ?>
                                 <div class="tw-flex tw-justify-end tw-items-center tw-space-x-2 mtop15">
@@ -600,6 +649,11 @@
 </div>
 <div id="modal-wrapper"></div>
 <?php init_tail(); ?>
+
+// Modificado por JRS -> 20/06/2024
+<?php $this->load->view('admin/clients/contract_js'); ?>
+//
+
 <?php if (isset($contract)) { ?>
 <!-- init table tasks -->
 <script>
@@ -612,6 +666,12 @@ var contract_id = '<?php echo $contract->id; ?>';
 <script>
 Dropzone.autoDiscover = false;
 $(function() {
+    // Modificado por JRS -> 21.06.2024
+    initDataTable('.table-faturas-contrato', admin_url + 'contracts/table_contrato', [0], [0], {},
+        <?php echo hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'desc'])); ?>)
+        .column(1).visible(false, false).columns.adjust();
+
+
     init_ajax_project_search_by_customer_id();
     if ($('#contract-attachments-form').length > 0) {
         new Dropzone("#contract-attachments-form", appCreateDropzoneOptions({
@@ -888,6 +948,9 @@ function contractGoogleDriveSave(pickData) {
     });
 }
 </script>
+
+
+
 </body>
 
 </html>

@@ -40,10 +40,12 @@ $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [
     'staffid',
     ]);
 
+
 $output  = $result['output'];
 $rResult = $result['rResult'];
 
-foreach ($rResult as $aRow) {
+foreach ($rResult as $aRow)
+{
     $row = [];
     for ($i = 0; $i < count($aColumns); $i++) {
         if (strpos($aColumns[$i], 'as') !== false && !isset($aRow[$aColumns[$i]])) {
@@ -72,7 +74,7 @@ foreach ($rResult as $aRow) {
             $_data .= '<span class="hide">' . ($checked == 'checked' ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
         } elseif ($aColumns[$i] == 'firstname') {
             $_data = '<a href="' . admin_url('staff/profile/' . $aRow['staffid']) . '">' . staff_profile_image($aRow['staffid'], [
-                'staff-profile-image-small',
+                    'staff-profile-image-small',
                 ]) . '</a>';
             $_data .= ' <a href="' . admin_url('staff/member/' . $aRow['staffid']) . '">' . $aRow['firstname'] . ' ' . $aRow['lastname'] . '</a>';
 
@@ -98,7 +100,10 @@ foreach ($rResult as $aRow) {
 
     $row['DT_RowClass'] = 'has-row-options';
 
-    $row = hooks()->apply_filters('staff_table_row', $row, $aRow);
+ //   $row = hooks()->apply_filters('staff_table_row', $row, $aRow);
 
     $output['aaData'][] = $row;
+
+
 }
+

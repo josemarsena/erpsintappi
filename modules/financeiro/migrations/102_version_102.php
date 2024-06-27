@@ -66,6 +66,17 @@ class Migration_Version_102 extends App_module_migration
 
 
         // Cria Tabela de Plano de Contas Gerencial
+        // ID da Tabela
+        // NOme da Conta = Nome da Conta
+        // Chave_da_Conta   = Texto que identifica a conta
+        // Numero da Conta = Numero que identifica a Conta
+        // Tipo_conta    = Tipo de Conta
+        // Descrição    = Descrição detalhada
+        // Criado Por    = Quem Criou
+        // Data Criaçao   =  Data de Crição
+        // Saldo = Saldo Acumulado
+        // Conta Pai = Conta Origem para a Subconta
+
         if (!$CI->db->table_exists(db_prefix() . 'fin_planocontas')) {
             $CI->db->query('CREATE TABLE `' . db_prefix() . "fin_planocontas` (
               `id` INT(11) NOT NULL AUTO_INCREMENT,

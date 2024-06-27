@@ -5795,6 +5795,7 @@ function init_table_tickets(manual) {
   }
 }
 
+
 // Staff projects table in staff profile
 function init_table_staff_projects(manual) {
   if (typeof manual == "undefined" && $("body").hasClass("dashboard")) {

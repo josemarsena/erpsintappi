@@ -318,6 +318,30 @@ function get_estimates_percent_by_status($status, $project_id = null)
     return $data;
 }
 
+/**
+ * Get project name by passed id
+ * @param  mixed $id
+ * @return string
+ */
+function get_estimate_name_by_id($id)
+{
+    $CI      = & get_instance();
+    $estimate = $CI->app_object_cache->get('estimate-name-data-' . $id);
+
+    if (!$estimate) {
+        $CI->db->select('name');
+        $CI->db->where('id', $id);
+        $estimate = $CI->db->get(db_prefix() . 'estimaetes')->row();
+        $CI->app_object_cache->add('estimate-name-data-' . $id, $estimate);
+    }
+
+    if ($estimate) {
+        return $estimate->name;
+    }
+
+    return '';
+}
+
 function get_estimates_where_sql_for_staff($staff_id)
 {
     $CI                                  = &get_instance();

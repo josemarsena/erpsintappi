@@ -30,11 +30,11 @@ class CronJobFailure extends AbstractMessage
         if (file_exists(TEMP_FOLDER . 'pcrm-cron-lock')) {
             @unlink(TEMP_FOLDER . 'pcrm-cron-lock');
         } ?>
-<h4>Cron Job Warning</h4>
+<h4>Aviso do Cron Job</h4>
 <p>
-    <b>It looks like your cron job hasn't run in the last <?php echo $this->hoursCheck; ?> hours</b>, you should
-    re-check if your cron job is properly configured, this message will auto disappear after 5 minutes after the cron
-    job starts working properly again.
+    <b>Parece que seu cron job não foi executado nas últimas <?php echo $this->hoursCheck; ?> horas</b>, você deve
+    verificar novamente se o seu cron job está configurado corretamente, esta mensagem desaparecerá
+    automaticamente após 5 minutos após o cron job começar a funcionar corretamente novamente.
 </p>
 <?php
     }
