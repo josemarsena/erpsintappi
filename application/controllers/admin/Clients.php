@@ -44,6 +44,9 @@ class Clients extends AdminController
         $this->load->view('admin/clients/manage', $data);
     }
 
+    /* function table
+   Chama o Controlador para buscar a Tabela de Clientes conforme o filtro ()
+*/
     public function table()
     {
         if (staff_cant('view', 'customers')) {

@@ -35,6 +35,9 @@ class Contracts extends AdminController
         $this->load->view('admin/contracts/manage', $data);
     }
 
+    /* function table
+       Chama o Controlador para buscar a Tabela de Contratos conforme o filtro (cliente)
+    */
     public function table($clientid = '')
     {
         if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {

@@ -138,7 +138,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('bancos'),
                 'icon'     => 'fa fa-ban',
                 'href'     => admin_url('financeiro/bancos'),
-                'position' => 20,
+                'position' => 15,
             ]);
         }
 
@@ -149,7 +149,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('contasbancarias'),
                 'icon'     => 'fa fa-credit-card',
                 'href'     => admin_url('financeiro/contasbancarias'),
-                'position' => 30,
+                'position' => 20,
             ]);
         }
 
@@ -159,9 +159,11 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('contacaixa'),
                 'icon'     => 'fa fa-credit-card',
                 'href'     => admin_url('financeiro/contacaixa'),
-                'position' => 31,
+                'position' => 25,
             ]);
         }
+
+
 
         if (has_permission('financeiro_cartaocredito', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
@@ -169,47 +171,47 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('cartaocredito'),
                 'icon'     => 'fa fa-credit-card',
                 'href'     => admin_url('financeiro/cartaocredito'),
-                'position' => 32,
+                'position' => 30,
             ]);
         }
 
-		if (has_permission('financeiro_planocontas', '', 'view')) {
+        if (has_permission('financeiro_planocontas', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_planocontas',
                 'name'     => _l('planocontas'),
                 'icon'     => 'fa fa-list-ol',
                 'href'     => admin_url('financeiro/planocontas'),
-                'position' => 40,
+                'position' => 35,
             ]);
         }
 
-		if (has_permission('financeiro_contaspagar', '', 'view')) {
+        if (has_permission('financeiro_contaspagar', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contaspagar',
                 'name'     => _l('contaspagar'),
                 'icon'     => 'fa fa-paypal',
                 'href'     => admin_url('financeiro/contaspagar'),
-                'position' => 50,
+                'position' => 40,
             ]);
         }
 
-		if (has_permission('financeiro_contasreceber', '', 'view')) {
+        if (has_permission('financeiro_contasreceber', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contasreceber',
                 'name'     => _l('contasreceber'),
                 'icon'     => 'fa fa-usd',
                 'href'     => admin_url('financeiro/contasreceber'),
-                'position' => 60,
+                'position' => 45,
             ]);
         }
-		
+
 		if (has_permission('financeiro_selecaopagamento', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_selecacopagamento',
                 'name'     => _l('selecaopagamento'),
                 'icon'     => 'fa fa-spinner',
                 'href'     => admin_url('financeiro/selecaopagamento'),
-                'position' => 70,
+                'position' => 50,
             ]);
         }
 
@@ -219,7 +221,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('faturas'),
                 'icon'     => 'fa fa-file-invoice',
                 'href'     => admin_url('financeiro/faturas'),
-                'position' => 80,
+                'position' => 55,
             ]);
         }		
 
@@ -229,7 +231,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('fluxocaixa'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/fluxocaixa'),
-                'position' => 90,
+                'position' => 60,
             ]);
         }		
 		
@@ -239,7 +241,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('conciliacaobancaria'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/conciliacaobancaria'),
-                'position' => 100,
+                'position' => 65,
             ]);
         }	
 
@@ -249,7 +251,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('budget'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/budget'),
-                'position' => 110,
+                'position' => 75,
             ]);
         }			
 		
@@ -259,7 +261,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('relatoriosfinanceiros'),
                 'icon'     => 'fa fa-line-chart',
                 'href'     => admin_url('financeiro/relatorios'),
-                'position' => 120,
+                'position' => 80,
             ]);
         }		
 
@@ -270,7 +272,7 @@ function financeiro_module_init_menu_items()
                 'name'     => _l('configuracoes'),
                 'icon'     => 'fa fa-cog',
                 'href'     => admin_url('financeiro/configuracoes'),
-                'position' => 130,
+                'position' => 85,
             ]);
         }
     }
@@ -285,7 +287,8 @@ function financeiro_permissions() {
     $capabilities['capabilities'] = [
         'view'   => _l('permission_view'),
     ];
-    register_staff_capabilities('financeiro_dashboard', $capabilities, _l('financeiro_dashboard'));
+    register_staff_capabilities('financeiro_dashboard', $capabilities, 'Financeiro->Painel');
+
 
     $capabilities = [];
     $capabilities['capabilities'] = [
@@ -294,14 +297,132 @@ function financeiro_permissions() {
         'edit'   => _l('permission_edit'),
         'delete' => _l('permission_delete'),
     ];
-
-
-    register_staff_capabilities('financeiro_report', $capabilities, _l('financeiro_report'));
+    register_staff_capabilities('financeiro_bancos', $capabilities, 'Financeiro->Bancos');
 
     $capabilities = [];
     $capabilities['capabilities'] = [
         'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
         'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
     ];
-    register_staff_capabilities('financeiro_setting', $capabilities, _l('financeiro_setting'));
+    register_staff_capabilities('financeiro_contasbancarias', $capabilities, 'Financeiro->Contas Bancárias');
+
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_contacaixa', $capabilities, 'Financeiro->Conta Caixa');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_cartaocredito', $capabilities, 'Financeiro->Cartao de Crédito');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_planocontas', $capabilities, 'Financeiro->Plano de Contas');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_contaspagar', $capabilities, 'Financeiro->Contas a Pagar');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_contasreceber', $capabilities, 'Financeiro->Contas a Receber');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_selecaopagto', $capabilities, 'Financeiro->Seleção de Pagamento');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_faturas', $capabilities, 'Financeiro->Faturas');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_fluxocaixa', $capabilities, 'Financeiro->Fluxo de Caixa');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_conciliacao', $capabilities, 'Financeiro->Conciliacao Bancária');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_despesas', $capabilities, 'Financeiro->Despesas');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_budget', $capabilities, 'Financeiro->Budget');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_relatorios', $capabilities, 'Financeiro->Relatórios');
+
+    $capabilities = [];
+    $capabilities['capabilities'] = [
+        'view'   => _l('permission_view'),
+        'create' => _l('permission_create'),
+        'edit'   => _l('permission_edit'),
+        'delete' => _l('permission_delete'),
+    ];
+    register_staff_capabilities('financeiro_configuracoes', $capabilities, 'Financeiro->Configurações');
 }
