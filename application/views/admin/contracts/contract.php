@@ -287,9 +287,7 @@
                                         <a href="#tab_comments" aria-controls="tab_comments" role="tab"
                                             data-toggle="tab" onclick="get_contract_comments(); return false;">
                                             <?php echo _l('contract_comments'); ?>
-                                            <?php
-                        $totalComments = total_rows(db_prefix() . 'contract_comments', 'contract_id=' . $contract->id)
-                        ?>
+                                            <?php $totalComments = total_rows(db_prefix() . 'contract_comments', 'contract_id=' . $contract->id) ?>
                                             <span
                                                 class="badge comments-indicator<?php echo $totalComments == 0 ? ' hide' : ''; ?>"><?php echo $totalComments; ?></span>
                                         </a>
@@ -462,9 +460,9 @@
                                 <div class="mtop20" id="sales_notes_area"></div>
                             </div>
 
-                            <div role="tabpanel" class="tab-pane" id="faturas">
-                                <div role="tabpanel" class="tab-pane" id="faturas_contrato">
-                                    <?php if (isset($contract)) { ?>
+                            <div role="tabpanel" class="tab-pane" id="faturas_contrato">
+                                    <?php
+                                     if (isset($contract)) { ?>
                                         <?php if (staff_can('create',  'invoices')) { ?>
                                             <a href="<?php echo admin_url('invoices/invoice?customer_id=' . $contract->client); ?>"
                                                class="btn btn-primary mbot15<?php echo $contract->active == 0 ? ' disabled' : ''; ?>">
@@ -475,20 +473,11 @@
                                         <?php if (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
                                             <div id="invoices_total" class="tw-mb-5"></div>
                                             <?php
-                                            $table_data = ['Fatura'];
+                                            $table_data = ['Fatura', 'Vencimento', 'Valor', 'Status'];
 
-                                            $table_data     = array_merge($table_data, ['Proposta', 'Vencimento', 'Valor', 'Status']);
-                                            $custom_fields = get_custom_fields('invoices', ['show_on_table' => 1]);
-                                            foreach ($custom_fields as $field) {
-                                                array_push($table_data, [
-                                                    'name'     => $field['name'],
-                                                    'th_attrs' => ['data-type' => $field['type'], 'data-custom-field' => 1],
-                                                ]);
-                                            }
-                                            echo render_datatable($table_data, 'faturas_contrato'); ?>
+                                            echo render_datatable($table_data, 'invoices'); ?>
                                         <?php } ?>
                                     <?php } ?>
-                                </div>
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="tab_comments">
@@ -542,7 +531,8 @@
          ?>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') == 'renewals') {
+                            <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') == 'renewals')
+                            {
              echo ' active';
          } ?>" id="renewals">
                                 <div class="mtop20">
@@ -658,6 +648,10 @@
 <!-- init table tasks -->
 <script>
 var contract_id = '<?php echo $contract->id; ?>';
+var client_id = '<?php echo $contract->client_id; ?>';
+var data_inicio = '<?php echo $contract->startdate; ?>';
+var data_fim = '<?php echo $contract->startend; ?>';
+var proposta_id = '<?php echo $contract->proposta_id; ?>';
 </script>
 <?php $this->load->view('admin/contracts/send_to_client'); ?>
 <?php $this->load->view('admin/contracts/renew_contract'); ?>
@@ -667,7 +661,8 @@ var contract_id = '<?php echo $contract->id; ?>';
 Dropzone.autoDiscover = false;
 $(function() {
     // Modificado por JRS -> 21.06.2024
-    initDataTable('.table-faturas-contrato', admin_url + 'contracts/table_contrato', [0], [0], {},
+    initDataTable('.table-faturas-contrato', admin_url + 'contracts/contrato_faturas/'+client_id +
+        '/'+proposta_id+'/'+data_inicio+'/'+data_fim, [0], [0], {},
         <?php echo hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'desc'])); ?>)
         .column(1).visible(false, false).columns.adjust();
 

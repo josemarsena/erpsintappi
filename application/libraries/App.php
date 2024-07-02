@@ -223,7 +223,7 @@ class App
     }
     
     /**
-     * Function that will parse table data from the tables folder for amin area
+     * Função que analisará os dados da tabela da pasta tabelas para a Area de Admin
      * @param  string $table  table filename
      * @param  array  $params additional params
      * @return void

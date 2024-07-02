@@ -443,4 +443,20 @@ class Contracts extends AdminController
             ]);
         }
     }
+
+
+    /*
+     * Função que busca os dados das Faturas conforme o contrato e o Cliente
+     */
+    public function contrato_faturas($client_id, $proposta_id, $data_inicio, $data_fim)
+    {
+        // Obtem os dados da table faturas_contrato
+        $this->app->get_table_data('faturas_contrato', [
+            'client_id' => $client_id,
+            'proposta_id' => $proposta_id,
+            'data_inicio' => $data_inicio,
+            'data_fim' => $data_fim,
+        ]);
+    }
+
 }
