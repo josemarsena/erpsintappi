@@ -2,11 +2,15 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+$myfile = fopen("erro.txt", "w") or die("Unable to open file!");
+
 $aColumns = ['number', 'duedate', 'total', 'status'];
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'invoices';
 $join         = [];
+
+fwrite($myfile, var_dump($aColumns));
 
 $where = [];
 
@@ -26,9 +30,12 @@ if ($this->ci->input->post('custom_view')) {
             'AND ' . db_prefix() . 'invoices.duedate <= ' . $data_fim . ')');
     }
 }
-
+fwrite($myfile, var_dump($where));
 
 $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, []);
+
+fwrite($myfile, var_dump($result));
+fclose($myfile);
 
 $output  = $result['output'];
 $rResult = $result['rResult'];

@@ -410,12 +410,12 @@
                                    echo ' editable';
                                } ?>" style="border:1px solid #d2d2d2;min-height:70px; border-radius:4px;">
                                     <?php
-                  if (empty($contract->content) && staff_can('edit', 'contracts')) {
-                      echo hooks()->apply_filters('new_contract_default_content', '<span class="text-danger text-uppercase mtop15 editor-add-content-notice"> ' . _l('click_to_add_content') . '</span>');
-                  } else {
-                      echo $contract->content;
-                  }
-                ?>
+                                      if (empty($contract->content) && staff_can('edit', 'contracts')) {
+                                          echo hooks()->apply_filters('new_contract_default_content', '<span class="text-danger text-uppercase mtop15 editor-add-content-notice"> ' . _l('click_to_add_content') . '</span>');
+                                      } else {
+                                          echo $contract->content;
+                                      }
+                                    ?>
                                 </div>
                                 <?php if (!empty($contract->signature)) { ?>
                                 <div class="row mtop25">
@@ -460,7 +460,7 @@
                                 <div class="mtop20" id="sales_notes_area"></div>
                             </div>
 
-                            <div role="tabpanel" class="tab-pane" id="faturas_contrato">
+                            <div role="tabpanel" class="tab-pane" id="faturas">
                                     <?php
                                      if (isset($contract)) { ?>
                                         <?php if (staff_can('create',  'invoices')) { ?>
@@ -470,12 +470,21 @@
                                                 <?php echo _l('create_new_invoice'); ?>
                                             </a>
                                         <?php } ?>
+
+                                         <?php if (staff_can('create',  'invoices')) { ?>
+                                             <a href="<?php echo admin_url('invoices/invoice?customer_id=' . $contract->client); ?>"
+                                                class="btn btn-primary mbot15<?php echo $contract->active == 0 ? ' disabled' : ''; ?>">
+                                                 <i class="fa-regular fa-plus tw-mr-1"></i>
+                                                 <?php echo 'Gerar todas'; ?>
+                                             </a>
+                                         <?php } ?>
+
                                         <?php if (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
                                             <div id="invoices_total" class="tw-mb-5"></div>
                                             <?php
                                             $table_data = ['Fatura', 'Vencimento', 'Valor', 'Status'];
 
-                                            echo render_datatable($table_data, 'invoices'); ?>
+                                            echo render_datatable($table_data, 'faturas-contrato'); ?>
                                         <?php } ?>
                                     <?php } ?>
                             </div>
@@ -506,29 +515,29 @@
 
                                 <div id="contract_attachments" class="mtop30">
                                     <?php
-            $data = '<div class="row">';
-            foreach ($contract->attachments as $attachment) {
-                $href_url = site_url('download/file/contract/' . $attachment['attachment_key']);
-                if (!empty($attachment['external'])) {
-                    $href_url = $attachment['external_link'];
-                }
-                $data .= '<div class="display-block contract-attachment-wrapper">';
-                $data .= '<div class="col-md-10">';
-                $data .= '<div class="pull-left"><i class="' . get_mime_class($attachment['filetype']) . '"></i></div>';
-                $data .= '<a href="' . $href_url . '"' . (!empty($attachment['external']) ? ' target="_blank"' : '') . '>' . $attachment['file_name'] . '</a>';
-                $data .= '<p class="text-muted">' . $attachment['filetype'] . '</p>';
-                $data .= '</div>';
-                $data .= '<div class="col-md-2 text-right">';
-                if ($attachment['staffid'] == get_staff_user_id() || is_admin()) {
-                    $data .= '<a href="#" class="text-danger" onclick="delete_contract_attachment(this,' . $attachment['id'] . '); return false;"><i class="fa fa fa-times"></i></a>';
-                }
-                $data .= '</div>';
-                $data .= '<div class="clearfix"></div><hr/>';
-                $data .= '</div>';
-            }
-         $data .= '</div>';
-         echo $data;
-         ?>
+                                $data = '<div class="row">';
+                                foreach ($contract->attachments as $attachment) {
+                                    $href_url = site_url('download/file/contract/' . $attachment['attachment_key']);
+                                    if (!empty($attachment['external'])) {
+                                        $href_url = $attachment['external_link'];
+                                    }
+                                    $data .= '<div class="display-block contract-attachment-wrapper">';
+                                    $data .= '<div class="col-md-10">';
+                                    $data .= '<div class="pull-left"><i class="' . get_mime_class($attachment['filetype']) . '"></i></div>';
+                                    $data .= '<a href="' . $href_url . '"' . (!empty($attachment['external']) ? ' target="_blank"' : '') . '>' . $attachment['file_name'] . '</a>';
+                                    $data .= '<p class="text-muted">' . $attachment['filetype'] . '</p>';
+                                    $data .= '</div>';
+                                    $data .= '<div class="col-md-2 text-right">';
+                                    if ($attachment['staffid'] == get_staff_user_id() || is_admin()) {
+                                        $data .= '<a href="#" class="text-danger" onclick="delete_contract_attachment(this,' . $attachment['id'] . '); return false;"><i class="fa fa fa-times"></i></a>';
+                                    }
+                                    $data .= '</div>';
+                                    $data .= '<div class="clearfix"></div><hr/>';
+                                    $data .= '</div>';
+                                }
+                             $data .= '</div>';
+                             echo $data;
+                             ?>
                                 </div>
                             </div>
                             <div role="tabpanel" class="tab-pane<?php if ($this->input->get('tab') == 'renewals')
@@ -640,17 +649,14 @@
 <div id="modal-wrapper"></div>
 <?php init_tail(); ?>
 
-// Modificado por JRS -> 20/06/2024
-<?php $this->load->view('admin/clients/contract_js'); ?>
-//
 
 <?php if (isset($contract)) { ?>
 <!-- init table tasks -->
 <script>
 var contract_id = '<?php echo $contract->id; ?>';
-var client_id = '<?php echo $contract->client_id; ?>';
-var data_inicio = '<?php echo $contract->startdate; ?>';
-var data_fim = '<?php echo $contract->startend; ?>';
+var client_id = '<?php echo $contract->client; ?>';
+var data_inicio = '<?php echo $contract->datestart; ?>';
+var data_fim = '<?php echo $contract->dateend; ?>';
 var proposta_id = '<?php echo $contract->proposta_id; ?>';
 </script>
 <?php $this->load->view('admin/contracts/send_to_client'); ?>
