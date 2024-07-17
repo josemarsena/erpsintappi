@@ -7,6 +7,7 @@ class Financeiro_model extends App_Model
     public function __construct()
     {
         parent::__construct();
+        // a acrescentar
     }
 
 
