@@ -63,7 +63,6 @@
 
 
     });
-
 </script>
 
 <script>
@@ -74,7 +73,7 @@
             maxlength: 3
         },
         nomebanco: 'required',
-    };
+    });
 
     $('#bancos_modal').on('show.bs.modal', function(event) {
 

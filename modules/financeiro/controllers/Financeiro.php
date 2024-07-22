@@ -108,6 +108,8 @@ class Financeiro extends AdminController
      */
     public function contasbancarias()
     {
+        $success = false;
+        $message = '';
         if (!has_permission('financeiro_contasbancarias', '', 'view')) {
             access_denied('financeiro_contasbancarias');
         }
@@ -230,15 +232,23 @@ class Financeiro extends AdminController
         ) {
             ajax_access_denied();
         }
-
-
+        // get_table_data = obtem os dados da tabela Função que analisará os dados da tabela da pasta tabelas para a Area de Admin
+        // $table = nome da tabela
+        // $params
         $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/bancos'));
-        $this->app->get_table_data('bancos');
+    //    $this->app->get_table_data('bancos');
 
 
    //     App_table::find('bancos')->output();
     }
 
+    /* Change client status / active / inactive */
+    public function muda_status_contabancaria($id, $status)
+    {
+        if ($this->input->is_ajax_request()) {
+            $this->contasbancarias_model->muda_status_contabancaria($id, $status);
+        }
+    }
 
     public function table_contasbancarias()
     {
@@ -252,10 +262,60 @@ class Financeiro extends AdminController
 
 
         $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/contasbancarias'));
-        $this->app->get_table_data('contasbancarias');
+        // $this->app->get_table_data('contasbancarias');
 
 
         //     App_table::find('bancos')->output();
+    }
+
+
+    public function editar_banco()
+    {
+        if ($this->input->post()) {
+            $data = $this->input->post();
+            $data['message'] = html_purify($this->input->post('message', false));
+            $id = $this->tickets_model->add($data, get_staff_user_id());
+            if ($id) {
+                set_alert('success', _l('new_ticket_added_successfully', $id));
+                redirect(admin_url('helpdesk/ticket/' . $id));
+            }
+        }
+        if ($userid !== false) {
+            $data['userid'] = $userid;
+            $data['client'] = $this->clients_model->get($userid);
+        }
+        // Carregas os Modelos necessários
+
+
+        $whereStaff = [];
+        if (get_option('access_tickets_to_none_staff_members') == 0) {
+            $whereStaff['is_not_staff'] = 0;
+        }
+
+        $data['title'] = 'Novo Banco';
+
+        if ($this->input->get('project_id') && $this->input->get('project_id') > 0) {
+            // request from project area to create new ticket
+            $data['project_id'] = $this->input->get('project_id');
+            $data['userid'] = get_client_id_by_project_id($data['project_id']);
+            if (total_rows(db_prefix() . 'contacts', ['active' => 1, 'userid' => $data['userid']]) == 1) {
+                $contact = $this->clients_model->get_contacts($data['userid']);
+                if (isset($contact[0])) {
+                    $data['contact'] = $contact[0];
+                }
+            }
+        } elseif ($this->input->get('contact_id') && $this->input->get('contact_id') > 0 && $this->input->get('userid')) {
+            $contact_id = $this->input->get('contact_id');
+            if (total_rows(db_prefix() . 'contacts', ['active' => 1, 'id' => $contact_id]) == 1) {
+                $contact = $this->clients_model->get_contact($contact_id);
+                if ($contact) {
+                    $data['contact'] = (array)$contact;
+                }
+            }
+        }
+
+        $this->load->view('financeiro/bancos/adicionar_banco', $data);
+
     }
     public function adicionar_banco()
     {

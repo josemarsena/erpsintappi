@@ -11,14 +11,14 @@ return App_table::find('invoices')
 
         $aColumns = [
             'number',
-            'total',
-            'total_tax',
-            'YEAR(date) as year',
             'date',
+            'duedate',
             get_sql_select_client_company(),
+            'YEAR(date) as year',
             db_prefix() . 'projects.name as project_name',
             '(SELECT GROUP_CONCAT(name SEPARATOR ",") FROM ' . db_prefix() . 'taggables JOIN ' . db_prefix() . 'tags ON ' . db_prefix() . 'taggables.tag_id = ' . db_prefix() . 'tags.id WHERE rel_id = ' . db_prefix() . 'invoices.id and rel_type="invoice" ORDER by tag_order ASC) as tags',
-            'duedate',
+            'total',
+            'total_tax',
             db_prefix() . 'invoices.status',
         ];
 

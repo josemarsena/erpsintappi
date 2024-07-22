@@ -20,10 +20,12 @@
                         <?php $selected = (isset($contabancaria) ? $contabancaria->banco_id : ''); ?>
                         <?php echo render_select('banco_id', $bancos, ['id', 'nomebanco'],'Nome do Banco', $selected); ?>
                         <div class="col-md-4">
-                            <?php echo render_input('agencia', 'Nome da Agência', '', 'text'); ?>
+                            <?php $value = (isset($contabancaria) ? $contabancaria->agencia : ''); ?>
+                            <?php echo render_input('agencia', 'Nome da Agência', $value, 'text'); ?>
                         </div>
                         <div class="col-md-8">
-                            <?php echo render_input('conta', 'Nro. da Conta', '', 'text'); ?>
+                            <?php $value = (isset($contabancaria) ? $contabancaria->conta : ''); ?>
+                            <?php echo render_input('conta', 'Nro. da Conta', $value, 'text'); ?>
                         </div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->gerente : ''); ?>
                         <?php echo render_input('gerente', 'Gerente', $value, 'text'); ?>
@@ -45,11 +47,11 @@
                                 </div>
                                 <div class="col-md-6 mtop10">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" id="conta_ativa" data-perm-id="1"
+                                        <input type="checkbox" id="ativo" data-perm-id="1"
                                                class="onoffswitch-checkbox" <?php if (isset($contabancaria) && $contabancaria->ativo == '1') {
                                             echo 'checked';
-                                        } ?> value="conta_ativa" name="conta_ativa">
-                                        <label class="onoffswitch-label" for="conta_ativa"></label>
+                                        } ?> value="ativo" name="ativo">
+                                        <label class="onoffswitch-label" for="ativo"></label>
                                     </div>
                                 </div>
                             </div>

@@ -69,12 +69,13 @@ return App_table::find('clients')
         foreach ($rResult as $aRow) {
             $row = [];
 
-            // Bulk actions
+            // Bulk actions = ações em massa, cria um checkbox em cada linha para seleção das ações em massa
             $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['userid'] . '"><label></label></div>';
-            // User id
+
+            // ID Usuario
             $row[] = $aRow['userid'];
 
-            // Company
+            // Empresa
             $company  = $aRow['company'];
             $isPerson = false;
 
@@ -110,27 +111,33 @@ return App_table::find('clients')
 
             $row[] = $company;
 
-            // Primary contact
+            // Contato Princiap
             $row[] = ($aRow['contact_id'] ? '<a href="' . admin_url('clients/client/' . $aRow['userid'] . '?contactid=' . $aRow['contact_id']) . '" target="_blank">' . trim($aRow['fullname']) . '</a>' : '');
 
-            // Primary contact email
+            // EMail do Contato Principal
             $row[] = ($aRow['email'] ? '<a href="mailto:' . $aRow['email'] . '">' . $aRow['email'] . '</a>' : '');
 
-            // Primary contact phone
+            // Telefone do Contato Principal
             $row[] = ($aRow['phonenumber'] ? '<a href="tel:' . $aRow['phonenumber'] . '">' . $aRow['phonenumber'] . '</a>' : '');
 
-            // Toggle active/inactive customer
+            // Alternar Ativar/Inativar Cliente
+            $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
             $toggleActive = '<div class="onoffswitch" data-toggle="tooltip" data-title="' . _l('customer_active_inactive_help') . '">
-    <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url() . 'clients/change_client_status" name="onoffswitch" class="onoffswitch-checkbox" id="' . $aRow['userid'] . '" data-id="' . $aRow['userid'] . '" ' . ($aRow[db_prefix() . 'clients.active'] == 1 ? 'checked' : '') . '>
+    <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url()
+                . 'clients/change_client_status" name="onoffswitch" class="onoffswitch-checkbox" id="'
+                . $aRow['userid'] . '" data-id="' . $aRow['userid'] . '" '
+                . ($aRow[db_prefix() . 'clients.active'] == 1 ? 'checked' : '') . '>
     <label class="onoffswitch-label" for="' . $aRow['userid'] . '"></label>
     </div>';
 
             // For exporting
             $toggleActive .= '<span class="hide">' . ($aRow[db_prefix() . 'clients.active'] == 1 ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
 
+            fwrite($myfile, $toggleActive);
+            fclose($myfile);
             $row[] = $toggleActive;
 
-            // Customer groups parsing
+            // Análise de grupos de clientes
             $groupsRow = '';
             if ($aRow['customerGroups']) {
                 $groups = explode(',', $aRow['customerGroups']);

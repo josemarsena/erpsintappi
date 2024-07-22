@@ -32,18 +32,18 @@ class Contasbancarias_model extends App_Model
     {
         $affectedRows = 0;
 
-        $banco = $this->db->where('id', $id)->get('fin_bancos')->row();
+        $contasbancarias = $this->db->where('id', $id)->get('fin_contasbancarias')->row();
 
 
         $data = hooks()->apply_filters('antes_banco_atualizar', $data, $id);
 
 
         $this->db->where('id', $id);
-        $this->db->update(db_prefix() . 'fin_bancos', $data);
+        $this->db->update(db_prefix() . 'fin_contasbancarias', $data);
 
         if ($this->db->affected_rows() > 0) {
             hooks()->do_action('apos_banco_atualizar', $id);
-            log_activity('Cadastro do Banco foi datualizado [' . $data['subject'] . ']');
+            log_activity('Cadastro da Conta foi datualizado [' . $data['subject'] . ']');
 
             return true;
         }
@@ -101,5 +101,34 @@ class Contasbancarias_model extends App_Model
 
         return $result;
     }
+
+
+    /**
+     * @param  integer ID
+     * @param  integer Status ID
+     * @return boolean
+     * Update client status Active/Inactive
+     */
+    public function muda_status_contabancaria($id, $status)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('fin_contabancaria', [
+            'ativo' => $status,
+        ]);
+
+        if ($this->db->affected_rows() > 0) {
+            hooks()->do_action('status_conta_mudado', [
+                'id'     => $id,
+                'status' => $status,
+            ]);
+
+            log_activity('Customer Status Changed [ID: ' . $id . ' Status(Active/Inactive): ' . $status . ']');
+
+            return true;
+        }
+
+        return false;
+    }
+
 }
 
