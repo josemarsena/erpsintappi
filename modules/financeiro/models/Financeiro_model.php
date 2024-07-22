@@ -12,12 +12,12 @@ class Financeiro_model extends App_Model
 
 
     /**
-     * obter_detalhes_tipo_conta
+     * obter_detalhes_tipos_conta
      * @param  integer $id    member group id
      * @param  array  $where
      * @return object
      */
-    public function obter_detalhes_tipo_conta()
+    public function obter_detalhes_tipos_conta()
     {
         $account_type_details = hooks()->apply_filters('before_get_account_type_details', [
             [
@@ -1136,11 +1136,11 @@ class Financeiro_model extends App_Model
             ],
         ]);
 
-        usort($account_types, function ($a, $b) {
+        usort(tipos_de_conta, function ($a, $b) {
             return $a['order'] - $b['order'];
         });
 
-        return $account_types;
+        return $tipos_de_conta;
     }
 
 }

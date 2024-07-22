@@ -1,5 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php init_head(); ?>
+<?php $arrAtt = array();
+      $arrAtt['data-type']='currency'; ?>
 <div id="wrapper">
     <div class="content">
         <div class="row">
@@ -35,7 +37,7 @@
                         <?php echo render_input('telefone', 'Telefone', $value, 'text'); ?>
                         <?php $value = (isset($contabancaria) ? $contabancaria->saldoinicial : ''); ?>
                         <div class="col-md-6">
-                            <?php echo render_input('saldoinicial', 'Saldo Inicial', $value, 'number'); ?></div>
+                            <?php echo render_input('saldoinicial', 'Saldo Inicial', $value, 'text', $arrAtt); ?></div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->datasaldoinicial : ''); ?>
                         <div class="col-md-6">
                             <?php echo render_date_input('datasaldoinicial', 'Data do Saldo Inicial', _d($value)); ?></div>
@@ -82,6 +84,13 @@ var selectCurrency = $('select[name="currency"]');
 <?php if (isset($customer_currency)) { ?>
 var customer_currency = '<?php echo $customer_currency; ?>';
 <?php } ?>
+
+
+
+$( "#saldoinicial" ).blur(function() {
+    this.value = parseFloat(this.value).toFixed(2);
+});
+
 $(function() {
     $('body').on('change', '#project_id', function() {
         var project_id = $(this).val();

@@ -262,7 +262,7 @@ class Financeiro extends AdminController
 
 
         $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/contasbancarias'));
-        // $this->app->get_table_data('contasbancarias');
+        $this->app->get_table_data('contasbancarias');
 
 
         //     App_table::find('bancos')->output();
@@ -403,11 +403,6 @@ class Financeiro extends AdminController
             if ($success) {
                 set_alert('success', _l('updated_successfully', _l('expense')));
             }
-            echo json_encode([
-                'url'       => admin_url('financeiro/contasbancarias/' . $id),
-                'id' => $id,
-            ]);
-            die;
         }
         if ($id == '') {
             $title = 'Adicionar nova Conta Bancária';
