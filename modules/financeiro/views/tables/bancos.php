@@ -4,6 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 $aColumns        = [];
 
+$hasPermissionDelete = staff_can('delete',  'financeiro_bancos');
+
 $aColumns = array_merge($aColumns, [
     'id',
     'codigobanco',
@@ -48,8 +50,26 @@ foreach ($rResult as $aRow)
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
 
+        $attributes = [
+            'data-toggle'             => 'modal',
+            'data-target'             => '#bancos_modal',
+            'data-id'                 => $aRow['id'],
+            'data-placement'          => $aRow['placement'],];
+
         if ($aColumns[$i] == 'criadopor') {
-            $_data = get_staff('criadopor');
+            $_data = get_staff($aRow['criadopor']);
+        }
+
+        if ($aColumns[$i] == 'nomebanco') {
+            $_data = $aRow['nomebanco'];
+            $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data .= '<div class="row-options">';
+            $_data .= '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . _l('view') . '</a>';
+
+            if ($hasPermissionDelete) {
+                $_data .= ' | <a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            }
+            $_data .= '</div>';
         }
  //       if ($aColumns[$i] == 'nomebanco') {
         //    $_data = '<a href="#" onclick="(this,' . $aRow['id'] . '); return false" data-name="' . $aRow['name']

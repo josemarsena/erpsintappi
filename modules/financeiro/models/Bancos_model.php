@@ -26,6 +26,19 @@ class Bancos_model extends App_Model
         return false;
     }
 
+    /**
+     * Delete customer group
+     * @param  mixed $id group id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete(db_prefix().'fin_bancos');
+
+        return true;
+    }
+
     public function update($data, $id)
     {
         $affectedRows = 0;

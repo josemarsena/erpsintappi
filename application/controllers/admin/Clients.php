@@ -4,7 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Clients extends AdminController
 {
-    /* List all clients */
+    /***************
+     * @return void
+     * Funcao: Lista todos os Clientes
+     * Parametros: nd
+     */
     public function index()
     {
         if (staff_cant('view', 'customers')) {
@@ -13,6 +17,7 @@ class Clients extends AdminController
             }
         }
 
+        // Carrega todos os  modelos para Lista os Clientes
         $this->load->model('contracts_model');
         $data['contract_types'] = $this->contracts_model->get_contract_types();
         $data['groups']         = $this->clients_model->get_groups();
@@ -40,13 +45,17 @@ class Clients extends AdminController
         $data['contacts_logged_in_today'] = $this->clients_model->get_contacts('', 'last_login LIKE "' . date('Y-m-d') . '%"' . $whereContactsLoggedIn);
 
         $data['countries'] = $this->clients_model->get_clients_distinct_countries();
+        // Carrega a tabela de Clientes
         $data['table'] = App_table::find('clients');
+        // Exibe os clientes
         $this->load->view('admin/clients/manage', $data);
     }
 
-    /* function table
-   Chama o Controlador para buscar a Tabela de Clientes conforme o filtro ()
-*/
+     /***************
+     * @return void
+     * Funcao: Chama o Controlador para buscar a Tabela de Clientes conforme o filtro ()
+     * Parametros: nd
+     */
     public function table()
     {
         if (staff_cant('view', 'customers')) {
@@ -54,10 +63,15 @@ class Clients extends AdminController
                 ajax_access_denied();
             }
         }
-
+        // Busca a Tabela em /views/admin/table
         App_table::find('clients')->output();
     }
 
+    /***************
+     * @return void
+     * Funcao: Exibe todos os contatos
+     * Parametros: nd
+     */
     public function all_contacts()
     {
         if ($this->input->is_ajax_request()) {
@@ -73,7 +87,11 @@ class Clients extends AdminController
         $this->load->view('admin/clients/all_contacts', $data);
     }
 
-    /* Edit client or add new client*/
+    /***************
+     * @return void
+     * Funcao: Edita ou Adiciona um Novo Cliente
+     * Parametros: nd
+     */
     public function client($id = '')
     {
         if (staff_cant('view', 'customers')) {
@@ -82,6 +100,7 @@ class Clients extends AdminController
             }
         }
 
+        // Aplica post para Gravar
         if ($this->input->post() && !$this->input->is_ajax_request()) {
             if ($id == '') {
                 if (staff_cant('create', 'customers')) {
@@ -130,7 +149,7 @@ class Clients extends AdminController
             redirect(admin_url('clients/client/' . $id . '?group=contacts&contactid=' . $contact_id));
         }
 
-        // Customer groups
+        // Grupos de Clientes
         $data['groups'] = $this->clients_model->get_groups();
 
         if ($id == '') {
@@ -150,7 +169,7 @@ class Clients extends AdminController
                 show_404();
             }
 
-            // Fetch data based on groups
+            // Buscar dados com base em grupos
             if ($group == 'profile') {
                 $data['customer_groups'] = $this->clients_model->get_customer_groups($id);
                 $data['customer_admins'] = $this->clients_model->get_admins($id);
@@ -187,6 +206,8 @@ class Clients extends AdminController
                 }
 
                 $data = array_merge($data, prepare_mail_preview_data('customer_statement', $id));
+
+                // Verificar a API do Google Maps
             } elseif ($group == 'map') {
                 if (get_option('google_api_key') != '' && !empty($client->latitude) && !empty($client->longitude)) {
                     $this->app_scripts->add('map-js', base_url($this->app_scripts->core_file('assets/js', 'map.js')) . '?v=' . $this->app_css->core_version());
@@ -204,12 +225,14 @@ class Clients extends AdminController
                 }
             }
 
+
+
             $data['staff'] = $this->staff_model->get('', ['active' => 1]);
 
             $data['client'] = $client;
             $title          = $client->company;
 
-            // Get all active staff members (used to add reminder)
+            // Obter todos os membros ativos da equipe (usado para adicionar lembrete)
             $data['members'] = $data['staff'];
 
             if (!empty($data['client']->company)) {
@@ -264,6 +287,11 @@ class Clients extends AdminController
         $this->load->view('admin/clients/client', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Exporta um Contato
+     * Parametros: nd
+     */
     public function export($contact_id)
     {
         if (is_admin()) {
@@ -272,7 +300,11 @@ class Clients extends AdminController
         }
     }
 
-    // Used to give a tip to the user if the company exists when new company is created
+    /***************
+     * @return void
+     * Funcao: Usado para dar uma dica ao usuário se a empresa existe quando uma nova empresa é criada. Checa nome duplicado
+     * Parametros: nd
+     */
     public function check_duplicate_customer_name()
     {
         if (staff_can('create',  'customers')) {
@@ -285,6 +317,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Salva Latitude e Longitude
+     * Parametros: nd
+     */
     public function save_longitude_and_latitude($client_id)
     {
         if (staff_cant('edit', 'customers')) {
@@ -305,6 +342,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Formulário para inserir o de Contato
+     * Parametros: nd
+     */
     public function form_contact($customer_id, $contact_id = '')
     {
         if (staff_cant('view', 'customers')) {
@@ -452,6 +494,11 @@ class Clients extends AdminController
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    /***************
+     * @return void
+     * Funcao: Atualiza arquivo compartilhado
+     * Parametros: nd
+     */
     public function update_file_share_visibility()
     {
         if ($this->input->post()) {
@@ -474,6 +521,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Apaga imagem do contato no Perfil
+     * Parametros: nd
+     */
     public function delete_contact_profile_image($contact_id)
     {
         $this->clients_model->delete_contact_profile_image($contact_id);
@@ -488,6 +540,11 @@ class Clients extends AdminController
         redirect(admin_url('clients/client/' . $id));
     }
 
+    /***************
+     * @return void
+     * Funcao: LGPD consentimento
+     * Parametros: nd
+     */
     public function consents($id)
     {
         if (staff_cant('view', 'customers')) {
@@ -504,6 +561,11 @@ class Clients extends AdminController
         $this->load->view('admin/gdpr/contact_consent', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Atualiza todas as propostas linkadas ao cliente
+     * Parametros: nd
+     */
     public function update_all_proposal_emails_linked_to_customer($contact_id)
     {
         $success = false;
@@ -545,6 +607,11 @@ class Clients extends AdminController
         ]);
     }
 
+    /***************
+     * @return void
+     * Funcao: Atribui Administradores ao Cliente
+     * Parametros: nd
+     */
     public function assign_admins($id)
     {
         if (staff_cant('create', 'customers') && staff_cant('edit', 'customers')) {
@@ -570,6 +637,11 @@ class Clients extends AdminController
         redirect(admin_url('clients/client/' . $customer_id) . '?tab=customer_admins');
     }
 
+    /***************
+     * @return void
+     * Funcao: Apaga o contato
+     * Parametros: nd
+     */
     public function delete_contact($customer_id, $id)
     {
         if (staff_cant('delete', 'customers')) {
@@ -592,6 +664,11 @@ class Clients extends AdminController
         redirect(admin_url('clients/client/' . $customer_id . '?group=contacts'));
     }
 
+    /***************
+     * @return void
+     * Funcao: Obtem a Tabela de Contatos
+     * Parametros: nd
+     */
     public function contacts($client_id)
     {
         $this->app->get_table_data('contacts', [
@@ -599,11 +676,21 @@ class Clients extends AdminController
         ]);
     }
 
+    /***************
+     * @return void
+     * Funcao: Atualiza Anexos
+     * Parametros: nd
+     */
     public function upload_attachment($id)
     {
         handle_client_attachments_upload($id);
     }
 
+    /***************
+     * @return void
+     * Funcao: Adiciona Anexo Externo
+     * Parametros: nd
+     */
     public function add_external_attachment()
     {
         if ($this->input->post()) {
@@ -611,6 +698,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Apaga anexo
+     * Parametros: nd
+     */
     public function delete_attachment($customer_id, $id)
     {
         if (staff_can('delete',  'customers') || is_customer_admin($customer_id)) {
@@ -619,7 +711,11 @@ class Clients extends AdminController
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    /* Delete client */
+    /***************
+     * @return void
+     * Funcao: Deleta o Cliente
+     * Parametros: nd
+     */
     public function delete($id)
     {
         if (staff_cant('delete', 'customers')) {
@@ -639,7 +735,11 @@ class Clients extends AdminController
         redirect(admin_url('clients'));
     }
 
-    /* Staff can login as client */
+    /***************
+     * @return void
+     * Funcao: Equipe pode logar como Cliente
+     * Parametros: nd
+     */
     public function login_as_client($id)
     {
         if (is_admin()) {
@@ -654,7 +754,12 @@ class Clients extends AdminController
         echo json_encode($this->clients_model->get_customer_billing_and_shipping_details($id));
     }
 
-    /* Change client status / active / inactive */
+
+    /***************
+     * @return void
+     * Funcao: Muda o Status do Contato para Ativo/Inativo
+     * Parametros: nd
+     */
     public function change_contact_status($id, $status)
     {
         if (staff_can('edit',  'customers') || is_customer_admin(get_user_id_by_contact_id($id))) {
@@ -664,7 +769,11 @@ class Clients extends AdminController
         }
     }
 
-    /* Change client status / active / inactive */
+    /***************
+     * @return void
+     * Funcao: Muda o Status do Cliente para Ativo/Inativo
+     * Parametros: nd
+     */
     public function change_client_status($id, $status)
     {
         if ($this->input->is_ajax_request()) {
@@ -672,7 +781,14 @@ class Clients extends AdminController
         }
     }
 
-    /* Zip function for credit notes */
+    /***************
+     * @return void
+     * Funcao: Funcao zip para notas de crédito.
+     * A nota de crédito de cliente é um título de crédito emitido pelo setor Financeiro da sua empresa para o seu cliente
+     * com o objetivo de deduzir valores do total a receber do cliente. A nota de crédito de cliente pode ter
+     * diversas origens como: Devolução de venda.
+     * Parametros: nd
+     */
     public function zip_credit_notes($id)
     {
         $has_permission_view = staff_can('view',  'credit_notes');
@@ -696,6 +812,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Faturas ZIP (CEP?)
+     * Parametros: nd
+     */
     public function zip_invoices($id)
     {
         $has_permission_view = staff_can('view',  'invoices');
@@ -719,7 +840,12 @@ class Clients extends AdminController
         }
     }
 
-    /* Since version 1.0.2 zip client estimates */
+
+    /***************
+     * @return void
+     * Funcao: Orçamentos ZIP (CEP?)
+     * Parametros: nd
+     */
     public function zip_estimates($id)
     {
         $has_permission_view = staff_can('view',  'estimates');
@@ -743,6 +869,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Pagamentos ZIP?
+     * Parametros: nd
+     */
     public function zip_payments($id)
     {
         $has_permission_view = staff_can('view',  'payments');
@@ -766,6 +897,11 @@ class Clients extends AdminController
         $this->app_bulk_pdf_export->export();
     }
 
+    /***************
+     * @return void
+     * Funcao: Importa Clientes
+     * Parametros: nd
+     */
     public function import()
     {
         if (staff_cant('create', 'customers')) {
@@ -811,6 +947,11 @@ class Clients extends AdminController
         $this->load->view('admin/clients/import', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Gerencia os Grupos
+     * Parametros: nd
+     */
     public function groups()
     {
         if (!is_admin()) {
@@ -823,6 +964,11 @@ class Clients extends AdminController
         $this->load->view('admin/clients/groups_manage', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Salva o Grupo?????
+     * Parametros: nd
+     */
     public function group()
     {
         if (!is_admin() && get_option('staff_members_create_inline_customer_groups') == '0') {
@@ -854,6 +1000,11 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Apaga o Grupo
+     * Parametros: nd
+     */
     public function delete_group($id)
     {
         if (!is_admin()) {
@@ -871,6 +1022,11 @@ class Clients extends AdminController
         redirect(admin_url('clients/groups'));
     }
 
+    /***************
+     * @return void
+     * Funcao: Manipula as ações em massa
+     * Parametros: nd
+     */
     public function bulk_action()
     {
         hooks()->do_action('before_do_bulk_action_for_customers');
@@ -900,6 +1056,13 @@ class Clients extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Cria entrada no Vault
+     * Google Vault é uma ferramenta que permite a retenção, análise, arquivamento e exportação de conversas e
+     * e-mails trocados por contas Google dentro de um ambiente corporativo, como o Google Workspace.
+     * Parametros: nd
+     */
     public function vault_entry_create($customer_id)
     {
         $data = $this->input->post();
@@ -927,6 +1090,13 @@ class Clients extends AdminController
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    /***************
+     * @return void
+     * Funcao: Atualiza as entrada no Vault
+     * Google Vault é uma ferramenta que permite a retenção, análise, arquivamento e exportação de conversas e
+     * e-mails trocados por contas Google dentro de um ambiente corporativo, como o Google Workspace.
+     * Parametros: nd
+     */
     public function vault_entry_update($entry_id)
     {
         $entry = $this->clients_model->get_vault_entry($entry_id);
@@ -960,6 +1130,13 @@ class Clients extends AdminController
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    /***************
+     * @return void
+     * Funcao: Apaga uma entrada no Vault
+     * Google Vault é uma ferramenta que permite a retenção, análise, arquivamento e exportação de conversas e
+     * e-mails trocados por contas Google dentro de um ambiente corporativo, como o Google Workspace.
+     * Parametros: nd
+     */
     public function vault_entry_delete($id)
     {
         $entry = $this->clients_model->get_vault_entry($id);
@@ -969,6 +1146,13 @@ class Clients extends AdminController
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    /***************
+     * @return void
+     * Funcao: Encripta a senha do  entrada no Vault
+     * Google Vault é uma ferramenta que permite a retenção, análise, arquivamento e exportação de conversas e
+     * e-mails trocados por contas Google dentro de um ambiente corporativo, como o Google Workspace.
+     * Parametros: nd
+     */
     public function vault_encrypt_password()
     {
         $id            = $this->input->post('id');
@@ -996,6 +1180,13 @@ class Clients extends AdminController
         echo json_encode(['password' => $password]);
     }
 
+    /***************
+     * @return void
+     * Funcao: Obtem a entrada no Vault
+     * Google Vault é uma ferramenta que permite a retenção, análise, arquivamento e exportação de conversas e
+     * e-mails trocados por contas Google dentro de um ambiente corporativo, como o Google Workspace.
+     * Parametros: nd
+     */
     public function get_vault_entry($id)
     {
         $entry = $this->clients_model->get_vault_entry($id);
@@ -1004,6 +1195,11 @@ class Clients extends AdminController
         echo json_encode($entry);
     }
 
+    /***************
+     * @return void
+     * Funcao: Declaração do PDF
+     * Parametros: nd
+     */
     public function statement_pdf()
     {
         $customer_id = $this->input->get('customer_id');
@@ -1037,6 +1233,11 @@ class Clients extends AdminController
         $pdf->Output(slug_it(_l('customer_statement') . '-' . $data['statement']['client']->company) . '.pdf', $type);
     }
 
+    /***************
+     * @return void
+     * Funcao: Envia Declaração do PDF
+     * Parametros: nd
+     */
     public function send_statement()
     {
         $customer_id = $this->input->get('customer_id');
@@ -1064,6 +1265,11 @@ class Clients extends AdminController
         redirect(admin_url('clients/client/' . $customer_id . '?group=statement'));
     }
 
+    /***************
+     * @return void
+     * Funcao: Declaração do PDF
+     * Parametros: nd
+     */
     public function statement()
     {
         if (staff_cant('view', 'invoices') && staff_cant('view', 'payments')) {

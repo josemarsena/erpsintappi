@@ -82,13 +82,12 @@
 
         $('#bancos_modal input[name="codigobanco"]').val('');
         $('#bancos_modal input[name="nomebanco"]').val('');
-        $('#currency_modal input[name="currencyid"]').val('');
 
         $('#bancos_modal .add-title').removeClass('hide');
         $('#bancos_modal .edit-title').addClass('hide');
 
         if (typeof(id) !== 'undefined') {
-            $('input[name="currencyid"]').val(id);
+
             var codigobanco = $(button).parents('tr').find('td').eq(0).find('span.name').text();
             var nomebanco = $(button).parents('tr').find('td').eq(1).text();
 

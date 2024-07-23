@@ -4,6 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Financeiro extends AdminController
 {
+    /***************
+     * @return void
+     * Funcao: Construtor da Classe financeiro
+     * Parametros: nd
+     */
 	public function __construct()
     {
         parent::__construct();
@@ -13,11 +18,6 @@ class Financeiro extends AdminController
         $this->load->model('contasbancarias_model');
         $this->load->model('planocontas_model');
     }
-
-    /**
-     * manage transaction
-     * @return view
-     */
 
 
     /***************
@@ -32,8 +32,6 @@ class Financeiro extends AdminController
             access_denied('financeiro_dashboard');
         }
         $data['title'] = 'Financeiro';
-
-
         $this->load->view('dashboard/manage', $data);
 
     }
@@ -47,8 +45,10 @@ class Financeiro extends AdminController
     public function bancos()
     {
         $this->load->model('bancos_model');
+        $this->load->model('staff_model');
         close_setup_menu();
 
+        // quem pode acessar?
         if (staff_cant('view', 'bancos') && staff_cant('view_own', 'bancos')) {
             access_denied('bancos');
         }
@@ -108,8 +108,6 @@ class Financeiro extends AdminController
      */
     public function contasbancarias()
     {
-        $success = false;
-        $message = '';
         if (!has_permission('financeiro_contasbancarias', '', 'view')) {
             access_denied('financeiro_contasbancarias');
         }
@@ -156,7 +154,11 @@ class Financeiro extends AdminController
 
     }
 
-
+    /***************
+     * @return void
+     * Funcao: Mostrar e Gerenciar o Contas a Pagar
+     * Parametros: nd
+     */
     public function contaspagar()
     {
 
@@ -187,6 +189,12 @@ class Financeiro extends AdminController
         $this->load->view('contaspagar/manage', $data);
 
     }
+
+    /***************
+     * @return void
+     * Funcao: Mostrar e Gerenciar o Contas a Receber
+     * Parametros: nd
+     */
     public function contasreceber()
     {
 
@@ -222,7 +230,11 @@ class Financeiro extends AdminController
 
     }
 
-
+    /***************
+     * @return void
+     * Funcao: Obtem os dados da Tabela baseado nos parametros
+     * Parametros: nd
+     */
     public function table_bancos()
     {
         if (
@@ -242,7 +254,11 @@ class Financeiro extends AdminController
    //     App_table::find('bancos')->output();
     }
 
-    /* Change client status / active / inactive */
+    /***************
+     * @return void
+     * Funcao: Muda o Status da Conta Bancária
+     * Parametros: nd
+     */
     public function muda_status_contabancaria($id, $status)
     {
         if ($this->input->is_ajax_request()) {
@@ -250,6 +266,11 @@ class Financeiro extends AdminController
         }
     }
 
+    /***************
+     * @return void
+     * Funcao: Obtem os dados da tabela baseado nos parametros
+     * Parametros: nd
+     */
     public function table_contasbancarias()
     {
         if (
@@ -260,16 +281,18 @@ class Financeiro extends AdminController
             ajax_access_denied();
         }
 
-
         $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/contasbancarias'));
         $this->app->get_table_data('contasbancarias');
-
 
         //     App_table::find('bancos')->output();
     }
 
-
-    public function editar_banco()
+    /***************
+     * @return void
+     * Funcao: Mostra/Edita o Banco
+     * Parametros: nd
+     */
+    public function editar_banco($id)
     {
         if ($this->input->post()) {
             $data = $this->input->post();
@@ -317,6 +340,12 @@ class Financeiro extends AdminController
         $this->load->view('financeiro/bancos/adicionar_banco', $data);
 
     }
+
+    /***************
+     * @return void
+     * Funcao: Adicona um novo Banco
+     * Parametros: nd
+     */
     public function adicionar_banco()
     {
         if ($this->input->post()) {
@@ -366,6 +395,30 @@ class Financeiro extends AdminController
 
     }
 
+    /***************
+     * @return void
+     * Funcao: Exclui um Banco da Base
+     * Parametros: nd
+     */
+    public function excluir_banco($id)
+    {
+        if (!$id) {
+            redirect(admin_url('financeiro/bancos'));
+        }
+        $response = $this->bancos_model->delete($id);
+        if ($response == true) {
+            set_alert('success', 'Banco Excluido com Sucesso');
+        } else {
+            set_alert('warning', 'Houve um problema para excluir o Banco. Verifique!');
+        }
+        redirect(admin_url('financeiro/bancos'));
+    }
+
+    /***************
+     * @return void
+     * Funcao: Adiciona uma nova Conta Bancaria
+     * Parametros: nd
+     */
     public function adicionar_contabancaria($id = '')
     {
         $this->load->model('contasbancarias_model');
@@ -373,31 +426,14 @@ class Financeiro extends AdminController
             if ($id == '') {
                 if (staff_cant('create', 'contabancaria')) {
                     set_alert('danger', _l('access_denied'));
-                    echo json_encode([
-                        'url' => admin_url('financeiro/contabancaria'),
-                    ]);
-                    die;
                 }
                 $id = $this->contasbancarias_model->add($this->input->post());
                 if ($id) {
                     set_alert('success', _l('added_successfully', 'Conta Bancária'));
-                    echo json_encode([
-                        'url'       => admin_url('financeiro/contasbancarias' . $id),
-                        'id' => $id,
-                    ]);
-                    die;
                 }
-                echo json_encode([
-                    'url' => admin_url('financeiro/contasbancarias'),
-                ]);
-                die;
             }
             if (staff_cant('edit', 'contasbancarias')) {
                 set_alert('danger', _l('access_denied'));
-                echo json_encode([
-                    'url' => admin_url('financeiro/contasbancarias/' . $id),
-                ]);
-                die;
             }
             $success = $this->contasbancarias_model->update($this->input->post(), $id);
             if ($success) {
@@ -426,6 +462,11 @@ class Financeiro extends AdminController
         $this->load->view('financeiro/contasbancarias/adicionar_contabancaria', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Gerencia o Plano de Contas
+     * Parametros: nd
+     */
     public function planocontas(){
         if (!has_permission('planocontas', '', 'view')) {
             access_denied('planocontas');

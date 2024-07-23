@@ -87,7 +87,7 @@ foreach ($rResult as $aRow) {
             $_data = app_format_money($aRow['saldoinicial'],'R$ ');
         }
         if ($aColumns[$i] == 'conta') {
-            $_data = '<a href="#"';
+            // $_data = '<a href="#"';
             // onclick="editar_conta(this,' . $aRow['id'] . '); return false" data-name="' . $aRow['name'] . '" data-calendar-id="' . $aRow['calendar_id'] . '" data-email="' . $aRow['email'] . '" data-hide-from-client="' . $aRow['hidefromclient'] . '" data-host="' . $aRow['host'] . '" data-password="' . $ps . '" data-folder="' . $aRow['folder'] . '" data-imap_username="' . $aRow['imap_username'] . '" data-encryption="' . $aRow['encryption'] . '" data-delete-after-import="' . $aRow['delete_after_import'] . '">' . $_data . '</a>';
         }
         $row[] = $_data;
