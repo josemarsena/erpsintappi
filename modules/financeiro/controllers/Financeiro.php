@@ -15,7 +15,6 @@ class Financeiro extends AdminController
         $this->load->model('financeiro_model');
         $this->load->model('bancos_model');
         $this->load->model('contasbancarias_model');
-        $this->load->model('contasbancarias_model');
         $this->load->model('planocontas_model');
     }
 
@@ -413,6 +412,26 @@ class Financeiro extends AdminController
         }
         redirect(admin_url('financeiro/bancos'));
     }
+
+    /***************
+     * @return void
+     * Funcao: Exclui um Banco da Base
+     * Parametros: nd
+     */
+    public function excluir_contabancaria($id)
+    {
+        if (!$id) {
+            redirect(admin_url('financeiro/contasbancarias'));
+        }
+        $response = $this->contasbancarias_model->delete($id);
+        if ($response == true) {
+            set_alert('success', 'Conta Excluida com Sucesso');
+        } else {
+            set_alert('warning', 'Houve um problema para excluir a Conta. Verifique!');
+        }
+        redirect(admin_url('financeiro/contasbancarias'));
+    }
+
 
     /***************
      * @return void

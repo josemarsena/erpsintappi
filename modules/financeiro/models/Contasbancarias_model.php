@@ -9,6 +9,18 @@ class Contasbancarias_model extends App_Model
         parent::__construct();
     }
 
+    /**
+     * Exclui um conta Bancaria
+     * @param  mixed $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete(db_prefix().'fin_contabancaria');
+
+        return true;
+    }
 
     public function add($data)
     {
