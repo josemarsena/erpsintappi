@@ -194,25 +194,26 @@ class Financeiro extends AdminController
      * Funcao: Mostrar e Gerenciar o Contas a Receber
      * Parametros: nd
      */
-    public function contasreceber()
+    public function contasreceber($id = '')
     {
 
-        if (!has_permission('financeiro_contaspagar', '', 'view')) {
-            access_denied('financeiro_contaspagar');
+        if (!has_permission('financeiro_receber', '', 'view')) {
+            access_denied('financeiro_contasreceber');
         }
 
         $this->load->model('invoices_model');
         $this->load->model('credit_notes_model');
 
-        if (staff_cant('view', 'contasreceber')
-            && staff_cant('view_own', 'contasreceber')
-            && get_option('allow_staff_view_contasreceber_assigned') == '0') {
+        if (staff_cant('view', 'invoices')
+            && staff_cant('view_own', 'invoices')
+            && get_option('allow_staff_view_invoices_assigned') == '0') {
             access_denied('contasreceber');
         }
 
         close_setup_menu();
 
-        $invoices_table = $this->invoices_model->get_unpaid_invoices();
+        $invoices_table = App_table::find('invoices');
+        //$this->invoices_model->get_unpaid_invoices();
 
         
         $this->load->model('payment_modes_model');
@@ -225,7 +226,7 @@ class Financeiro extends AdminController
         $data['invoices_table']       = $invoices_table;
         /** ///App_table::find('invoices');    **/
         $data['bodyclass']            = 'invoices-total-manual';
-        $this->load->view('contasreceber/gerenciar', $data);
+        $this->load->view('financeiro/contasreceber/gerenciar', $data);
 
     }
 

@@ -5,7 +5,7 @@
 		<div id="vueApp">
 			<div class="row">
 				<?php include_once(APPPATH.'views/admin/invoices/filter_params.php'); ?>
-				<?php $this->load->view('admin/invoices/list_template'); ?>
+				<?php $this->load->view('financeiro/contasreceber/list_template'); ?>
 			</div>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 <div class="col-md-12">
     <div class="tw-mb-2 sm:tw-mb-4">
         <div class="_buttons">
-            <?php $this->load->view('financeiro/contasreceber/invoices_top_stats'); ?>
+            <?php $this->load->view('admin/contasreceber/invoices_top_stats'); ?>
             <?php if (staff_can('create',  'invoices')) { ?>
                 <a href="<?php echo admin_url('financeiro/contasreceber'); ?>"
                     class="btn btn-primary pull-left new new-invoice-list mright5">
@@ -50,7 +50,7 @@
                 <div class="panel-body panel-table-full">
                     <!-- if invoiceid found in url -->
                     <?php echo form_hidden('invoiceid', $invoiceid); ?>
-                    <?php $this->load->view('financeiro/contasreceber/table_html'); ?>
+                    <?php $this->load->view('admin/invoices/table_html'); ?>
                 </div>
             </div>
         </div>

@@ -47,6 +47,8 @@ return App_table::find('invoices')
             $where[] = $filtersWhere;
         }
 
+        array_push($where, 'AND ' . db_prefix() . 'invoices.status <> 1 ');
+
         if ($clientid != '') {
             array_push($where, 'AND ' . db_prefix() . 'invoices.clientid=' . $this->ci->db->escape_str($clientid)
                  ' AND ' . db_prefix() . 'invoice.status <> 2 ');
