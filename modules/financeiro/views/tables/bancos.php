@@ -50,14 +50,14 @@ foreach ($rResult as $aRow)
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
 
-        $attributes = [
-            'data-toggle'             => 'modal',
-            'data-target'             => '#bancos_modal',
-            'data-id'                 => $aRow['id'],
-            'data-placement'          => $aRow['placement'],];
+ //       $attributes = [
+ //           'data-toggle'             => 'modal',
+ //           'data-target'             => '#bancos_modal',
+ //           'data-id'                 => $aRow['id'],
+ //           'data-placement'          => $aRow['placement'],];
 
         if ($aColumns[$i] == 'criadopor') {
-            $_data = get_staff($aRow['criadopor']);
+//            $_data = get_staff($aRow['criadopor']);
         }
 
         if ($aColumns[$i] == 'nomebanco') {
