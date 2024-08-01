@@ -121,7 +121,7 @@ return App_table::find('clients')
             $row[] = ($aRow['phonenumber'] ? '<a href="tel:' . $aRow['phonenumber'] . '">' . $aRow['phonenumber'] . '</a>' : '');
 
             // Alternar Ativar/Inativar Cliente
-            $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
+
             $toggleActive = '<div class="onoffswitch" data-toggle="tooltip" data-title="' . _l('customer_active_inactive_help') . '">
     <input type="checkbox"' . ($aRow['registration_confirmed'] == 0 ? ' disabled' : '') . ' data-switch-url="' . admin_url()
                 . 'clients/change_client_status" name="onoffswitch" class="onoffswitch-checkbox" id="'
@@ -133,8 +133,6 @@ return App_table::find('clients')
             // For exporting
             $toggleActive .= '<span class="hide">' . ($aRow[db_prefix() . 'clients.active'] == 1 ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
 
-            fwrite($myfile, $toggleActive);
-            fclose($myfile);
             $row[] = $toggleActive;
 
             // Análise de grupos de clientes
