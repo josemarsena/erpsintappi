@@ -669,8 +669,7 @@ $(function() {
     // Modificado por JRS -> 21.06.2024
     initDataTable('.table-faturas-contrato', admin_url + 'contracts/contrato_faturas/'+client_id +
         '/'+proposta_id+'/'+data_inicio+'/'+data_fim, [0], [0], {},
-        <?php echo hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'desc'])); ?>)
-        .column(1).visible(false, false).columns.adjust();
+        <?php echo hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'desc'])); ?>);
 
 
     init_ajax_project_search_by_customer_id();

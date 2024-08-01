@@ -8,7 +8,12 @@ $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'invoices';
 $join         = [];
 
-$where = [];
+$where = [ db_prefix() . 'invoices.client_id = '. $client_id .
+    'AND ' . db_prefix() . 'invoices.proposta_id = ' . $proposta_id .
+    'AND ' . db_prefix() . 'invoices.duedate >= ' . $data_inicio .
+    'AND ' . db_prefix() . 'invoices.duedate <= ' . $data_fim];
+
+/**
 
 if (staff_cant('view', 'customers')) {
     array_push($where, 'AND ' . db_prefix() . 'invoices.client_id = '. $client_id .
@@ -16,6 +21,8 @@ if (staff_cant('view', 'customers')) {
         'AND ' . db_prefix() . 'invoices.duedate >= ' . $data_inicio .
         'AND ' . db_prefix() . 'invoices.duedate <= ' . $data_fim . ')');
 }
+
+**/
 
 if ($this->ci->input->post('custom_view')) {
     $filter = $this->ci->input->post('custom_view');
@@ -26,12 +33,9 @@ if ($this->ci->input->post('custom_view')) {
             'AND ' . db_prefix() . 'invoices.duedate <= ' . $data_fim . ')');
     }
 }
-fwrite($myfile, var_dump($where));
 
-$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, []);
 
-fwrite($myfile, var_dump($result));
-fclose($myfile);
+$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where);
 
 $output  = $result['output'];
 $rResult = $result['rResult'];
