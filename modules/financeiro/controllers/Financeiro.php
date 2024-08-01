@@ -65,6 +65,7 @@ class Financeiro extends AdminController
         }
 
         $data['title'] = 'Bancos Brasileiros';
+        $data['staff'] = $this->staff_model->get();
 
         if ($this->input->post()) {
             $message          = '';
@@ -105,7 +106,7 @@ class Financeiro extends AdminController
      * Funcao: Mostrar e gerenciar as ContasBancarias
      * Parametros: nd
      */
-    public function contasbancarias()
+    public function gerenciar_contasbancarias()
     {
         if (!has_permission('financeiro_contasbancarias', '', 'view')) {
             access_denied('financeiro_contasbancarias');
@@ -187,6 +188,18 @@ class Financeiro extends AdminController
         $data['bodyclass']            = 'invoices-total-manual';
         $this->load->view('contaspagar/manage', $data);
 
+    }
+
+    public function table_contasreceber($clientid = '')
+    {
+        if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && get_option('allow_staff_view_estimates_assigned') == '0') {
+            ajax_access_denied();
+        }
+
+        // busca os orçamentos baseado no ID do Cliente
+        App_table::find('estimates')->output([
+            'clientid' => $clientid,
+        ]);
     }
 
     /***************
@@ -436,12 +449,13 @@ class Financeiro extends AdminController
 
     /***************
      * @return void
-     * Funcao: Adiciona uma nova Conta Bancaria
+     * Funcao: Adiciona/Edita uma nova Conta Bancaria
      * Parametros: nd
      */
-    public function adicionar_contabancaria($id = '')
+    public function contabancaria($id = '')
     {
         $this->load->model('contasbancarias_model');
+        $this->load->model('staff_model');
         if ($this->input->post()) {
             if ($id == '') {
                 if (staff_cant('create', 'contabancaria')) {
@@ -457,7 +471,7 @@ class Financeiro extends AdminController
             }
             $success = $this->contasbancarias_model->update($this->input->post(), $id);
             if ($success) {
-                set_alert('success', _l('updated_successfully', _l('expense')));
+                set_alert('success', _l('updated_successfully', 'Conta Bancaria Atualizada com Sucesso'));
             }
         }
         if ($id == '') {
@@ -479,7 +493,7 @@ class Financeiro extends AdminController
         $data['bodyclass']  = 'contabacancaria';
         $data['title']      = $title;
 
-        $this->load->view('financeiro/contasbancarias/adicionar_contabancaria', $data);
+        $this->load->view('financeiro/contasbancarias/contabancaria', $data);
     }
 
     /***************

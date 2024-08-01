@@ -12,6 +12,7 @@
 </div>
 <?php $this->load->view('admin/includes/modals/sales_attach_file'); ?>
 <div id="modal-wrapper"></div>
+<?php echo '<script src="' . 'financeiro/assets/js/financeiro.js' . '"></script>'; ?>
 <script>var hidden_columns = [2,6,7,8];</script>
 <?php init_tail(); ?>
 <script>

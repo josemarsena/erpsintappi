@@ -10,13 +10,15 @@ $aColumns = array_merge($aColumns, [
     'id',
     'codigobanco',
     'nomebanco',
-    'criadopor',
+    db_prefix() . 'staff.firstname',
     'datacriacao',
 ]);
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'fin_bancos';
-$join         = [];
+$join         = [
+    'LEFT JOIN ' . db_prefix() . 'staff ON ' . db_prefix() . 'staff.staffid=' . db_prefix() . 'fin_bancos.criadopor ',
+];
 
 // Busca Campos Customizaqdos, se houver
 
@@ -38,7 +40,7 @@ $where = [];
 * @return array
  *
  */
-$result = data_tables_init($aColumns, $sIndexColumn, $sTable);
+$result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where);
 
 $output  = $result['output'];
 $rResult = $result['rResult'];
@@ -50,36 +52,36 @@ foreach ($rResult as $aRow)
     for ($i = 0; $i < count($aColumns); $i++) {
         $_data = $aRow[$aColumns[$i]];
 
- //       $attributes = [
- //           'data-toggle'             => 'modal',
- //           'data-target'             => '#bancos_modal',
- //           'data-id'                 => $aRow['id'],
- //           'data-placement'          => $aRow['placement'],];
-
         if ($aColumns[$i] == 'criadopor') {
-//            $_data = get_staff($aRow['criadopor']);
+            $_data = $aRow['firstname'];
         }
 
-        if ($aColumns[$i] == 'nomebanco') {
-            $_data = $aRow['nomebanco'];
-            $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
+        if ($aColumns[$i] == 'codigobanco') {
+            $_data = $aRow['codigobanco'];
+            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['codigobanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
+ //           $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
             $_data .= '<div class="row-options">';
-            $_data .= '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . _l('view') . '</a>';
+            $_data .= '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['codigobanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . _l('view') . '</a>';
 
             if ($hasPermissionDelete) {
                 $_data .= ' | <a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
             }
             $_data .= '</div>';
         }
- //       if ($aColumns[$i] == 'nomebanco') {
-        //    $_data = '<a href="#" onclick="(this,' . $aRow['id'] . '); return false" data-name="' . $aRow['name']
-            // . '" data-calendar-id="' . $aRow['calendar_id'] . '" data-email="' . $aRow['email']
-            // . '" data-hide-from-client="' . $aRow['hidefromclient'] . '" data-host="' . $aRow['host']
-            // . '" data-password="' . $ps . '" data-folder="' . $aRow['folder'] . '" data-imap_username="'
-            // . $aRow['imap_username'] . '" data-encryption="' . $aRow['encryption']
-            // . '" data-delete-after-import="' . $aRow['delete_after_import'] . '">' . $_data . '</a>';
-  //          $_data = '<a href="#"';
-   //     }
+
+        if ($aColumns[$i] == 'nomebanco') {
+            $_data = $aRow['nomebanco'];
+            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['nomebanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
+            //           $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data .= '<div class="row-options">';
+            $_data .= '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['nomebanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . _l('view') . '</a>';
+
+            if ($hasPermissionDelete) {
+                $_data .= ' | <a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+            }
+            $_data .= '</div>';
+        }
+
         $row[] = $_data;
     }
 

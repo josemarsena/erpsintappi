@@ -6,7 +6,7 @@
             <div class="col-md-12">
                 <div class="_buttons">
                     <?php if (staff_can('create',  'contasbancarias')) { ?>
-                        <a href="<?php echo admin_url('financeiro/adicionar_contabancaria'); ?>" class="btn btn-primary">
+                        <a href="<?php echo admin_url('financeiro/contabancaria'); ?>" class="btn btn-primary">
                             <i class="fa-regular fa-plus tw-mr-1"></i>
                             <?php echo 'Nova Conta'; ?>
                         </a>

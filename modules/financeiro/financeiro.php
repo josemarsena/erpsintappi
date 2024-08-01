@@ -148,7 +148,7 @@ function financeiro_module_init_menu_items()
                 'slug'     => 'financeiro_contasbancarias',
                 'name'     => _l('contasbancarias'),
                 'icon'     => 'fa fa-credit-card',
-                'href'     => admin_url('financeiro/contasbancarias'),
+                'href'     => admin_url('financeiro/gerenciar_contasbancarias'),
                 'position' => 20,
             ]);
         }

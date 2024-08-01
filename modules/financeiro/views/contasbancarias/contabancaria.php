@@ -11,7 +11,6 @@
                 echo form_hidden('is_edit', 'true');
             }
             ?>
-            <?php echo form_open_multipart($this->uri->uri_string(), ['id' => 'contabancaria-form', 'class' => 'dropzone dropzone-manual']) ; ?>
             <div class="col-md-8">
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
                     <?php echo $title; ?>
@@ -41,7 +40,9 @@
                             <?php echo render_input('saldoinicial', 'Saldo Inicial', $value, 'text', $arrAtt); ?></div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->datasaldoinicial : ''); ?>
                         <div class="col-md-6">
+                            <?php echo $value ?>
                             <?php echo render_date_input('datasaldoinicial', 'Data do Saldo Inicial', _d($value)); ?></div>
+                        <?php echo _d($value) ?>
                         <?php $value = (isset($contabancaria) ? $contabancaria->ativo : ''); ?>
                         <div class="col-md-6 row">
                             <div class="row">
@@ -61,6 +62,7 @@
                         </div>
                         <div class="btn-bottom-toolbar text-right">
                             <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
+                            <?php echo form_close(); ?>
                         </div>
                     </div>
                 </div>

@@ -25,6 +25,7 @@ class Estimates extends AdminController
             access_denied('estimates');
         }
 
+        // É pipeline????
         $isPipeline = $this->session->userdata('estimate_pipeline') == 'true';
 
         $data['estimate_statuses'] = $this->estimates_model->get_statuses();
@@ -66,6 +67,7 @@ class Estimates extends AdminController
             ajax_access_denied();
         }
 
+        // busca os orçamentos baseado no ID do Cliente
         App_table::find('estimates')->output([
             'clientid' => $clientid,
         ]);

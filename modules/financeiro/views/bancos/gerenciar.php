@@ -33,7 +33,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">
-                    <span class="edit-title"><?php echo 'Adicionar novo Banco'; ?></span>
+                    <span class="add-title"><?php echo 'Adicionar novo Banco'; ?></span>
+                    <span class="edit-title"><?php echo 'Editar Banco'; ?></span>
                 </h4>
             </div>
             <?php echo form_open('financeiro/bancos', ['id' => 'bancos_form']); ?>
@@ -41,8 +42,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <?php echo render_input('codigobanco', 'Código do Banco', '', 'text'); ?>
-                        <?php echo render_input('nomebanco', 'Nome do Banco', '', 'text'); ?>
+                        <?php echo render_input('codigobanco', 'Código do Banco'); ?>
+                        <?php echo render_input('nomebanco', 'Nome do Banco'); ?>
                      </div>
                 </div>
             </div>

@@ -2,15 +2,11 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$myfile = fopen("erro.txt", "w") or die("Unable to open file!");
-
 $aColumns = ['number', 'duedate', 'total', 'status'];
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'invoices';
 $join         = [];
-
-fwrite($myfile, var_dump($aColumns));
 
 $where = [];
 

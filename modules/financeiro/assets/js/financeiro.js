@@ -2188,7 +2188,7 @@ $(function () {
       initDataTable(
         table_invoices,
         admin_url +
-          "invoices/table" +
+          "financeiro/table_contasreceber1" +
           ($("body").hasClass("recurring") ? "?recurring=1" : ""),
         "undefined",
         "undefined",

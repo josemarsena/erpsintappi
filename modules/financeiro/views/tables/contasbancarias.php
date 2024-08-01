@@ -74,16 +74,30 @@ foreach ($rResult as $aRow) {
         }
         if ($aColumns[$i] == 'conta') {
             $_data = $aRow['conta'];
-            $_data = '<a href="' . admin_url('financeiro/editar_contabancaria/' . $aRow['id']) . '">' . $_data . '</a>';
+            $_data = '<a href="' . admin_url('financeiro/contabancaria/' . $aRow['id']) . '">' . $_data . '</a>';
             $_data .= '<div class="row-options">';
-            $_data .= '<a href="' . admin_url('financeiro/editar_contabancaria/' . $aRow['id']) . '">' . _l('view') . '</a>';
+            $_data .= '<a href="' . admin_url('financeiro/contabancaria/' . $aRow['id']) . '">' . _l('view') . '</a>';
 
             if ($hasPermissionDelete) {
                 $_data .= ' | <a href="' . admin_url('financeiro/excluir_contabancaria/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
             }
             $_data .= '</div>';
 
+
         }
+
+        if ($aColumns[$i] == 'ativo') {
+                $checked = '';
+                if ($aRow['ativo'] == 1) {
+                    $checked = 'checked';
+                }
+                $_data = '<div class="onoffswitch">
+                <input type="checkbox" data-switch-url="' . admin_url() . 'financeiro/muda_status_contabancaria" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '" ' . $checked . '>
+                <label class="onoffswitch-label" for="c_' . $aRow['id'] . '"></label>
+            </div>';
+
+        }
+
 
         $row[] = $_data;
     }
