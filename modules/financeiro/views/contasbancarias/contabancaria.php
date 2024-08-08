@@ -15,6 +15,7 @@
                 <h4 class="tw-mt-0 tw-font-semibold tw-text-lg tw-text-neutral-700">
                     <?php echo $title; ?>
                 </h4>
+                <?php echo form_open_multipart($this->uri->uri_string(), ['id' => 'contabancaria-form']) ; ?>
                 <div class="panel_s">
                     <div class="panel-body">
                         <hr class="hr-panel-separator" />
@@ -37,12 +38,12 @@
                         <?php echo render_input('telefone', 'Telefone', $value, 'text'); ?>
                         <?php $value = (isset($contabancaria) ? $contabancaria->saldoinicial : ''); ?>
                         <div class="col-md-6">
-                            <?php echo render_input('saldoinicial', 'Saldo Inicial', $value, 'text', $arrAtt); ?></div>
+                            <?php echo render_input('saldoinicial', 'Saldo Inicial', $value, 'text', $arrAtt); ?>
+                        </div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->datasaldoinicial : ''); ?>
                         <div class="col-md-6">
-                            <?php echo $value ?>
-                            <?php echo render_date_input('datasaldoinicial', 'Data do Saldo Inicial', _d($value)); ?></div>
-                        <?php echo _d($value) ?>
+                               <?php echo render_date_input('datasaldoinicial', 'Data do Saldo Inicial', _d($value)); ?>
+                        </div>
                         <?php $value = (isset($contabancaria) ? $contabancaria->ativo : ''); ?>
                         <div class="col-md-6 row">
                             <div class="row">
@@ -54,7 +55,7 @@
                                         <input type="checkbox" id="ativo" data-perm-id="1"
                                                class="onoffswitch-checkbox" <?php if (isset($contabancaria) && $contabancaria->ativo == '1') {
                                             echo 'checked';
-                                        } ?> value="ativo" name="ativo">
+                                        } ?> value="1" name="ativo">
                                         <label class="onoffswitch-label" for="ativo"></label>
                                     </div>
                                 </div>
@@ -62,7 +63,7 @@
                         </div>
                         <div class="btn-bottom-toolbar text-right">
                             <button type="submit" class="btn btn-primary"><?php echo _l('submit'); ?></button>
-                            <?php echo form_close(); ?>
+
                         </div>
                     </div>
                 </div>

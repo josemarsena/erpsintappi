@@ -2,23 +2,19 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-$aColumns        = [];
-
 $hasPermissionDelete = staff_can('delete',  'financeiro_bancos');
 
-$aColumns = array_merge($aColumns, [
+$aColumns = [
     'id',
     'codigobanco',
     'nomebanco',
     db_prefix() . 'staff.firstname',
     'datacriacao',
-]);
+];
 
 $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'fin_bancos';
-$join         = [
-    'LEFT JOIN ' . db_prefix() . 'staff ON ' . db_prefix() . 'staff.staffid=' . db_prefix() . 'fin_bancos.criadopor ',
-];
+$join         = ['LEFT JOIN ' . db_prefix() . 'staff ON ' . db_prefix() . 'staff.staffid=' . db_prefix() . 'fin_bancos.criadopor '];
 
 // Busca Campos Customizaqdos, se houver
 
@@ -56,36 +52,32 @@ foreach ($rResult as $aRow)
             $_data = $aRow['firstname'];
         }
 
-        if ($aColumns[$i] == 'codigobanco') {
-            $_data = $aRow['codigobanco'];
-            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['codigobanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
- //           $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
-            $_data .= '<div class="row-options">';
-            $_data .= '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['codigobanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . _l('view') . '</a>';
+        if ($aColumns[$i] == 'codigobanco' || $aColumns[$i] == 'nomebanco') {
 
-            if ($hasPermissionDelete) {
-                $_data .= ' | <a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
-            }
-            $_data .= '</div>';
-        }
+            //          //$_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['codigobanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
+          $_data = '<a href="#" data-toggle="modal" data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data
+                     . '</a>';
 
-        if ($aColumns[$i] == 'nomebanco') {
-            $_data = $aRow['nomebanco'];
-            $_data = '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['nomebanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . $_data . '</a>';
-            //           $_data = '<a href="' . admin_url('financeiro/editar_banco/' . $aRow['id']) . '">' . $_data . '</a>';
-            $_data .= '<div class="row-options">';
-            $_data .= '<a href="#" data-toggle="modal" data-default-selected="' . $aRow['nomebanco'] . '"data-target="#bancos_modal" data-id="' . $aRow['id'] . '">' . _l('view') . '</a>';
+       }
 
-            if ($hasPermissionDelete) {
-                $_data .= ' | <a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
-            }
-            $_data .= '</div>';
-        }
 
         $row[] = $_data;
     }
 
-    $row['DT_RowClass'] = 'has-row-options';
-    $row = hooks()->apply_filters('admin_bancos_table_row', $row, $aRow);
+    $options = '<div class="tw-flex tw-items-center tw-space-x-3">';
+    $options .= '<a href="#" class="tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700" ' . _attributes_to_string([
+            'data-toggle'           => 'modal',
+            'data-target'           => '#bancos_modal',
+            'data-id'               => $aRow['id'],
+        ]) . '><i class="fa-regular fa-pen-to-square fa-lg"></i></a>';
+
+    $options .= '<a href="' . admin_url('financeiro/excluir_banco/' . $aRow['id']) .
+        '" class="tw-mt-px tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 _delete"><i class="fa-regular fa-trash-can fa-lg"></i></a>';
+    $options .= '</div>';
+
+    $row[] = $options;
+
+ //   $row['DT_RowClass'] = 'has-row-options';
+ //   $row = hooks()->apply_filters('admin_bancos_table_row', $row, $aRow);
     $output['aaData'][] = $row;
 }

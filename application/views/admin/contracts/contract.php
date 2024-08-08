@@ -484,7 +484,7 @@
                                             <?php
                                             $table_data = ['Fatura', 'Vencimento', 'Valor', 'Status'];
 
-                                           // echo render_datatable($table_data, 'faturas-contrato'); ?>
+                                            echo render_datatable($table_data, 'faturas-contrato'); ?>
                                         <?php } ?>
                                     <?php } ?>
                             </div>

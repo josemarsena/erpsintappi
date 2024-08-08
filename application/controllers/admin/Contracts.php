@@ -451,12 +451,14 @@ class Contracts extends AdminController
     public function contrato_faturas($client_id, $proposta_id, $data_inicio, $data_fim)
     {
         // Obtem os dados da table faturas_contrato
-        $this->app->get_table_data('faturas_contrato', [
+        $result = $this->app->get_table_data('faturas_contrato', [
             'client_id' => $client_id,
             'proposta_id' => $proposta_id,
             'data_inicio' => $data_inicio,
             'data_fim' => $data_fim,
         ]);
+
+        echo $result;
     }
 
 }

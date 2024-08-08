@@ -37,7 +37,7 @@
                     <span class="edit-title"><?php echo 'Editar Banco'; ?></span>
                 </h4>
             </div>
-            <?php echo form_open('financeiro/bancos', ['id' => 'bancos_form']); ?>
+            <?php echo form_open('financeiro/bancos/gerenciar', ['id' => 'bancos_form']); ?>
             <?php echo form_hidden('id'); ?>
             <div class="modal-body">
                 <div class="row">
@@ -88,9 +88,9 @@
         $('#bancos_modal .edit-title').addClass('hide');
 
         if (typeof(id) !== 'undefined') {
-
-            var codigobanco = $(button).parents('tr').find('td').eq(0).find('span.name').text();
-            var nomebanco = $(button).parents('tr').find('td').eq(1).text();
+            $('input[name="id"]').val(id);
+            var codigobanco = $(button).parents('tr').find('td').eq(1).text();
+            var nomebanco = $(button).parents('tr').find('td').eq(2).text();
 
             $('#bancos_modal .add-title').addClass('hide');
             $('#bancos_modal .edit-title').removeClass('hide');
@@ -100,7 +100,20 @@
     });
 
  });
-
+ /* CURRENCY MANAGE FUNCTIONS */
+ function gerencia_bancos(form) {
+     var data = $(form).serialize();
+     var url = form.action;
+     $.post(url, data).done(function(response) {
+         response = JSON.parse(response);
+         if (response.success == true) {
+             $('.table-currencies').DataTable().ajax.reload();
+             alert_float('success', response.message);
+         }
+         $('#bancos_modal').modal('hide');
+     });
+     return false;
+ }
 </script>
 
 </body>

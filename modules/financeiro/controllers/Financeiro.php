@@ -87,7 +87,7 @@ class Financeiro extends AdminController
                     access_denied('financeiro_bancos');
                 }
 
-                $success = $this->bancos_model->update($data);
+                $success = $this->bancos_model->update($data, $data['id']);
                 if ($success) {
                     $message = _l('updated_successfully');
                     set_alert('success', $message);
@@ -138,13 +138,15 @@ class Financeiro extends AdminController
                 if(!has_permission('financeiro_contasbancarias','','edit') && !is_admin()){
                     access_denied('financeiro_contasbancarias');
                 }
-
+                //$myfile = fopen("erro.txt", "w") or die("Unable to open file!");
+                //fwrite($myfile, $data);
+                //fclose($myfile);
                 $success = $this->contasbancarias_model->update($data);
                 if ($success) {
                     $message = _l('updated_successfully');
                     set_alert('success', $message);
                 }
-                redirect(admin_url('financeiro/contasbancarias'));
+                redirect(admin_url('financeiro/contabancaria'));
             }
             die;
         }
@@ -443,7 +445,7 @@ class Financeiro extends AdminController
         } else {
             set_alert('warning', 'Houve um problema para excluir a Conta. Verifique!');
         }
-        redirect(admin_url('financeiro/contasbancarias'));
+        redirect(admin_url('financeiro/gerenciar_contasbancarias'));
     }
 
 
@@ -470,6 +472,10 @@ class Financeiro extends AdminController
                 set_alert('danger', _l('access_denied'));
             }
             $success = $this->contasbancarias_model->update($this->input->post(), $id);
+            $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
+            $dados = $this->input->post();
+            fwrite($myfile, var_dump($dados) );
+            fclose($myfile);
             if ($success) {
                 set_alert('success', _l('updated_successfully', 'Conta Bancaria Atualizada com Sucesso'));
             }

@@ -49,6 +49,7 @@ class Contasbancarias_model extends App_Model
 
         $data = hooks()->apply_filters('antes_contasbancarias_atualizar', $data, $id);
 
+        $data['datasaldoinicial'] = to_sql_date($data['datasaldoinicial']);
 
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'fin_contabancaria', $data);

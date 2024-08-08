@@ -43,7 +43,7 @@ class Bancos_model extends App_Model
     {
         $affectedRows = 0;
 
-        $banco = $this->db->where('id', $id)->get('fin_bancos')->row();
+        // $banco = $this->db->where('id', $id)->get('fin_bancos')->row();
 
 
         $data = hooks()->apply_filters('antes_banco_atualizar', $data, $id);
@@ -54,7 +54,7 @@ class Bancos_model extends App_Model
 
         if ($this->db->affected_rows() > 0) {
             hooks()->do_action('apos_banco_atualizar', $id);
-            log_activity('Cadastro do Banco foi datualizado [' . $data['subject'] . ']');
+            log_activity('Cadastro do Banco foi atualizado [' . $data['id'] . ']');
 
             return true;
         }
