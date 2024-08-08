@@ -472,10 +472,7 @@ class Financeiro extends AdminController
                 set_alert('danger', _l('access_denied'));
             }
             $success = $this->contasbancarias_model->update($this->input->post(), $id);
-            $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
-            $dados = $this->input->post();
-            fwrite($myfile, var_dump($dados) );
-            fclose($myfile);
+
             if ($success) {
                 set_alert('success', _l('updated_successfully', 'Conta Bancaria Atualizada com Sucesso'));
             }
