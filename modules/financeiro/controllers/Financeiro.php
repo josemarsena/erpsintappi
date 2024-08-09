@@ -491,6 +491,7 @@ class Financeiro extends AdminController
 
         // Carrega o Modelo de Bancos para Seleção
         $this->load->model('bancos_model');
+        $this->load->model('planocontas_model');
 
         $data['bancos']     = $this->bancos_model->get();
         $data['bodyclass']  = 'contabacancaria';
@@ -510,9 +511,9 @@ class Financeiro extends AdminController
         }
 
         $data['title'] = 'Plano de Contas Gerencial';
-        $data['tipos_conta'] = $this->financeiro_model->obter_tipos_conta();
-        $data['tipos_detalhes'] = $this->financeiro_model->obter_detalhes_tipos_conta();
-        $data['contas'] = $this->financeiro_model->obter_contas();
+        $data['tipos_conta'] = $this->planocontas_model->obter_tipos_conta();
+        $data['tipos_detalhes'] = $this->planocontas_model->obter_detalhes_tipo_conta();
+        $data['contas'] = $this->planocontas_model->obter_contas();
         $this->load->view('planocontas/gerenciar', $data);
     }
 

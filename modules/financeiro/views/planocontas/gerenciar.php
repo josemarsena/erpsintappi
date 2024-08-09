@@ -17,7 +17,7 @@
               <?php echo render_select('ft_parent_account',$contas,array('id','name', 'account_type_name'),'parent_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
-              <?php echo render_select('ft_type',$tipos_contas,array('id','name'),'type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_type',$tipos_conta,array('id','name'),'type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
               <?php echo render_select('ft_detail_type',$tipos_detalhes,array('id','name'),'detail_type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
