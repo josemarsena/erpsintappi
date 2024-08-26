@@ -461,32 +461,11 @@
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="faturas">
-                                    <?php
-                                     if (isset($contract)) { ?>
-                                        <?php if (staff_can('create',  'invoices')) { ?>
-                                            <a href="<?php echo admin_url('invoices/invoice?customer_id=' . $contract->client); ?>"
-                                               class="btn btn-primary mbot15<?php echo $contract->active == 0 ? ' disabled' : ''; ?>">
-                                                <i class="fa-regular fa-plus tw-mr-1"></i>
-                                                <?php echo _l('create_new_invoice'); ?>
-                                            </a>
-                                        <?php } ?>
 
-                                         <?php if (staff_can('create',  'invoices')) { ?>
-                                             <a href="<?php echo admin_url('invoices/invoice?customer_id=' . $contract->client); ?>"
-                                                class="btn btn-primary mbot15<?php echo $contract->active == 0 ? ' disabled' : ''; ?>">
-                                                 <i class="fa-regular fa-plus tw-mr-1"></i>
-                                                 <?php echo 'Gerar todas'; ?>
-                                             </a>
-                                         <?php } ?>
+                                    <!-- comentario aqui
 
-                                        <?php if (staff_can('view',  'invoices') || staff_can('view_own',  'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
-                                            <div id="invoices_total" class="tw-mb-5"></div>
-                                            <?php
-                                            $table_data = ['Fatura', 'Vencimento', 'Valor', 'Status'];
 
-                                            echo render_datatable($table_data, 'faturas-contrato'); ?>
-                                        <?php } ?>
-                                    <?php } ?>
+                                    -->
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="tab_comments">
