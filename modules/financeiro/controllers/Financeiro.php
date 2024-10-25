@@ -16,6 +16,7 @@ class Financeiro extends AdminController
         $this->load->model('bancos_model');
         $this->load->model('contasbancarias_model');
         $this->load->model('planocontas_model');
+
     }
 
 
@@ -51,8 +52,6 @@ class Financeiro extends AdminController
         if (staff_cant('view', 'bancos') && staff_cant('view_own', 'bancos')) {
             access_denied('bancos');
         }
-
- //       $data['table'] = App_table::find('fin_bancos');
 
         // Checa as Permissões para os Bancos
         if (!has_permission('financeiro_bancos', '', 'view')) {
@@ -99,6 +98,27 @@ class Financeiro extends AdminController
 
        // $data['table'] = $this->bancos_model->get();
         $this->load->view('bancos/gerenciar', $data);
+    }
+
+    /***************
+     * @return void
+     * Funcao: Obtem os dados da Tabela baseado nos parametros
+     * Parametros: nd
+     */
+    public function table_bancos()
+    {
+        if (
+            staff_cant('view', 'bancos')
+            && staff_cant('view_own', 'bancos')
+            && get_option('allow_staff_view_bancos_assigned') == 0
+        ) {
+            ajax_access_denied();
+        }
+        // get_table_data = obtem os dados da tabela Função que analisará os dados da tabela da pasta tabelas para a Area de Admin
+        // $table = nome da tabela
+        // $params
+        $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/bancos'));
+
     }
 
     /***************
@@ -158,50 +178,206 @@ class Financeiro extends AdminController
 
     /***************
      * @return void
+     * Funcao: Obtem os dados da Tabela de Contas a Pagar (Fatura a Pagar)
+     * Parametros: nd
+     */
+    public function table_contaspagar()
+    {
+        $this->app->get_table_data(module_views_path('financeiro', 'contaspagar/contaspagar'));
+    }
+
+    /***************
+     * @return void
+     * Funcao: Registra nova Fatura a Pagar
+     * Parametros: nd
+     */
+    public function fatura_a_pagar($id = '')
+    {
+        if ($this->input->post()) {
+            $dados_fatura = $this->input->post();
+
+
+            if ($id == '') {
+
+                // Verifica permissão para a Equipe
+                if (staff_cant('create', 'invoices')) {
+                    access_denied('invoices');
+                }
+
+                if (hooks()->apply_filters('valida_fatura_a_pagar', true)) {
+                    $numero = ltrim($dados_fatura['numero'], '0');
+                    if (total_rows('fin_faturas', [
+                        'YEAR(data)' => (int) date('Y', strtotime(to_sql_date($dados_fatura['data']))),
+                        'numero'     => $numero,
+                        'status !='  => Faturas_model::STATUS_DRAFT,
+                    ])) {
+                        set_alert('warning', _l('invoice_number_exists'));
+
+                        redirect(admin_url('contaspagar/pagar'));
+                    }
+                }
+
+                $id = $this->faturas_model->add($dados_fatura);
+                if ($id) {
+                    set_alert('success', _l('added_successfully', _l('invoice')));
+                    $redUrl = admin_url('financeiro/contaspagar/list_invoices/' . $id);
+
+                    if (isset($dados_fatura['save_and_record_payment'])) {
+                        $this->session->set_userdata('record_payment', true);
+                    } elseif (isset($dados_fatura['save_and_send_later'])) {
+                        $this->session->set_userdata('send_later', true);
+                    }
+
+                    redirect($redUrl);
+                }
+            } else {
+                // Verifica se a Equipe pode Editar
+                if (staff_cant('edit', 'invoices')) {
+                    access_denied('invoices');
+                }
+
+                // If number not set, is draft
+                if (hooks()->apply_filters('valida_fatura_a_pagar', true) && isset($dados_fatura['numero'])) {
+                    $numero = trim(ltrim($dados_fatura['numero'], '0'));
+                    if (total_rows('fin_faturas', [
+                        'YEAR(data)' => (int) date('Y', strtotime(to_sql_date($dados_fatura['data']))),
+                        'numero'     => $numero,
+                        'status !='  => Faturas_model::STATUS_DRAFT,
+                        'id !='      => $id,
+                    ])) {
+                        set_alert('warning', _l('invoice_number_exists'));
+
+                        redirect(admin_url('financeiro/contaspagar/fatura/' . $id));
+                    }
+                }
+                $success = $this->invoices_model->update($dados_fatura, $id);
+                if ($success) {
+                    set_alert('success', _l('updated_successfully', _l('invoice')));
+                }
+
+                redirect(admin_url('financeiro/contaspagar/list_invoices/' . $id));
+            }
+        }
+        if ($id == '') {
+            $titulo                  = ' Criar Nova Fatura a Pagar';
+            $data['billable_tasks'] = [];
+        } else {
+            $fatura = $this->faturas_model->get($id);
+
+            if (!$fatura || !user_can_view_invoice($id)) {
+                blank_page(_l('invoice_not_found'));
+            }
+
+            $data['invoices_to_merge'] = $this->faturas_model->check_for_merge_invoice($fatura->id_fornecedor, $fatura->id);
+            $data['expenses_to_bill']  = $this->faturas_model->get_expenses_to_bill($fatura->id_fornecedor);
+
+            $data['fatura']        = $fatura;
+            $data['edit']           = true;
+            $data['billable_tasks'] = $this->tasks_model->get_billable_tasks($fatura->id_fornecedor, !empty($fatura->id_projeto) ? $fatura->id_projeto : '');
+
+            $titulo = _l('edit', _l('invoice_lowercase')) . ' - ' . format_invoice_number($fatura->id);
+        }
+
+        if ($this->input->get('customer_id')) {
+            $data['customer_id'] = $this->input->get('customer_id');
+        }
+
+        $this->load->model('payment_modes_model');
+        $data['payment_modes'] = $this->payment_modes_model->get('', [
+            'expenses_only !=' => 1,
+        ]);
+
+        $this->load->model('taxes_model');
+        $data['impostos'] = $this->taxes_model->get();
+        $this->load->model('invoice_items_model');
+
+        $data['ajaxItems'] = false;
+        if (total_rows(db_prefix() . 'items') <= ajax_on_total_items()) {
+            $data['items'] = $this->invoice_items_model->get_grouped();
+        } else {
+            $data['items']     = [];
+            $data['ajaxItems'] = true;
+        }
+        $data['items_groups'] = $this->invoice_items_model->get_groups();
+
+        $this->load->model('currencies_model');
+        $data['moedas'] = $this->currencies_model->get();
+
+        $data['moeda_base'] = $this->currencies_model->get_base_currency();
+
+        $data['equipe']     = $this->staff_model->get('', ['active' => 1]);
+        $data['titulo']     = $titulo;
+        $data['bodyclass'] = 'invoice';
+        $this->load->view('financeiro/contaspagar/fatura', $data);
+    }
+
+    public function valida_fatura_a_pagar()
+    {
+        $isedit          = $this->input->post('isedit');
+        $number          = $this->input->post('number');
+        $date            = $this->input->post('date');
+        $original_number = $this->input->post('original_number');
+        $number          = trim($number);
+        $number          = ltrim($number, '0');
+
+        if ($isedit == 'true') {
+            if ($number == $original_number) {
+                echo json_encode(true);
+                die;
+            }
+        }
+
+        if (total_rows('invoices', [
+                'YEAR(date)' => date('Y', strtotime(to_sql_date($date))),
+                'number' => $number,
+                'status !=' => Invoices_model::STATUS_DRAFT,
+            ]) > 0) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
+    }
+    
+    /***************
+     * @return void
      * Funcao: Mostrar e Gerenciar o Contas a Pagar
      * Parametros: nd
      */
-    public function contaspagar()
+    public function contaspagar($id = '')
     {
 
-        if (!has_permission('financeiro_contaspagar', '', 'view')) {
+        if (!has_permission('financeiro_pagar', '', 'view')) {
             access_denied('financeiro_contaspagar');
         }
 
-        $this->load->model('invoices_model');
+        $this->load->model('faturas_model');
         $this->load->model('credit_notes_model');
 
         if (staff_cant('view', 'invoices')
             && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
-            access_denied('invoices');
+            access_denied('financeiro_contasreceberpagar');
         }
 
+        if ($this->input->is_ajax_request()) {
+            $this->app->get_table_data('contaspagar');
+            // obter os dados da tabela conforme arquivo da tabela definido na pasta tables
+        }
         close_setup_menu();
 
         $this->load->model('payment_modes_model');
-        $data['payment_modes']        = $this->payment_modes_model->get('', [], true);
-        $data['invoiceid']            = $id;
-        $data['title']                = 'Contas a Pagar';
-        $data['invoices_years']       = $this->invoices_model->get_invoices_years();
-        $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
-        $data['invoices_statuses']    = $this->invoices_model->get_statuses();
-        $data['invoices_table']       = App_table::find('invoices');
+        $this->load->model('purchase_model');
+        $data['payment_modes']        = $this->payment_modes_model->get('', [], true);     // Array de modos de Pagamento
+        $data['id_fatura']            = $id;
+        $data['titulo']                = 'Contas a Pagar';
+        $data['fornecedores'] = $this->purchase_model->get_vendor();
+        $data['invoices_years']       = $this->faturas_model->get_invoices_years();    // Array de Anos das Faturas
+        $data['invoices_sale_agents'] = $this->faturas_model->get_compradores();    // Array dos Vendedores
+        $data['invoices_statuses']    = $this->faturas_model->get_status_naopagos();    // Array dos não Pagos
+
         $data['bodyclass']            = 'invoices-total-manual';
-        $this->load->view('contaspagar/manage', $data);
+        $this->load->view('contaspagar/gerenciar', $data);
 
-    }
-
-    public function table_contasreceber($clientid = '')
-    {
-        if (staff_cant('view', 'estimates') && staff_cant('view_own', 'estimates') && get_option('allow_staff_view_estimates_assigned') == '0') {
-            ajax_access_denied();
-        }
-
-        // busca os orçamentos baseado no ID do Cliente
-        App_table::find('estimates')->output([
-            'clientid' => $clientid,
-        ]);
     }
 
     /***************
@@ -222,51 +398,84 @@ class Financeiro extends AdminController
         if (staff_cant('view', 'invoices')
             && staff_cant('view_own', 'invoices')
             && get_option('allow_staff_view_invoices_assigned') == '0') {
-            access_denied('contasreceber');
+            access_denied('financeiro_contasreceber');
         }
 
+        if ($this->input->is_ajax_request()) {
+            $this->app->get_table_data('contasreceber');
+            // obter os dados da tabela conforme arquivo da tabela definido na pasta tables
+        }
         close_setup_menu();
 
-        $invoices_table = App_table::find('invoices');
-        //$this->invoices_model->get_unpaid_invoices();
+    //    if ($this->input->is_ajax_request()) {
+     //       $this->app->get_table_data(module_views_path('financeiro', 'tables/contasreceber'));
+     //   }
+//
+     //   $invoices_table = App_table::find('invoices');
 
-        
         $this->load->model('payment_modes_model');
-        $data['payment_modes']        = $this->payment_modes_model->get('', [], true);
+        $data['payment_modes']        = $this->payment_modes_model->get('', [], true);     // Array de modos de Pagamento
         $data['invoiceid']            = $id;
         $data['title']                = 'Contas a Receber';
-        $data['invoices_years']       = $this->invoices_model->get_invoices_years();
-        $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
-        $data['invoices_statuses']    = $this->invoices_model->get_status_naopagos();
-        $data['invoices_table']       = $invoices_table;
-        /** ///App_table::find('invoices');    **/
+        $data['invoices_years']       = $this->invoices_model->get_invoices_years();    // Array de Anos das Faturas
+        $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();    // Array dos Vendedores
+        $data['invoices_statuses']    = $this->invoices_model->get_status_naopagos();    // Array dos não Pagos
+   //     $data['invoices_table']       = $invoices_table;   // Tabela de Fatura
         $data['bodyclass']            = 'invoices-total-manual';
-        $this->load->view('financeiro/contasreceber/gerenciar', $data);
+        $this->load->view('contasreceber/gerenciar', $data);
 
     }
 
-    /***************
-     * @return void
-     * Funcao: Obtem os dados da Tabela baseado nos parametros
-     * Parametros: nd
+
+    /**
+     * Gets the pur order data ajax.
+     *
+     * @param      <type>   $id         The identifier
+     * @param      boolean  $to_return  To return
+     *
+     * @return     view.
      */
-    public function table_bancos()
+    public function get_contasreceber_data_ajax($id, $to_return = false)
     {
-        if (
-            staff_cant('view', 'bancos')
-            && staff_cant('view_own', 'bancos')
-            && get_option('allow_staff_view_bancos_assigned') == 0
-        ) {
-            ajax_access_denied();
+        if (!has_permission('purchase', '', 'view') && !has_permission('purchase', '', 'view_own')) {
+            echo _l('access_denied');
+            die;
         }
-        // get_table_data = obtem os dados da tabela Função que analisará os dados da tabela da pasta tabelas para a Area de Admin
-        // $table = nome da tabela
-        // $params
-        $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/bancos'));
-    //    $this->app->get_table_data('bancos');
 
+        if (!$id) {
+            die('No purchase order found');
+        }
 
-   //     App_table::find('bancos')->output();
+        $estimate = $this->purchase_model->get_pur_order($id);
+
+        if (!$estimate || !user_can_view_estimate($id)) {
+            echo _l('pur_order_not_found');
+            die;
+        }
+
+        $this->load->model('payment_modes_model');
+        $data['payment_modes'] = $this->payment_modes_model->get('', [
+            'expenses_only !=' => 1,
+        ]);
+
+        $data['payment'] = $this->purchase_model->get_payment_purchase_order($id);
+        $data['pur_order_attachments'] = $this->purchase_model->get_purchase_order_attachments($id);
+        $data['estimate_detail'] = $this->purchase_model->get_pur_order_detail($id);
+        $data['estimate']          = $estimate;
+        $data['members']           = $this->staff_model->get('', ['active' => 1]);
+
+        if ($to_return == false) {
+            $this->load->view('purchase_order/pur_order_preview', $data);
+        } else {
+            return $this->load->view('purchase_order/pur_order_preview', $data, true);
+        }
+    }
+
+    // $clientid = ''
+
+    public function table_contasreceber()
+    {
+        $this->app->get_table_data(module_views_path('financeiro', 'contasreceber/contasreceber'));
     }
 
     /***************

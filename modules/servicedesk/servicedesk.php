@@ -4,10 +4,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: ServiceDesk
 Description: Serviços de TI
-Version: 1.0.1
+Version: 1.0.2
 Requires at least: 1.0.*
-Author: I3Software
-Author URI: https://i3software.i3c.com.br
+Author: Synglia
+Author URI: https://synglia.com.br
 */
 
 
@@ -68,7 +68,7 @@ function servicedesk_load_js()
     $mediaLocale = get_media_locale();
 
  
-    if (!(strpos($viewuri, '/admin/financeiro/dashboard') === false)) 
+    if (!(strpos($viewuri, '/admin/servicedesk/dashboard') === false))
 	{
 		echo '<script src="' . module_dir_url(SERVICEDESK_MODULE_NAME, 'assets/plugins/highcharts/highcharts.js') . '"></script>';
 		echo '<script src="' . module_dir_url(SERVICEDESK_MODULE_NAME, 'assets/plugins/highcharts/modules/variable-pie.js') . '"></script>';
@@ -88,18 +88,6 @@ function servicedesk_module_init_menu_items()
 {
     $CI = &get_instance();
 
-
-// Criar o itens do Menu
-// Contas a Pagar/Pagas	
-// Contas a Receber/Recebidas
-// Dashboard
-// Plano de Contas Financeiro
-// Bancos
-// Contas Bancárias
-// Cartões de Crédito
-// Seleção de Pagamento
-// Fluxo de Caixa Financeiro
-// Pagamentos
 
 
     if (has_permission('servicedesk_dashboard', '', 'view') || has_permission('servicedesk_report', '', 'view') || has_permission('servicedesk_setting', '', 'view')) {

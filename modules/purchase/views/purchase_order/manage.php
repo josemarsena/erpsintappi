@@ -54,32 +54,32 @@
 				<div class="col-md-12" id="small-table">
 					<div class="panel_s">
 						<div class="panel-body">
-	                    <?php echo form_hidden('pur_orderid',$pur_orderid); ?>
-	                    <?php $table_data = array(
-                           _l('purchase_order'),
-                           _l('total'),
-                           _l('estimates_total_tax'),
-                           _l('vendor'),
-                           _l('tags'),
-                           _l('order_date'),
-                           _l('payment_status'),
-                           _l('status'),
-                           _l('convert_expense'),
-                           );
-                       $custom_fields = get_custom_fields('pur_order',array('show_on_table'=>1));
-                        foreach($custom_fields as $field){
-                         array_push($table_data,$field['name']);
-                        }
-                       render_datatable($table_data,'table_pur_order'); ?>
+                            <?php echo form_hidden('pur_orderid',$pur_orderid); ?>
+                            <?php $table_data = array(
+                               _l('purchase_order'),
+                               _l('total'),
+                               _l('estimates_total_tax'),
+                               _l('vendor'),
+                               _l('tags'),
+                               _l('order_date'),
+                               _l('payment_status'),
+                               _l('status'),
+                               _l('convert_expense'),
+                               );
+                               $custom_fields = get_custom_fields('pur_order',array('show_on_table'=>1));
+                                foreach($custom_fields as $field){
+                                 array_push($table_data,$field['name']);
+                                }
+                           render_datatable($table_data,'table_pur_order'); ?>
 							
 						</div>
 					</div>
 				</div>
             	
-			<div class="col-md-7 small-table-right-col">
-			    <div id="pur_order" class="hide">
-			    </div>
-			 </div>
+                <div class="col-md-7 small-table-right-col">
+                    <div id="pur_order" class="hide">
+                    </div>
+                 </div>
             </div>
 		</div>
 	</div>

@@ -7,7 +7,7 @@ class Accounting extends AdminController
 	public function __construct()
     {
         parent::__construct();
-        $this->load->model('Planocontas_model');
+        $this->load->model('accounting_model');
         if(get_option('acc_add_default_account') == 0){
             $this->accounting_model->add_default_account();
         }

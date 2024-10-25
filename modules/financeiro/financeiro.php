@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.5
+Version: 1.0.6
 Requires at least: 1.0.*
 Author: Synglia
 Author URI: https://synglia.com.br
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'financeiro_load_js');
 hooks()->add_action('admin_init', 'financeiro_module_init_menu_items');
 hooks()->add_action('admin_init', 'financeiro_permissions');
 
-define('FINANCEIRO_REVISION', 105);
+define('FINANCEIRO_REVISION', 106);
 
 
 /**
@@ -56,6 +56,8 @@ function financeiro_add_head_component()
     $viewuri = $_SERVER['REQUEST_URI'];
 
     // Inicializa e cria o Cabeçalho do Modulo Dashboard/Financeiro
+
+
     if(!(strpos($viewuri,'admin/financeiro/dashboard') === false)){
         echo '<link href="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/css/box_loading.css') . '?v=' . FINANCEIRO_REVISION. '"  rel="stylesheet" type="text/css" />';
         echo '<link href="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/css/dashboard.css') . '?v=' . FINANCEIRO_REVISION. '"  rel="stylesheet" type="text/css" />';
@@ -78,7 +80,15 @@ function financeiro_load_js()
     $viewuri     = $_SERVER['REQUEST_URI'];
     $mediaLocale = get_media_locale();
 
- 
+    if(!(strpos($viewuri, '/admin/financeiro/contasreceber') === false)){
+        echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/js/financeiro.js') .'?v=' . FINANCEIRO_REVISION . '"></script>';
+    }
+
+    if(!(strpos($viewuri, '/admin/financeiro/contaspagar') === false)){
+        echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/js/financeiro.js') .'?v=' . FINANCEIRO_REVISION . '"></script>';
+    }
+
+
     if (!(strpos($viewuri, '/admin/financeiro/dashboard') === false)) 
 	{
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/highcharts.js') . '"></script>';
@@ -87,7 +97,7 @@ function financeiro_load_js()
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/modules/accessibility.js') . '"></script>';
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/modules/exporting.js') . '"></script>';
 		echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/plugins/highcharts/highcharts-3d.js') . '"></script>';
-        echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/js/financeiro.js') . '"></script>';
+
 	}
 }
 

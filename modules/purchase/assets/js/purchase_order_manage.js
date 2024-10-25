@@ -58,10 +58,12 @@ var expenseDropzone;
 
 
 })(jQuery);
+
 function init_pur_order(id) {
     "use strict";
     load_small_pur_order_table_item(id, '#pur_order', 'pur_orderid', 'purchase/get_pur_order_data_ajax', '.table-table_pur_order');
 }
+
 function load_small_pur_order_table_item(id, selector, input_name, url, table) {
     "use strict";
     var _tmpID = $('input[name="' + input_name + '"]').val();

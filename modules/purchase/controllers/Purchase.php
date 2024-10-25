@@ -24,7 +24,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { vendors }
+     * { Fornecedores - Gerencia os Fornecedores }
      */
     public function vendors(){
     	
@@ -34,7 +34,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { table vendor }
+     * { Tabela Fornecedores }
      */
     public function table_vendor()
     {
@@ -43,10 +43,10 @@ class purchase extends AdminController
     }
 
     /**
-     * { vendor }
+     * { Administra um Vendedor }
      *
-     * @param      string  $id     The vendor
-     * @return      view
+     * @param      string  $id     O Fornecedor
+     * @return      View
      */
     public function vendor($id = '')
     {
@@ -196,7 +196,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { setting }
+     * { Configuração do Pedido de Compra}
      */
     public function setting(){
     	if (!has_permission('purchase', '', 'edit') && !is_admin()) {
@@ -229,9 +229,9 @@ class purchase extends AdminController
     }
     
     /**
-     * { assign vendor admins }
+     * { Atribuir administradores dos fornecedores }
      *
-     * @param      string  $id     The identifier
+     * @param      string  $id     O identificador
      * @return      redirect
      */
     public function assign_vendor_admins($id)
@@ -248,7 +248,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { delete vendor }
+     * { Exclui um Fornecedor }
      *
      * @param      <type>  $id     The identifier
      * @return      redirect
@@ -272,7 +272,7 @@ class purchase extends AdminController
    	}
 
     /**
-     * { form contact }
+     * { Formulário de Contato }
      *
      * @param      <type>  $customer_id  The customer identifier
      * @param      string  $contact_id   The contact identifier
@@ -394,7 +394,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { vendor contacts }
+     * { Contatos do Fornecedor }
      *
      * @param      <type>  $client_id  The client identifier
      */
@@ -406,7 +406,7 @@ class purchase extends AdminController
     }
 
     /**
-     * Determines if contact email exists.
+     * Determina se Existe email do Contato.
      */
     public function contact_email_exists()
     {
@@ -435,7 +435,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { delete vendor contact }
+     * { Exclui Contato do Vendedor }
      *
      * @param      string  $customer_id  The customer identifier
      * @param      <type>  $id           The identifier
@@ -456,7 +456,7 @@ class purchase extends AdminController
 
 
     /**
-     * { all contacts }
+     * { Todos os Contatos }
      * @return     view
      */
     public function all_contacts()
@@ -475,7 +475,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { purchase request }
+     * { Solicitação de Compra }
      * @return     view
      */
     public function purchase_request(){
@@ -485,7 +485,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { add update purchase request }
+     * { Adicionar atualização de solicitação de compra }
      *
      * @param      string  $id     The identifier
      * @return    redirect, view
@@ -527,7 +527,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { view pur request }
+     * { Ver Solicitação de Compra }
      *
      * @param      <type>  $id     The identifier
      * @return view
@@ -557,7 +557,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { approval setting }
+     * { Configurações de Aprovação }
      * @return redirect
      */
     public function approval_setting()
@@ -586,7 +586,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { delete approval setting }
+     * { Exclui Configurações de Aprovaçaõ }
      *
      * @param      <type>  $id     The identifier
      * @return redirect
@@ -608,7 +608,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { items change event}
+     * { Evento de Mudança de Itens}
      *
      * @param      <type>  $val    The value
      * @return      json
@@ -624,14 +624,14 @@ class purchase extends AdminController
     }
 
     /**
-     * { table pur request }
+     * { Table Solicitação de Compra}
      */
     public function table_pur_request(){
     	 $this->app->get_table_data(module_views_path('purchase', 'purchase_request/table_pur_request'));
     }
 
     /**
-     * { delete pur request }
+     * { Exclui a solicitação de Compras }
      *
      * @param      <type>  $id     The identifier
      * @return     redirect
@@ -652,7 +652,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { change status pur request }
+     * { Muda o Status da Solicitação de Compra }
      *
      * @param      <type>  $status  The status
      * @param      <type>  $id      The identifier
@@ -675,7 +675,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { quotations }
+     * { Cotações }
      *
      * @param      string  $id     The identifier
      * @return     view
@@ -994,7 +994,7 @@ class purchase extends AdminController
     }
 
     /**
-     * { purchase order }
+     * { Chama a Janela de Pedido de Compra }
      *
      * @param      string  $id     The identifier
      * @return view

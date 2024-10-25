@@ -307,7 +307,7 @@ function get_null_columns_that_should_be_sorted_as_last()
     return hooks()->apply_filters('null_columns_sort_as_last', $columns);
 }
 /**
- * Render table used for datatables
+ * Renderezia tabelas usadas pelo datatables
  * @param  array  $headings           [description]
  * @param  string $class              table class / added prefix table-$class
  * @param  array  $additional_classes
@@ -361,6 +361,7 @@ function render_datatable($headings = [], $class = '', $additional_classes = [''
     $table .= '</thead>';
     $table .= '<tbody></tbody>';
     $table .= '</table></div>';
+
     echo $table;
 }
 
