@@ -88,9 +88,9 @@ var fnServerParams = {};
 
 
 // Init single invoice
-function init_contasreceber() {
-    "use strict";
-    load_small_contasreceber_table_item(id, '#invoice', 'invoiceid', 'financeiro/get_contasreceber_data_ajax', '.table-contasreceber');
+function init_contasreceber(id) {
+
+    load_small_table_item(id, '#invoice', 'invoiceid', 'financeiro/get_contasreceber_data_ajax', '.table-invoices');
 }
 
 function load_small_contasreceber_table_item(id, selector, input_name, url, table) {

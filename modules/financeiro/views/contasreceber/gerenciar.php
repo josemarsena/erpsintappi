@@ -16,7 +16,7 @@
 <?php init_tail(); ?>
 <script>
     $(function(){
-      //  init_contasreceber();
+        init_contasreceber();
     });
 </script>
 </body>

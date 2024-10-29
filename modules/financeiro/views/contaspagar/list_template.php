@@ -32,6 +32,7 @@
                    title="<?php echo _l('view_stats_tooltip'); ?>">
                     <i class="fa fa-bar-chart"></i>
                 </a>
+
             </div>
 
             <div class="clearfix"></div>

@@ -87,9 +87,9 @@ return App_table::find('invoices')
 
             // If is from client area table
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
             }
 
             if ($aRow['recurring'] > 0) {

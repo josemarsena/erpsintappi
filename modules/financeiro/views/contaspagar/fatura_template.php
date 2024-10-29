@@ -39,23 +39,23 @@
                         <?php } ?>
                     </select>
                 <?php
-            if (!isset($fatura)) { ?>
-                <div class="form-group select-placeholder projects-wrapper<?php if ((!isset($fatura)) || (isset($fatura) && !customer_has_projects($fatura->id_fornecedor))) {
-                echo (isset($customer_id) && (!isset($project_id) || !$project_id)) ?  ' hide' : '';
-            } ?>">
+                if (!isset($fatura)) { ?>
+                    <div class="form-group select-placeholder projects-wrapper<?php if ((!isset($fatura)) || (isset($fatura) && !customer_has_projects($fatura->id_fornecedor))) {
+                    echo (isset($id_fornecedor) && (!isset($id_projeto) || !$id_projeto)) ?  ' hide' : '';
+                } ?>">
                     <label for="project_id"><?php echo _l('project'); ?></label>
                     <div id="project_ajax_search_wrapper">
-                        <select name="project_id" id="project_id" class="projects ajax-search" data-live-search="true"
+                        <select name="id_projeto" id="id_projeto" class="projects ajax-search" data-live-search="true"
                             data-width="100%" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                             <?php
-                    if (!isset($project_id)) {
-                        $project_id = '';
+                    if (!isset($id_projeto)) {
+                        $id_projeto = '';
                     }
                     if (isset($fatura) && $fatura->id_projeto) {
-                        $project_id = $fatura->id_projeto;
+                        $id_projeto = $fatura->id_projeto;
                     }
-                    if ($project_id) {
-                        echo '<option value="' . $project_id . '" selected>' . get_project_name_by_id($project_id) . '</option>';
+                    if ($id_projeto) {
+                        echo '<option value="' . $id_projeto . '" selected>' . get_project_name_by_id($id_projeto) . '</option>';
                     }
                    ?>
                         </select>
@@ -63,60 +63,60 @@
                 </div>
                 <?php } ?>
                 <?php
-               $next_invoice_number = get_option('proxima_fatura_a_pagar');
-               $format              = get_option('formato_fatura_a_pagar');
+               $prox_numero_fatura = get_option('proxima_fatura_a_pagar');
+               $formato             = get_option('formato_fatura_a_pagar');
 
                if (isset($fatura)) {
-                   $format = $fatura->formatonumero;
+                   $formato = $fatura->formatonumero;
                }
 
-               $prefix = get_option('invoice_prefix');
+               $prefixo = get_option('prefixo_fatura');
 
-               if ($format == 1) {
-                   $__number = $next_invoice_number;
+               if ($formato == 1) {
+                   $__numero = $prox_numero_fatura;
                    if (isset($fatura)) {
-                       $__number = $fatura->numero;
-                       $prefix   = '<span id="prefix">' . $fatura->prefixo . '</span>';
+                       $__numero = $fatura->numero;
+                       $prefixo   = '<span id="prefix">' . $fatura->prefixo . '</span>';
                    }
-               } elseif ($format == 2) {
+               } elseif ($formato == 2) {
                    if (isset($fatura)) {
-                       $__number = $fatura->numero;
-                       $prefix   = $fatura->prefixo;
-                       $prefix   = '<span id="prefix">' . $prefixo . '</span><span id="prefix_year">' . date('Y', strtotime($fatura->data)) . '</span>/';
+                       $__numero = $fatura->numero;
+                       $prefixo   = $fatura->prefixo;
+                       $prefixo   = '<span id="prefix">' . $prefixo . '</span><span id="prefix_year">' . date('Y', strtotime($fatura->data)) . '</span>/';
                    } else {
-                       $__number = $next_invoice_number;
-                       $prefix   = $prefix . '<span id="prefix_year">' . date('Y') . '</span>/';
+                       $__numero = $prox_numero_fatura;
+                       $prefixo   = $prefixo . '<span id="prefix_year">' . date('Y') . '</span>/';
                    }
-               } elseif ($format == 3) {
+               } elseif ($formato == 3) {
                    if (isset($fatura)) {
                        $yy       = date('y', strtotime($fatura->data));
-                       $__number = $fatura->numero;
-                       $prefix   = '<span id="prefix">' . $fatura->prefixo . '</span>';
+                       $__numero = $fatura->numero;
+                       $prefixo   = '<span id="prefix">' . $fatura->prefixo . '</span>';
                    } else {
                        $yy       = date('y');
-                       $__number = $next_invoice_number;
+                       $__numero = $prox_numero_fatura;
                    }
-               } elseif ($format == 4) {
+               } elseif ($formato == 4) {
                    if (isset($fatura)) {
                        $yyyy     = date('Y', strtotime($fatura->data));
                        $mm       = date('m', strtotime($fatura->data));
-                       $__number = $fatura->number;
-                       $prefix   = '<span id="prefix">' . $fatura->prefixo . '</span>';
+                       $__numero = $fatura->numero;
+                       $prefixo   = '<span id="prefix">' . $fatura->prefixo . '</span>';
                    } else {
                        $yyyy     = date('Y');
                        $mm       = date('m');
-                       $__number = $next_invoice_number;
+                       $__numero = $prox_numero_fatura;
                    }
                }
 
                $_is_draft            = (isset($fatura) && $fatura->status == Invoices_model::STATUS_DRAFT) ? true : false;
-               $_invoice_number      = str_pad($__number, get_option('number_padding_prefixes'), '0', STR_PAD_LEFT);
+               $_invoice_number      = str_pad($__numero, get_option('number_padding_prefixes'), '0', STR_PAD_LEFT);
                $isedit               = isset($fatura) ? 'true' : 'false';
                $data_original_number = isset($fatura) ? $fatura->numero : 'false';
 
                ?>
                 <div class="form-group">
-                    <label for="number">
+                    <label for="numero">
                         <?php echo _l('invoice_add_edit_number'); ?>
                         <i class="fa-regular fa-circle-question" data-toggle="tooltip"
                             data-title="<?php echo _l('invoice_number_not_applied_on_draft') ?>"
@@ -127,23 +127,23 @@
                             <?php if (isset($fatura)) { ?>
                             <a href="#" onclick="return false;" data-toggle="popover"
                                 data-container='._transaction_form' data-html="true"
-                                data-content="<label class='control-label'><?php echo _l('settings_sales_invoice_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo $invoice->prefix; ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('invoices/update_number_settings/' . $invoice->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>">
+                                data-content="<label class='control-label'><?php echo _l('settings_sales_invoice_prefix'); ?></label><div class='input-group'><input name='s_prefix' type='text' class='form-control' value='<?php echo $fatura->prefixo; ?>'></div><button type='button' onclick='save_sales_number_settings(this); return false;' data-url='<?php echo admin_url('invoices/update_number_settings/' . $fatura->id); ?>' class='btn btn-primary btn-block mtop15'><?php echo _l('submit'); ?></button>">
                                 <i class="fa fa-cog"></i>
                             </a>
                             <?php }
-                    echo $prefix;
+                    echo $prefixo;
                   ?>
                         </span>
-                        <input type="text" name="number" class="form-control"
+                        <input type="text" name="numero" class="form-control"
                             value="<?php echo ($_is_draft) ? 'DRAFT' : $_invoice_number; ?>"
                             data-isedit="<?php echo $isedit; ?>"
                             data-original-number="<?php echo $data_original_number; ?>"
                             <?php echo ($_is_draft) ? 'disabled' : '' ?>>
-                        <?php if ($format == 3) { ?>
+                        <?php if ($formato == 3) { ?>
                         <span class="input-group-addon">
                             <span id="prefix_year" class="format-n-yy"><?php echo $yy; ?></span>
                         </span>
-                        <?php } elseif ($format == 4) { ?>
+                        <?php } elseif ($formato == 4) { ?>
                         <span class="input-group-addon">
                             <span id="prefix_month" class="format-mm-yyyy"><?php echo $mm; ?></span>
                             /
@@ -160,30 +160,30 @@
                       $date_attrs['disabled'] = true;
                   }
                   ?>
-                        <?php echo render_date_input('date', 'invoice_add_edit_date', $value, $date_attrs); ?>
+                        <?php echo render_date_input('data', 'invoice_add_edit_date', $value, $date_attrs); ?>
                     </div>
                     <div class="col-md-6">
                         <?php
                   $value = '';
                   if (isset($fatura)) {
-                      $value = _d($fatura->duedate);
+                      $value = _d($fatura->datavencimento);
                   } else {
                       if (get_option('invoice_due_after') != 0) {
                           $value = _d(date('Y-m-d', strtotime('+' . get_option('invoice_due_after') . ' DAY', strtotime(date('Y-m-d')))));
                       }
                   }
                    ?>
-                        <?php echo render_date_input('duedate', 'invoice_add_edit_duedate', $value); ?>
+                        <?php echo render_date_input('datavencimento', 'invoice_add_edit_duedate', $value); ?>
                     </div>
                 </div>
                 <?php if (is_invoices_overdue_reminders_enabled()) { ?>
                 <div class="form-group">
                     <div class="checkbox checkbox-danger">
-                        <input type="checkbox" <?php if (isset($fatura) && $fatura->cancel_overdue_reminders == 1) {
+                        <input type="checkbox" <?php if (isset($fatura) && $fatura->cancelar_lembretes_atraso == 1) {
                        echo 'checked';
-                   } ?> id="cancel_overdue_reminders" name="cancel_overdue_reminders">
+                   } ?> id="cancelar_lembretes_atraso" name="cancelar_lembretes_atraso">
                         <label
-                            for="cancel_overdue_reminders"><?php echo _l('cancel_overdue_reminders_invoice') ?></label>
+                            for="cancelar_lembretes_atraso"><?php echo _l('cancel_overdue_reminders_invoice') ?></label>
                     </div>
                 </div>
                 <?php } ?>
@@ -211,7 +211,7 @@
                             data-role="tagsinput">
                     </div>
                     <div class="form-group mbot15<?= count($payment_modes) > 0 ? ' select-placeholder' : ''; ?>">
-                        <label for="allowed_payment_modes"
+                        <label for="modos_pagamento_permitidos"
                             class="control-label"><?php echo _l('invoice_add_edit_allowed_payment_modes'); ?></label>
                         <br />
                         <?php if (count($payment_modes) > 0) { ?>
@@ -222,8 +222,8 @@
                             <?php foreach ($payment_modes as $mode) {
                    $selected = '';
                    if (isset($fatura)) {
-                       if ($fatura->allowed_payment_modes) {
-                           $inv_modes = unserialize($fatura->allowed_payment_modes);
+                       if ($fatura->modos_pagamento_permitidos) {
+                           $inv_modes = unserialize($fatura->modos_pagamento_permitidos);
                            if (is_array($inv_modes)) {
                                foreach ($inv_modes as $_allowed_payment_mode) {
                                    if ($_allowed_payment_mode == $mode['id']) {
@@ -274,7 +274,7 @@
                         }
                         $currency_attr = hooks()->apply_filters('invoice_currency_attributes', $currency_attr);
                         ?>
-                            <?php echo render_select('currency', $moedas, ['id', 'name', 'symbol'], 'invoice_add_edit_currency', $selected, $currency_attr); ?>
+                            <?php echo render_select('moeda', $moedas, ['id', 'name', 'symbol'], 'invoice_add_edit_currency', $selected, $currency_attr); ?>
                         </div>
                         <div class="col-md-6">
                             <?php
@@ -286,31 +286,31 @@
                                         }
                                     }
                                 }
-                                echo render_select('sale_agent', $equipe, ['staffid', ['firstname', 'lastname']], 'Responsável/Comprador', $selected);
+                                echo render_select('id_comprador', $equipe, ['staffid', ['firstname', 'lastname']], 'Responsável/Comprador', $selected);
                             ?>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group select-placeholder"
-                                <?php if (isset($fatura) && !empty($fatura->is_recurring_from)) { ?>
+                                <?php if (isset($fatura) && !empty($fatura->e_recorrente_de)) { ?>
                                 data-toggle="tooltip"
                                 data-title="<?php echo _l('create_recurring_from_child_error_message', [_l('invoice_lowercase'), _l('invoice_lowercase'), _l('invoice_lowercase')]); ?>"
                                 <?php } ?>>
                                 <label for="recurring" class="control-label">
                                     <?php echo _l('invoice_add_edit_recurring'); ?>
                                 </label>
-                                <select class="selectpicker" data-width="100%" name="recurring"
+                                <select class="selectpicker" data-width="100%" name="recorrente"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>" <?php
                         // The problem is that this invoice was generated from previous recurring invoice
                         // Then this new invoice you set it as recurring but the next invoice date was still taken from the previous invoice.
-                        if (isset($fatura) && !empty($fatura->is_recurring_from)) {
+                        if (isset($fatura) && !empty($fatura->e_recorrente_de)) {
                             echo 'disabled';
                         } ?>>
                                     <?php for ($i = 0; $i <= 12; $i++) { ?>
                                     <?php
                               $selected = '';
                               if (isset($fatura)) {
-                                  if ($fatura->custom_recurring == 0) {
-                                      if ($fatura->recurring == $i) {
+                                  if ($fatura->custom_recorrencia == 0) {
+                                      if ($fatura->recorrente == $i) {
                                           $selected = 'selected';
                                       }
                                   }
@@ -326,7 +326,7 @@
                                     <option value="<?php echo $i; ?>" <?php echo $selected; ?>>
                                         <?php echo $reccuring_string; ?></option>
                                     <?php } ?>
-                                    <option value="custom" <?php if (isset($fatura) && $fatura->recurring != 0 && $fatura->custom_recurring == 1) {
+                                    <option value="custom" <?php if (isset($fatura) && $fatura->recorrente != 0 && $fatura->custom_recorrencia == 1) {
                                   echo 'selected';
                               } ?>><?php echo _l('recurring_custom'); ?></option>
                                 </select>
@@ -334,68 +334,68 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group select-placeholder">
-                                <label for="discount_type"
+                                <label for="tipo_descto"
                                     class="control-label"><?php echo _l('discount_type'); ?></label>
-                                <select name="discount_type" class="selectpicker" data-width="100%"
+                                <select name="tipo_descto" class="selectpicker" data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                                     <option value="" selected><?php echo _l('no_discount'); ?></option>
                                     <option value="before_tax" <?php
                               if (isset($fatura)) {
-                                  if ($fatura->discount_type == 'before_tax') {
+                                  if ($fatura->tipo_descto == 'before_tax') {
                                       echo 'selected';
                                   }
                               } ?>><?php echo _l('discount_type_before_tax'); ?></option>
                                     <option value="after_tax" <?php if (isset($fatura)) {
-                                  if ($fatura->discount_type == 'after_tax') {
+                                  if ($fatura->tipo_descto == 'after_tax') {
                                       echo 'selected';
                                   }
                               } ?>><?php echo _l('discount_type_after_tax'); ?></option>
                                 </select>
                             </div>
                         </div>
-                        <div class="recurring_custom <?php if ((isset($fatura) && $fatura->custom_recurring != 1) || (!isset($fatura))) {
+                        <div class="recurring_custom <?php if ((isset($fatura) && $fatura->custom_recorrencia != 1) || (!isset($fatura))) {
                                   echo 'hide';
                               } ?>">
                             <div class="col-md-6">
-                                <?php $value = (isset($fatura) && $fatura->custom_recurring == 1 ? $fatura->recurring : 1); ?>
+                                <?php $value = (isset($fatura) && $fatura->custom_recorrencia == 1 ? $fatura->recorrente : 1); ?>
                                 <?php echo render_input('repeat_every_custom', '', $value, 'number', ['min' => 1]); ?>
                             </div>
                             <div class="col-md-6">
                                 <select name="repeat_type_custom" id="repeat_type_custom" class="selectpicker"
                                     data-width="100%"
                                     data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
-                                    <option value="day" <?php if (isset($fatura) && $fatura->custom_recurring == 1 && $fatura->recurring_type == 'day') {
+                                    <option value="day" <?php if (isset($fatura) && $fatura->custom_recorrencia == 1 && $fatura->tipo_recorrencia == 'day') {
                                   echo 'selected';
                               } ?>><?php echo _l('invoice_recurring_days'); ?></option>
-                                    <option value="week" <?php if (isset($fatura) && $fatura->custom_recurring == 1 && $fatura->recurring_type == 'week') {
+                                    <option value="week" <?php if (isset($fatura) && $fatura->custom_recorrencia == 1 && $fatura->tipo_recorrencia == 'week') {
                                   echo 'selected';
                               } ?>><?php echo _l('invoice_recurring_weeks'); ?></option>
-                                    <option value="month" <?php if (isset($fatura) && $fatura->custom_recurring == 1 && $fatura->recurring_type == 'month') {
+                                    <option value="month" <?php if (isset($fatura) && $fatura->custom_recorrencia == 1 && $fatura->tipo_recorrencia == 'month') {
                                   echo 'selected';
                               } ?>><?php echo _l('invoice_recurring_months'); ?></option>
-                                    <option value="year" <?php if (isset($fatura) && $fatura->custom_recurring == 1 && $fatura->recurring_type == 'year') {
+                                    <option value="year" <?php if (isset($fatura) && $fatura->custom_recorrencia == 1 && $fatura->tipo_recorrencia == 'year') {
                                   echo 'selected';
                               } ?>><?php echo _l('invoice_recurring_years'); ?></option>
                                 </select>
                             </div>
                         </div>
-                        <div id="cycles_wrapper" class="<?php if (!isset($fatura) || (isset($fatura) && $fatura->recurring == 0)) {
+                        <div id="cycles_wrapper" class="<?php if (!isset($fatura) || (isset($fatura) && $fatura->recorrente == 0)) {
                                   echo ' hide';
                               }?>">
                             <div class="col-md-12">
-                                <?php $value = (isset($fatura) ? $fatura->cycles : 0); ?>
+                                <?php $value = (isset($fatura) ? $fatura->ciclos : 0); ?>
                                 <div class="form-group recurring-cycles">
                                     <label for="cycles"><?php echo _l('recurring_total_cycles'); ?>
-                                        <?php if (isset($fatura) && $fatura->total_cycles > 0) {
-                                  echo '<small>' . _l('cycles_passed', $fatura->total_cycles) . '</small>';
+                                        <?php if (isset($fatura) && $fatura->total_ciclos > 0) {
+                                  echo '<small>' . _l('cycles_passed', $fatura->total_ciclos) . '</small>';
                               }
                             ?>
                                     </label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" <?php if ($value == 0) {
                                 echo ' disabled';
-                            } ?> name="cycles" id="cycles" value="<?php echo $value; ?>" <?php if (isset($fatura) && $fatura->total_cycles > 0) {
-                                echo 'min="' . ($fatura->total_cycles) . '"';
+                            } ?> name="cycles" id="cycles" value="<?php echo $value; ?>" <?php if (isset($fatura) && $fatura->total_ciclos > 0) {
+                                echo 'min="' . ($fatura->total_ciclos) . '"';
                             } ?>>
                                         <div class="input-group-addon">
                                             <div class="checkbox">
@@ -412,7 +412,7 @@
                         </div>
                     </div>
                     <?php $value = (isset($fatura) ? $fatura->adminnote : ''); ?>
-                    <?php echo render_textarea('adminnote', 'invoice_add_edit_admin_note', $value); ?>
+                    <?php echo render_textarea('nota_admin', 'invoice_add_edit_admin_note', $value); ?>
 
                 </div>
             </div>

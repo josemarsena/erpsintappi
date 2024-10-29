@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/twilio-web/src/Twilio" isTestSource="false" packagePrefix="Twilio\" />
       <sourceFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/twilio-web/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/twilio-web/tests/Twilio" isTestSource="true" packagePrefix="Twilio\Tests\" />
+      <sourceFolder url="file://$MODULE_DIR$/modules/saas/controllers/api" isTestSource="false" packagePrefix="PerfexSaaSApi\" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/authorizenet/authorizenet" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/bainternet/php-hooks" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/braintree/braintree_php" />

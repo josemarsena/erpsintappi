@@ -35,25 +35,25 @@
                     <div class="form-group select-placeholder">
                         <label for="clientid" class="control-label"><?php echo _l('invoice_select_customer'); ?></label>
                         <select id="clientid" name="clientid" data-live-search="true" data-width="100%" class="ajax-search<?php if (isset($invoice) && empty($invoice->clientid)) {
-                echo ' customer-removed';
-            } ?>" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
-                            <?php $selected = (isset($invoice) ? $invoice->clientid : '');
-                 if ($selected == '') {
-                     $selected = (isset($customer_id) ? $customer_id: '');
-                 }
-                 if ($selected != '') {
-                     $rel_data = get_relation_data('customer', $selected);
-                     $rel_val  = get_relation_values($rel_data, 'customer');
-                     echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
-                 } ?>
-                        </select>
+                        echo ' customer-removed';
+                         } ?>" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
+                                    <?php $selected = (isset($invoice) ? $invoice->clientid : '');
+                         if ($selected == '') {
+                             $selected = (isset($customer_id) ? $customer_id: '');
+                         }
+                         if ($selected != '') {
+                             $rel_data = get_relation_data('customer', $selected);
+                             $rel_val  = get_relation_values($rel_data, 'customer');
+                             echo '<option value="' . $rel_val['id'] . '" selected>' . $rel_val['name'] . '</option>';
+                         } ?>
+                                </select>
                     </div>
                 </div>
                 <?php
-            if (!isset($invoice_from_project)) { ?>
-                <div class="form-group select-placeholder projects-wrapper<?php if ((!isset($invoice)) || (isset($invoice) && !customer_has_projects($invoice->clientid))) {
-                echo (isset($customer_id) && (!isset($project_id) || !$project_id)) ?  ' hide' : '';
-            } ?>">
+                if (!isset($invoice_from_project)) { ?>
+                    <div class="form-group select-placeholder projects-wrapper<?php if ((!isset($invoice)) || (isset($invoice) && !customer_has_projects($invoice->clientid))) {
+                    echo (isset($customer_id) && (!isset($project_id) || !$project_id)) ?  ' hide' : '';
+                } ?>">
                     <label for="project_id"><?php echo _l('project'); ?></label>
                     <div id="project_ajax_search_wrapper">
                         <select name="project_id" id="project_id" class="projects ajax-search" data-live-search="true"

@@ -360,23 +360,19 @@ class Faturas_model extends App_Model
      */
     public function add($data, $expense = false)
     {
-        $data['prefix'] = get_option('invoice_prefix');
+        $data['prefixo'] = get_option('invoice_prefix');
 
-        $data['number_format'] = get_option('invoice_number_format');
+        $data['formatonumero'] = get_option('invoice_number_format');
 
-        $data['datecreated'] = date('Y-m-d H:i:s');
+        $data['datacriacao'] = date('Y-m-d H:i:s');
 
         $save_and_send = isset($data['save_and_send']);
 
-        $data['addedfrom'] = !DEFINED('CRON') ? get_staff_user_id() : 0;
+        $data['adicionado_por'] = !DEFINED('CRON') ? get_staff_user_id() : 0;
 
-        $data['cancel_overdue_reminders'] = isset($data['cancel_overdue_reminders']) ? 1 : 0;
+        $data['cancelar_lembretes_atraso'] = isset($data['cancel_overdue_reminders']) ? 1 : 0;
 
-        $data['allowed_payment_modes'] = isset($data['allowed_payment_modes']) ? serialize($data['allowed_payment_modes']) : serialize([]);
-
-        $billed_tasks = isset($data['billed_tasks']) ? array_map('unserialize', array_unique(array_map('serialize', $data['billed_tasks']))) : [];
-
-        $billed_expenses = isset($data['billed_expenses']) ? array_map('unserialize', array_unique(array_map('serialize', $data['billed_expenses']))) : [];
+        $data['modos_pagamento_permitidos'] = isset($data['modos_pagamento_permitidos']) ? serialize($data['modos_pagamento_permitidos']) : serialize([]);
 
         $invoices_to_merge = isset($data['invoices_to_merge']) ? $data['invoices_to_merge'] : [];
 
@@ -392,15 +388,15 @@ class Faturas_model extends App_Model
             unset($data['save_and_send_later']);
         }
 
-        if (isset($data['recurring'])) {
-            if ($data['recurring'] == 'custom') {
-                $data['recurring_type']   = $data['repeat_type_custom'];
-                $data['custom_recurring'] = 1;
-                $data['recurring']        = $data['repeat_every_custom'];
+        if (isset($data['recorrente'])) {
+            if ($data['recorrente'] == 'custom') {
+                $data['tipo_recorrencia']   = $data['repeat_type_custom'];
+                $data['custom_recorrencia'] = 1;
+                $data['recorrente']        = $data['repeat_every_custom'];
             }
         } else {
-            $data['custom_recurring'] = 0;
-            $data['recurring']        = 0;
+            $data['custom_recorrencia'] = 0;
+            $data['recorrente']        = 0;
         }
 
         if (isset($data['custom_fields'])) {
@@ -419,19 +415,11 @@ class Faturas_model extends App_Model
 
         $data = $this->map_shipping_columns($data, $expense);
 
-        if (isset($data['shipping_street'])) {
-            $data['shipping_street'] = trim($data['shipping_street']);
-            $data['shipping_street'] = nl2br($data['shipping_street']);
-        }
-
-        $data['billing_street'] = trim($data['billing_street']);
-        $data['billing_street'] = nl2br($data['billing_street']);
-
         if (isset($data['status']) && $data['status'] == self::STATUS_DRAFT) {
             $data['number'] = self::STATUS_DRAFT_NUMBER;
         }
 
-        $data['duedate'] = isset($data['duedate']) && empty($data['duedate']) ? null : $data['duedate'];
+        $data['datavencimento'] = isset($data['datavencimento']) && empty($data['datavencimento']) ? null : $data['datavencimento'];
 
         $hook = hooks()->apply_filters('before_invoice_added', [
             'data'  => $data,
@@ -441,7 +429,7 @@ class Faturas_model extends App_Model
         $data  = $hook['data'];
         $items = $hook['items'];
 
-        $this->db->insert(db_prefix() . 'invoices', $data);
+        $this->db->insert(db_prefix() . 'fin_faturas', $data);
         $insert_id = $this->db->insert_id();
         if ($insert_id) {
             if (isset($custom_fields)) {
@@ -450,6 +438,7 @@ class Faturas_model extends App_Model
 
             handle_tags_save($tags, $insert_id, 'invoice');
 
+            // juntar faturas -> Resolver
             foreach ($invoices_to_merge as $m) {
                 $merged   = false;
                 $or_merge = $this->get($m);
@@ -509,38 +498,9 @@ class Faturas_model extends App_Model
                 }
             }
 
-            foreach ($billed_tasks as $key => $tasks) {
-                foreach ($tasks as $t) {
-                    $this->db->select('status')
-                    ->where('id', $t);
 
-                    $_task = $this->db->get(db_prefix() . 'tasks')->row();
 
-                    $taskUpdateData = [
-                        'billed'     => 1,
-                        'invoice_id' => $insert_id,
-                    ];
-
-                    if ($_task->status != Tasks_model::STATUS_COMPLETE) {
-                        $taskUpdateData['status']       = Tasks_model::STATUS_COMPLETE;
-                        $taskUpdateData['datefinished'] = date('Y-m-d H:i:s');
-                    }
-
-                    $this->db->where('id', $t);
-                    $this->db->update(db_prefix() . 'tasks', $taskUpdateData);
-                }
-            }
-
-            foreach ($billed_expenses as $key => $val) {
-                foreach ($val as $expense_id) {
-                    $this->db->where('id', $expense_id);
-                    $this->db->update(db_prefix() . 'expenses', [
-                        'invoiceid' => $insert_id,
-                    ]);
-                }
-            }
-
-            update_invoice_status($insert_id);
+            atualiza_status_fatura($insert_id);
 
             // Update next invoice number in settings if status is not draft
             if (!$this->is_draft($insert_id)) {
@@ -570,7 +530,7 @@ class Faturas_model extends App_Model
                 }
             }
 
-            update_sales_total_tax_column($insert_id, 'invoice', db_prefix() . 'invoices');
+            update_sales_total_tax_column($insert_id, 'invoice', db_prefix() . 'fin_faturas');
 
             if (!DEFINED('CRON') && $expense == false) {
                 $lang_key = 'invoice_activity_created';

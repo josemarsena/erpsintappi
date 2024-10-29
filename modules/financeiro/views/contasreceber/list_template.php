@@ -23,7 +23,7 @@
             <?php } ?>
             <div class="display-block pull-right tw-space-x-0 sm:tw-space-x-1.5">
                 <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs"
-                   onclick="toggle_small_view('.table-invoices','#invoice'); return false;" data-toggle="tooltip"
+                   onclick="toggle_small_view('.table-contasreceber','#invoice'); return false;" data-toggle="tooltip"
                    title="<?php echo _l('invoices_toggle_table_tooltip'); ?>"><i
                             class="fa fa-angle-double-left"></i>
                 </a>
