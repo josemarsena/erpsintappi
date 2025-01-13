@@ -33,9 +33,9 @@ $lang['invoice_pdf_heading'] = 'FATURAS';
 $lang['invoice_table_item_heading']            = 'Item';
 $lang['invoice_table_quantity_heading']        = 'Qtd';
 $lang['invoice_table_rate_heading']            = 'Tarifa';
-$lang['invoice_table_tax_heading']             = 'Imposto';
-$lang['invoice_table_amount_heading']          = 'Valor';
-$lang['invoice_subtotal']                      = 'SubTotal';
+$lang['invoice_table_tax_heading']             = 'Taxa';
+$lang['invoice_table_amount_heading']          = 'Quantia';
+$lang['invoice_subtotal']                      = 'Sub Total';
 $lang['invoice_adjustment']                    = 'Ajuste';
 $lang['invoice_total']                         = 'Total';
 $lang['invoice_bill_to']                       = 'Faturar para';
@@ -3833,7 +3833,6 @@ $lang['add_timesheet']                                         = 'Adicionar Plan
 $lang['submit_button_bg_color']                                = 'Enviar cor de fundo do botão';
 $lang['submit_button_text_color']                              = 'Enviar texto de fundo do botão';
 $lang['automatically_assign_ticket_to_first_staff_responding'] = 'Atribuir automaticamente o ticket à primeira equipe que postar uma resposta?';
-
 # Version 2.9.1
 $lang['contract_signed_not_all_fields_editable'] = 'Este contrato está assinado, portanto nem todos os campos podem ser editados até que a assinatura seja removida.';
 $lang['form_submit_success_action']              = 'O que deve acontecer depois que um visitante enviar este formulário';
@@ -3963,3 +3962,28 @@ $lang['filter_operator_less_or_equal'] = 'menor ou igual';
 $lang['no_filters_found'] = 'Nenhum filtro salvo. Comece criando um novo filtro.';
 
 $lang['staff_logged_in_public_ticket_warning'] = 'Você está logado como membro da equipe, se quiser responder ao ticket como membro da equipe, deverá responder através da área administrativa.';
+
+# Version 3.1.2
+$lang['allow_non_admin_members_to_delete_tickets_and_replies'] = 'Permitir que membros da equipe não administrativos excluam tickets e respostas';
+$lang['default_filter_info'] = 'O filtro será marcado como padrão somente para sua conta.';
+$lang['required_register_fields'] = 'Campos obrigatórios para registro (área de clientes)';
+
+# Version 3.1.6
+$lang['allow_non_admin_members_to_edit_ticket_messages'] = 'Permitir que membros da equipe não administrativos excluam tickets e respostas';
+$lang['proposal_auto_convert_to_invoice_on_client_accept'] = 'Converter automaticamente a proposta em fatura após a aceitação do cliente (somente propostas relacionadas ao cliente)';
+$lang['invoice_activity_auto_converted_from_proposal']      = 'Fatura criada automaticamente a partir da proposta com número %s';
+$lang['clients_proposal_invoiced_successfully'] = 'Obrigado por aceitar a proposta. Por favor, revise a fatura criada para a proposta';
+
+# Version 3.2.0
+$lang['ideal_payment_failure_message'] = 'O Pagamento falhou ou foi cancelado.';
+$lang['ideal_api_publishable_key'] = 'Stripe Chave Publicável';
+$lang['ideal_api_secret_key'] = 'Stripe API Chave Secreta';
+$lang['filters'] = 'Filtros';
+$lang['view_financial_stats'] = 'Ver Estatísticas Financeiras';
+$lang['timesheet_summary'] = 'Resumo do Quadro de Horários';
+$lang['timesheet_detailed_overview'] = 'Visão geral detalhada de planilhas de horas e horários registrados';
+$lang['ticket_request_history'] = 'Histórico de Solicitações';
+$lang['integrations'] = 'Integrações';
+$lang['settings_group_other'] = 'Outro';
+$lang['settings_group_configure_features'] = 'Configurar Recursos';
+$lang['disable_ticket_public_url'] = 'Desativar URL pública do ticket';

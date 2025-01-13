@@ -171,10 +171,10 @@ if ( ! function_exists('form_open_multipart'))
 if ( ! function_exists('form_hidden'))
 {
 	/**
-	 * Campo de Entrada Oculto
+	 * Hidden Input Field
 	 *
-	 * Gera campos ocultos. Você pode passar uma string simples de chave/valor ou
-     *  um array associativo com múltiplos valores.
+	 * Generates hidden fields. You can pass a simple key/value string or
+	 * an associative array with multiple values.
 	 *
 	 * @param	mixed	$name		Field name
 	 * @param	string	$value		Field value

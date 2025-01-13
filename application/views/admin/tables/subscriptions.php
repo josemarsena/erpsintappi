@@ -59,7 +59,7 @@ return App_table::find('subscriptions')
             $row[] = $aRow['id'];
 
             $link       = admin_url('subscriptions/edit/' . $aRow['id']);
-            $outputName = '<a href="' . $link . '">' . $aRow['name'] . '</a>';
+            $outputName = '<a href="' . $link . '" class="tw-font-medium">' . e($aRow['name']) . '</a>';
 
             $outputName .= '<div class="row-options">';
 
@@ -73,36 +73,36 @@ return App_table::find('subscriptions')
                         && $aRow['in_test_environment'] == 1))
                 && staff_can('delete',  'subscriptions')
             ) {
-                $outputName .= ' | <a href="' . admin_url('subscriptions/delete/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
+                $outputName .= ' | <a href="' . admin_url('subscriptions/delete/' . $aRow['id']) . '" class="_delete">' . _l('delete') . '</a>';
             }
             $outputName .= '</div>';
 
             $row[] = $outputName;
 
-            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+            $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
             if (empty($aRow['status'])) {
                 $row[] = _l('subscription_not_subscribed');
             } else {
-                $row[] = _l('subscription_' . $aRow['status'], '', false);
+                $row[] = e(_l('subscription_' . $aRow['status'], '', false));
             }
 
             if ($aRow['next_billing_cycle']) {
-                $row[] = _d(date('Y-m-d', $aRow['next_billing_cycle']));
+                $row[] = e(_d(date('Y-m-d', $aRow['next_billing_cycle'])));
             } else {
                 $row[] = '-';
             }
 
             if ($aRow['date_subscribed']) {
-                $row[] = _dt($aRow['date_subscribed']);
+                $row[] = e(_dt($aRow['date_subscribed']));
             } else {
                 $row[] = '-';
             }
 
             if ($aRow['last_sent_at']) {
-                $row[] = _dt($aRow['last_sent_at']);
+                $row[] = e(_dt($aRow['last_sent_at']));
             } else {
                 $row[] = '-';
             }

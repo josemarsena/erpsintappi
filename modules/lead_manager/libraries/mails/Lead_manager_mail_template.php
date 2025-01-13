@@ -89,8 +89,6 @@ class Lead_manager_mail_template
         $GLOBALS['SENDING_EMAIL_TEMPLATE_CLASS'] = $this;
 
         $this->build();
-       
-        $this->send_to = hooks()->apply_filters('send_email_template_to', $this->send_to);
         
         $this->template = $this->prepare();
 
@@ -164,16 +162,16 @@ class Lead_manager_mail_template
             return false;
         }
 
-        $this->ci->load->config('email');
+        $this->ci->load->config('lead_manager/email', true);
 
         $this->ci->email->clear(true);
         $this->ci->email->set_newline(config_item('newline'));
 
-
-
-        $from = $this->_from();
+        //$from = $this->_from();
        
-        $this->ci->email->from($from['fromemail'], $from['fromname']);
+        //$this->ci->email->from($from['fromemail'], $from['fromname']);
+
+        $this->ci->email->from($this->ci->email->smtp_user, $this->ci->email->smtp_fromname);
 
         $this->ci->email->subject($this->_subject());
 
@@ -512,13 +510,12 @@ class Lead_manager_mail_template
      * Set template merge fields
      * @param array $fields
      */
-    public function set_lead_manager_merge_fields($fields, ...$params)
+    public function set_merge_fields($fields, ...$params)
     {
-        $this->ci->load->library('merge_fields/app_lead_merge_fields');
         if (!is_array($fields)) {
-            $fields = $this->ci->app_lead_merge_fields->format_feature($fields, ...$params);
+            $fields = $this->ci->app_merge_fields->format_feature($fields, ...$params);
         }
-        
+
         $this->merge_fields = array_merge($this->merge_fields, $fields);
 
         return $this;

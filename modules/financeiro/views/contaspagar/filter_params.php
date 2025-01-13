@@ -2,7 +2,7 @@
 <div class="_filters _hidden_inputs">
     <?php
     foreach($invoices_sale_agents as $agent){
-        echo form_hidden('sale_agent_'.$agent['sale_agent']);
+        echo form_hidden('sale_agent_'.$agent['comprador']);
     }
     foreach($invoices_statuses as $_status){
         $val = '';

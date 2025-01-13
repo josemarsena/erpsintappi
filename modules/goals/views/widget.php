@@ -17,7 +17,7 @@ if (is_staff_member()) {
                     <div class="widget-dragger"></div>
 
                     <p
-                        class="tw-font-medium tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse tw-p-1.5">
+                        class="tw-font-semibold tw-flex tw-items-center tw-mb-0 tw-space-x-1.5 rtl:tw-space-x-reverse tw-p-1.5">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="tw-w-6 tw-h-6 tw-text-neutral-500">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -35,9 +35,9 @@ if (is_staff_member()) {
     ?>
                     <div class="goal tw-px-1 tw-pb-1">
                         <h4 class="pull-left font-medium no-mtop">
-                            <?php echo $goal['goal_type_name']; ?>
+                            <?php echo e($goal['goal_type_name']); ?>
                             <br />
-                            <small><?php echo $goal['subject']; ?></small>
+                            <small><?php echo e($goal['subject']); ?></small>
                         </h4>
                         <h4 class="pull-right bold no-mtop text-success text-right">
                             <?php echo $goal['achievement']['total']; ?>

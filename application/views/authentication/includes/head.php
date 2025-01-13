@@ -7,15 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <title>
-        <?php echo get_option('companyname'); ?> - <?php echo _l('admin_auth_login_heading'); ?>
+        <?php echo e(get_option('companyname')); ?> - <?php echo _l('admin_auth_login_heading'); ?>
     </title>
-    <link href="<?php echo base_url('assets/css/form-login.css'); ?>" rel="stylesheet" type="text/css" />
-
     <?php echo app_compile_css('admin-auth'); ?>
     <style>
     body,
     html {
-        font-size: 0.95em;
+        font-size: 16px;
     }
 
     body>* {
@@ -24,11 +22,9 @@
 
     body {
         font-family: "Inter", sans-serif;
-        color: #333;
+        color: #475569;
         margin: 0;
         padding: 0;
-        background-image: url("../assets/images/bg.jpg");
-        background-size:cover;
     }
 
     .company-logo {

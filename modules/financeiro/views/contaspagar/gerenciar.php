@@ -4,7 +4,7 @@
     <div class="content">
         <div id="vueApp">
             <div class="row">
-                <?php include_once(APPPATH.'views/admin/invoices/filter_params.php'); ?>
+                <?php include_once('modules/financeiro/views/contaspagar/filter_params.php'); ?>
                 <?php $this->load->view('financeiro/contaspagar/list_template'); ?>
             </div>
         </div>

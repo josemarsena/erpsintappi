@@ -6,15 +6,15 @@ $this->ci->load->model('faturas_model');
 
 $where = [];
 
-$project_id = $this->ci->input->post('id_projeto');
+$id_projeto = $this->ci->input->post('id_projeto');
 
-$clientid = $this->ci->input->post('id_fornecedor');
+$id_fornecedor = $this->ci->input->post('id_fornecedor');
 
 $aColumns = [
     'numero',
     'data',
     'datavencimento',
-    'id_fornecedor',
+     get_sql_select_fornecedor_company(),
     'YEAR(data) as ano',
     db_prefix() . 'projects.name as project_name',
     '(SELECT GROUP_CONCAT(name SEPARATOR ",") FROM ' . db_prefix() . 'taggables JOIN ' . db_prefix() . 'tags ON ' . db_prefix() . 'taggables.tag_id = ' . db_prefix() . 'tags.id WHERE rel_id = ' . db_prefix() . 'fin_faturas.id and rel_type="invoice" ORDER by tag_order ASC) as tags',
@@ -27,7 +27,7 @@ $sIndexColumn = 'id';
 $sTable       = db_prefix() . 'fin_faturas';
 
 $join = [
-    'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'fin_faturas.id_fornecedor',
+    'LEFT JOIN ' . db_prefix() . 'pur_vendor ON ' . db_prefix() . 'pur_vendor.userid = ' . db_prefix() . 'fin_faturas.id_fornecedor',
     'LEFT JOIN ' . db_prefix() . 'currencies ON ' . db_prefix() . 'currencies.id = ' . db_prefix() . 'fin_faturas.moeda',
     'LEFT JOIN ' . db_prefix() . 'projects ON ' . db_prefix() . 'projects.id = ' . db_prefix() . 'fin_faturas.id_projeto',
 ];
@@ -37,8 +37,8 @@ array_push($where, ' AND ' . db_prefix() . 'fin_faturas.status = 1 OR ' . db_pre
     . 'fin_faturas.status = 4 OR ' . db_prefix() . 'fin_faturas.status = 6');
 
 
-if ($project_id) {
-    array_push($where, 'AND project_id=' . $this->ci->db->escape_str($project_id));
+if ($id_projeto) {
+    array_push($where, 'AND id_projeto=' . $this->ci->db->escape_str($id_projeto));
 }
 
 if (staff_cant('view', 'invoices')) {
@@ -66,42 +66,41 @@ foreach ($rResult as $aRow) {
     $numberOutput = '';
 
     // If is from client area table
-    if (is_numeric($clientid) || $project_id) {
-        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+    if (is_numeric($id_fornecedor) || $id_projeto) {
+        $numberOutput = '<a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '" target="_blank">' . formata_numero_faturapagar($aRow['id']) . '</a>';
     } else {
-        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" onclick="init_contasreceber(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+        $numberOutput = '<a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '" onclick="init_contaspagar(' . $aRow['id'] . '); return false;">' . formata_numero_faturapagar($aRow['id']) . '</a>';
     }
 
-    if ($aRow['recurring'] > 0) {
+    if ($aRow['recorrente'] > 0) {
         $numberOutput .= '<br /><span class="label label-primary inline-block tw-mt-1"> ' . _l('invoice_recurring_indicator') . '</span>';
     }
 
     $numberOutput .= '<div class="row-options">';
 
-    $numberOutput .= '<a href="' . site_url('invoice/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
+    $numberOutput .= '<a href="' . site_url('financeiro/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
     if (staff_can('edit',  'invoices')) {
-        $numberOutput .= ' | <a href="' . admin_url('invoices/invoice/' . $aRow['id']) . '">' . _l('edit') . '</a>';
+        $numberOutput .= ' | <a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }
     $numberOutput .= '</div>';
 
     $row[] = $numberOutput;
 
-    $row[] = _d($aRow['date']);
+    $row[] = _d($aRow['data']);
 
-    $row[] = _d($aRow['duedate']);
+    $row[] = _d($aRow['datavencimento']);
 
     $row[] = '<a href="' . admin_url('clients/client/' . $aRow['id_fornecedor']) . '">' . $aRow['company'] . '</a>';
 
-
-    $row[] = $aRow['year'];
+    $row[] = $aRow['ano'];
 
 
     $row[] = '<a href="' . admin_url('projects/view/' . $aRow['id_projeto']) . '">' . $aRow['project_name'] . '</a>';;
 
     $row[] = render_tags($aRow['tags']);
 
-    $row[] = app_format_money($aRow['total_imposto'], $aRow['currency_name']);
-
+   $row[] = app_format_money($aRow['total_impostos'], $aRow['currency_name']);
+//
     $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
 
     $row[] = format_invoice_status($aRow[db_prefix() . 'fin_faturas.status']);

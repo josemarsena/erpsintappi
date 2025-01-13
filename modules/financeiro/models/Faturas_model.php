@@ -58,7 +58,7 @@ class Faturas_model extends App_Model
      * Funcao: Obtem o Status da Fatura
      * Parametros: nd
      */
-    public function get_statuses()
+    public function obter_status()
     {
         return $this->statuses;
     }
@@ -68,7 +68,7 @@ class Faturas_model extends App_Model
      * Funcao: Obtem Status das não Pagas
      * Parametros: nd
      */
-    public function get_status_naopagos()
+    public function obter_status_naopagos()
     {
         return $this->status_naopagos;
     }
@@ -78,7 +78,7 @@ class Faturas_model extends App_Model
      * Funcao: Obtem o nome dos compradores
      * Parametros: nd
      */
-    public function get_compradores()
+    public function obter_compradores()
     {
         return $this->db->query('SELECT DISTINCT(id_comprador) as comprador, CONCAT(firstname, \' \', lastname) as full_name FROM ' .
             db_prefix() . 'fin_faturas JOIN ' . db_prefix() . 'staff ON ' . db_prefix() . 'staff.staffid=' . db_prefix()
@@ -90,7 +90,7 @@ class Faturas_model extends App_Model
      * Funcao: Obtem as faturas nao pagas
      * Parametros: nd
      */
-    public function get_faturas_naopagas()
+    public function obter_faturas_naopagas()
     {
         if (staff_cant('view', 'invoices')) {
             $where = get_invoices_where_sql_for_staff(get_staff_user_id());
@@ -137,7 +137,7 @@ class Faturas_model extends App_Model
                 $fatura->total_left_to_pay = get_invoice_total_left_to_pay($fatura->id, $fatura->total);   // total a pagar que falta
 
                 $fatura->items       = get_items_by_type('invoice', $id);
-                $fatura->attachments = $this->get_attachments($id);
+                $fatura->attachments = $this->obter_anexos($id);
 
                 if ($fatura->id_projeto) {
                     $this->load->model('projects_model');
@@ -179,7 +179,7 @@ class Faturas_model extends App_Model
      * @param  mixed $id
      * @return array|object
      */
-    public function get_invoice_item($id)
+    public function obter_item_fatura($id)
     {
         $this->db->where('id', $id);
 
@@ -191,9 +191,9 @@ class Faturas_model extends App_Model
      * @param  mixed $id
      * @return array|object
      */
-    public function mark_as_cancelled($id)
+    public function marcar_como_cancelado($id)
     {
-        $isDraft = $this->is_draft($id);
+        $isDraft = $this->eh_rascunho($id);
 
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'fin_faturas', [
@@ -203,7 +203,7 @@ class Faturas_model extends App_Model
 
         if ($this->db->affected_rows() > 0) {
             if ($isDraft) {
-                $this->change_invoice_number_when_status_draft($id);
+                $this->muda_numero_fatura_com_status_rascunho($id);
             }
 
             $this->log_invoice_activity($id, 'invoice_activity_marked_as_cancelled');
@@ -221,7 +221,7 @@ class Faturas_model extends App_Model
      * @param  mixed $id
      * @return array|object
      */
-    public function unmark_as_cancelled($id)
+    public function desmarcar_como_cancelado($id)
     {
         $this->db->where('id', $id);
         $this->db->update(db_prefix() . 'fin_faturas', [
@@ -245,7 +245,7 @@ class Faturas_model extends App_Model
      * @param  mixed $id main invoice id
      * @return array
      */
-    public function get_invoice_recurring_invoices($id)
+    public function obter_fatura_das_faturas_recorrentes($id)
     {
         $this->db->select('id');
         $this->db->where('is_recurring_from', $id);
@@ -260,12 +260,12 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Get invoice total from all statuses
+     * Obter o total das faturas de todos os status
      * @since  Version 1.0.2
      * @param  mixed $data $_POST data
      * @return array
      */
-    public function get_invoices_total($data)
+    public function obter_total_das_faturas($data)
     {
         $this->load->model('currencies_model');
 
@@ -354,13 +354,13 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Insert new invoice to database
+     * Insere nova fatura a pagar no Banco de Dados
      * @param array $data invoice data
      * @return mixed - false if not insert, invoice ID if succes
      */
     public function add($data, $expense = false)
     {
-        $data['prefixo'] = get_option('invoice_prefix');
+        $data['prefixo'] = get_option('prefixo_fatura');
 
         $data['formatonumero'] = get_option('invoice_number_format');
 
@@ -378,7 +378,9 @@ class Faturas_model extends App_Model
 
         $cancel_merged_invoices = isset($data['cancel_merged_invoices']);
 
+        // @var Remover tags provisioriamente
         $tags = isset($data['tags']) ? $data['tags'] : '';
+        //
 
         if (isset($data['save_as_draft'])) {
             $data['status'] = self::STATUS_DRAFT;
@@ -399,11 +401,6 @@ class Faturas_model extends App_Model
             $data['recorrente']        = 0;
         }
 
-        if (isset($data['custom_fields'])) {
-            $custom_fields = $data['custom_fields'];
-            unset($data['custom_fields']);
-        }
-
         $data['hash'] = app_generate_hash();
 
         $items = [];
@@ -413,15 +410,14 @@ class Faturas_model extends App_Model
             unset($data['newitems']);
         }
 
-        $data = $this->map_shipping_columns($data, $expense);
 
         if (isset($data['status']) && $data['status'] == self::STATUS_DRAFT) {
-            $data['number'] = self::STATUS_DRAFT_NUMBER;
+            $data['numero'] = self::STATUS_DRAFT_NUMBER;
         }
 
         $data['datavencimento'] = isset($data['datavencimento']) && empty($data['datavencimento']) ? null : $data['datavencimento'];
 
-        $hook = hooks()->apply_filters('before_invoice_added', [
+        $hook = hooks()->apply_filters('antes_adicionar_fatura', [
             'data'  => $data,
             'items' => $items,
         ]);
@@ -436,7 +432,9 @@ class Faturas_model extends App_Model
                 handle_custom_fields_post($insert_id, $custom_fields);
             }
 
-            handle_tags_save($tags, $insert_id, 'invoice');
+            // remover tags provisioriamente
+            handle_tags_save($tags, $insert_id, 'fatura');
+            //
 
             // juntar faturas -> Resolver
             foreach ($invoices_to_merge as $m) {
@@ -447,7 +445,7 @@ class Faturas_model extends App_Model
                         $merged = true;
                     }
                 } else {
-                    if ($this->mark_as_cancelled($m)) {
+                    if ($this->marcar_como_cancelado($m)) {
                         $merged     = true;
                         $admin_note = $or_merge->adminnote;
                         $note       = 'Merged into invoice ' . format_invoice_number($insert_id);
@@ -457,7 +455,7 @@ class Faturas_model extends App_Model
                             $admin_note = $note;
                         }
                         $this->db->where('id', $m);
-                        $this->db->update(db_prefix() . 'invoices', [
+                        $this->db->update(db_prefix() . 'fin_faturas', [
                             'adminnote' => $admin_note,
                         ]);
                         // Delete the old items related from the merged invoice
@@ -503,8 +501,8 @@ class Faturas_model extends App_Model
             atualiza_status_fatura($insert_id);
 
             // Update next invoice number in settings if status is not draft
-            if (!$this->is_draft($insert_id)) {
-                $this->increment_next_number();
+            if (!$this->eh_rascunho($insert_id)) {
+                $this->incrementa_prox_numero();
             }
 
             foreach ($items as $key => $item) {
@@ -530,7 +528,7 @@ class Faturas_model extends App_Model
                 }
             }
 
-            update_sales_total_tax_column($insert_id, 'invoice', db_prefix() . 'fin_faturas');
+            atualiza_imposto_fatura($insert_id, 'fatura', db_prefix() . 'fin_faturas');
 
             if (!DEFINED('CRON') && $expense == false) {
                 $lang_key = 'invoice_activity_created';
@@ -544,7 +542,7 @@ class Faturas_model extends App_Model
             $this->log_invoice_activity($insert_id, $lang_key);
 
             if ($save_and_send === true) {
-                $this->send_invoice_to_client($insert_id, '', true, '', true);
+                $this->envia_fatura_para_financeiro($insert_id, '', true, '', true);
             }
             hooks()->do_action('after_invoice_added', $insert_id);
 
@@ -553,8 +551,12 @@ class Faturas_model extends App_Model
 
         return false;
     }
-
-    public function get_expenses_to_bill($clientid)
+    /**
+     * Obtem as despesas a serem faturadas
+     * @param array $clientid
+     * @return mixed - false if not insert, invoice ID if succes
+     */
+    public function obter_despesas_a_faturar($clientid)
     {
         $this->load->model('expenses_model');
         $where = 'billable=1 AND clientid=' . $clientid . ' AND invoiceid IS NULL';
@@ -565,7 +567,12 @@ class Faturas_model extends App_Model
         return $this->expenses_model->get('', $where);
     }
 
-    public function check_for_merge_invoice($client_id, $current_invoice = '')
+    /**
+     * Verifica por faturas mescladas
+     * @param array $client_id
+     * @return mixed - false if not insert, invoice ID if succes
+     */
+    public function verifica_faturas_mescladas($client_id, $current_invoice = '')
     {
         if ($current_invoice != '') {
             $this->db->select('status');
@@ -595,7 +602,7 @@ class Faturas_model extends App_Model
             $this->db->where('id !=', $current_invoice);
         }
 
-        $invoices = $this->db->get(db_prefix() . 'invoices')->result_array();
+        $invoices = $this->db->get(db_prefix() . 'fin_faturas')->result_array();
         $invoices = hooks()->apply_filters('invoices_ids_available_for_merging', $invoices);
 
         $_invoices = [];
@@ -611,8 +618,8 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Copy invoice
-     * @param  mixed $id invoice id to copy
+     * Copia a Fatura
+     * @param  mixed $id invoice id a copiar
      * @return mixed
      */
     public function copy($id)
@@ -635,7 +642,7 @@ class Faturas_model extends App_Model
         $new_invoice_data['subtotal']         = $_invoice->subtotal;
         $new_invoice_data['total']            = $_invoice->total;
         $new_invoice_data['adminnote']        = $_invoice->adminnote;
-        $new_invoice_data['adjustment']       = $_invoice->adjustment;
+       // $new_invoice_data['adjustment']       = $_invoice->adjustment;
         $new_invoice_data['discount_percent'] = $_invoice->discount_percent;
         $new_invoice_data['discount_total']   = $_invoice->discount_total;
         $new_invoice_data['recurring']        = $_invoice->recurring;
@@ -645,21 +652,7 @@ class Faturas_model extends App_Model
         $new_invoice_data['project_id']       = $_invoice->project_id;
         $new_invoice_data['cycles']           = $_invoice->cycles;
         $new_invoice_data['total_cycles']     = 0;
-        // Since version 1.0.6
-        $new_invoice_data['billing_street']   = clear_textarea_breaks($_invoice->billing_street);
-        $new_invoice_data['billing_city']     = $_invoice->billing_city;
-        $new_invoice_data['billing_state']    = $_invoice->billing_state;
-        $new_invoice_data['billing_zip']      = $_invoice->billing_zip;
-        $new_invoice_data['billing_country']  = $_invoice->billing_country;
-        $new_invoice_data['shipping_street']  = clear_textarea_breaks($_invoice->shipping_street);
-        $new_invoice_data['shipping_city']    = $_invoice->shipping_city;
-        $new_invoice_data['shipping_state']   = $_invoice->shipping_state;
-        $new_invoice_data['shipping_zip']     = $_invoice->shipping_zip;
-        $new_invoice_data['shipping_country'] = $_invoice->shipping_country;
-        if ($_invoice->include_shipping == 1) {
-            $new_invoice_data['include_shipping'] = $_invoice->include_shipping;
-        }
-        $new_invoice_data['show_shipping_on_invoice'] = $_invoice->show_shipping_on_invoice;
+
         // Set to unpaid status automatically
         $new_invoice_data['status']                = self::STATUS_UNPAID;
         $new_invoice_data['clientnote']            = $_invoice->clientnote;
@@ -692,7 +685,7 @@ class Faturas_model extends App_Model
             }
             $key++;
         }
-        $id = $this->invoices_model->add($new_invoice_data);
+        $id = $this->faturas_model->add($new_invoice_data);
         if ($id) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'invoices', [
@@ -714,7 +707,7 @@ class Faturas_model extends App_Model
             }
 
             $tags = get_tags_in($_invoice->id, 'invoice');
-            handle_tags_save($tags, $id, 'invoice');
+            handle_tags_save($tags, $id, 'fatura');
 
             log_activity('Copied Invoice ' . format_invoice_number($_invoice->id));
 
@@ -727,7 +720,7 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Update invoice data
+     * Atualiza dados da Fatura
      * @param  array $data invoice data
      * @param  mixed $id   invoiceid
      * @return boolean
@@ -779,17 +772,6 @@ class Faturas_model extends App_Model
             $data['last_recurring_date'] = null;
         }
 
-        $data = $this->map_shipping_columns($data);
-
-        $data['billing_street'] = trim($data['billing_street']);
-        if ($data['shipping_street'] ?? false) {
-            $data['shipping_street'] = trim($data['shipping_street']);
-        }
-
-        $data['billing_street'] = nl2br($data['billing_street']);
-        if ($data['shipping_street'] ?? false) {
-            $data['shipping_street'] = nl2br($data['shipping_street']);
-        }
         $data['duedate'] = isset($data['duedate']) && empty($data['duedate']) ? null : $data['duedate'];
 
         $items    = $data['items'] ?? [];
@@ -800,14 +782,14 @@ class Faturas_model extends App_Model
         }
 
         if (array_key_exists('tags', $data)) {
-            if (handle_tags_save($tags = $data['tags'], $id, 'invoice')) {
+            if (handle_tags_save($tags = $data['tags'], $id, 'fatura')) {
                 $updated = true;
             }
         }
 
         unset($data['items'], $data['newitems'], $data['custom_fields'], $data['tags']);
 
-        $hook = apply_filters_deprecated('before_invoice_updated', [[
+        $hook = apply_filters_deprecated('antes_atualizar_fatura', [[
             'data' => array_merge($data, [
                 'tags'          => $tags ?? null,
                 'custom_fields' => $custom_fields,
@@ -815,7 +797,7 @@ class Faturas_model extends App_Model
             'items'         => $items,
             'newitems'      => $newitems,
             'removed_items' => isset($data['removed_items']) ? $data['removed_items'] : [],
-        ], $id], '3.0.0', 'before_update_invoice');
+        ], $id], '3.0.0', 'antes_atualizar_fatura');
 
         extract($hook);
         unset($data['custom_fields'], $data['tags']);
@@ -898,15 +880,15 @@ class Faturas_model extends App_Model
             }
         }
 
-        if ($this->save_items($items, $id)) {
+        if ($this->salva_items($items, $id)) {
             $updated = true;
         }
 
-        if ($this->add_new_items($newitems, $billed_tasks, $billed_expenses, $id)) {
+        if ($this->adiciona_novo_item($newitems, $billed_tasks, $billed_expenses, $id)) {
             $updated = true;
         }
 
-        if ($this->merge_invoices($invoices_to_merge, $id, $cancel_merged_invoices)) {
+        if ($this->mescla_faturas($invoices_to_merge, $id, $cancel_merged_invoices)) {
             $updated = true;
         }
 
@@ -916,7 +898,7 @@ class Faturas_model extends App_Model
         }
 
         if ($save_and_send === true) {
-            $this->send_invoice_to_client($id, '', true, '', true);
+            $this->envia_fatura_para_financeiro($id, '', true, '', true);
         }
 
         do_action_deprecated('after_invoice_updated', [$id], '3.0.0', 'invoice_updated');
@@ -925,11 +907,17 @@ class Faturas_model extends App_Model
         return $updated;
     }
 
+    /**
+     * Remove Itens da Fatura
+     * @param  array $items itens
+     * @param  mixed $id
+     * @return boolean
+     */
     protected function remove_items($items, $id)
     {
         $updated = false;
         foreach ($items as $itemId) {
-            $original_item = $this->get_invoice_item($itemId);
+            $original_item = $this->obter_item_fatura($itemId);
 
             if (handle_removed_sales_item_post($itemId, 'invoice')) {
                 $updated = true;
@@ -960,7 +948,13 @@ class Faturas_model extends App_Model
         return $updated;
     }
 
-    protected function merge_invoices($invoices, $id, $cancel)
+    /**
+     * Mescla a Fatura
+     * @param  array $items itens
+     * @param  mixed $id
+     * @return boolean
+     */
+    protected function mescla_faturas($invoices, $id, $cancel)
     {
         foreach ($invoices as $mergeId) {
             $merged          = false;
@@ -971,7 +965,7 @@ class Faturas_model extends App_Model
                     $merged = true;
                 }
             } else {
-                if ($this->mark_as_cancelled($mergeId)) {
+                if ($this->marcar_como_cancelado($mergeId)) {
                     $merged     = true;
                     $admin_note = $originalInvoice->adminnote;
                     $note       = 'Merged into invoice ' . format_invoice_number($id);
@@ -1018,7 +1012,13 @@ class Faturas_model extends App_Model
         }
     }
 
-    protected function add_new_items($items, $billed_tasks, $billed_expenses, $id)
+    /**
+     * Adiciona novo Item
+     * @param  array $items itens
+     * @param  mixed $id
+     * @return boolean
+     */
+    protected function adiciona_novo_item($items, $billed_tasks, $billed_expenses, $id)
     {
         $updated = false;
 
@@ -1054,11 +1054,17 @@ class Faturas_model extends App_Model
         return $updated;
     }
 
-    protected function save_items($items, $id)
+    /**
+     * Salva os Itens
+     * @param  array $items itens
+     * @param  mixed $id
+     * @return boolean
+     */
+    protected function salva_items($items, $id)
     {
         $updated = false;
         foreach ($items as $item) {
-            $original_item = $this->get_invoice_item($item['itemid']);
+            $original_item = $this->obter_item_fatura($item['itemid']);
 
             if (update_sales_item_post($item['itemid'], $item, 'item_order')) {
                 $updated = true;
@@ -1138,7 +1144,13 @@ class Faturas_model extends App_Model
         return $updated;
     }
 
-    public function get_attachments($invoiceid, $id = '')
+    /**
+     * Obtem Anexos
+     * @param  array $invoiceid
+     * @param  mixed $id
+     * @return boolean
+     */
+    public function obter_anexos($invoiceid, $id = '')
     {
         // If is passed id get return only 1 attachment
         if (is_numeric($id)) {
@@ -1157,14 +1169,14 @@ class Faturas_model extends App_Model
     }
 
     /**
-     *  Delete invoice attachment
+     *  Exclui anexo da Fatura
      * @since  Version 1.0.4
      * @param   mixed $id  attachmentid
      * @return  boolean
      */
-    public function delete_attachment($id)
+    public function exclui_anexo($id)
     {
-        $attachment = $this->get_attachments('', $id);
+        $attachment = $this->obter_anexos('', $id);
         $deleted    = false;
         if ($attachment) {
             if (empty($attachment->external)) {
@@ -1191,7 +1203,7 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Delete invoice items and all connections
+     * Exclui os itens da Fatura e todas as conexões
      * @param  mixed $id invoiceid
      * @return boolean
      */
@@ -1204,7 +1216,7 @@ class Faturas_model extends App_Model
         }
 
         $number  = format_invoice_number($id);
-        $isDraft = $this->is_draft($id);
+        $isDraft = $this->eh_rascunho($id);
 
         hooks()->do_action('before_invoice_deleted', $id);
 
@@ -1223,7 +1235,7 @@ class Faturas_model extends App_Model
             $simpleDelete == false &&
             !$isDraft) {
                 // Decrement next invoice number to
-                $this->decrement_next_number();
+                $this->decrementa_prox_numero();
             }
 
             if ($simpleDelete == false) {
@@ -1365,23 +1377,23 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Set invoice to sent when email is successfuly sended to client
+     * Define a fatura como enviada quando o e-mail for enviado com sucesso ao cliente
      * @param mixed $id invoiceid
      * @param  mixed $manually is staff manually marking this invoice as sent
      * @return  boolean
      */
-    public function set_invoice_sent($id, $manually = false, $emails_sent = [], $is_status_updated = false)
+    public function define_fatura_como_enviada($id, $manually = false, $emails_sent = [], $is_status_updated = false)
     {
         $this->db->where('id', $id);
-        $this->db->update(db_prefix() . 'invoices', [
+        $this->db->update(db_prefix() . 'fin_faturas', [
             'sent'     => 1,
             'datesend' => date('Y-m-d H:i:s'),
         ]);
 
         $marked = $this->db->affected_rows() > 0;
 
-        if ($marked && $this->is_draft($id)) {
-            $this->change_invoice_number_when_status_draft($id);
+        if ($marked && $this->eh_rascunho($id)) {
+            $this->muda_numero_fatura_com_status_rascunho($id);
         }
 
         if (DEFINED('CRON')) {
@@ -1415,11 +1427,11 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Send overdue notice to client for this invoice
+     * Enviar aviso de atraso ao Staff para esta fatura
      * @param  mxied  $id   invoiceid
      * @return boolean
      */
-    public function send_invoice_overdue_notice($id)
+    public function envia_aviso_fatura_em_atraso($id)
     {
         $invoice        = $this->get($id);
         $invoice_number = format_invoice_number($invoice->id);
@@ -1443,7 +1455,7 @@ class Faturas_model extends App_Model
             'last_overdue_reminder' => date('Y-m-d'),
         ]);
 
-        $contacts = $this->get_contacts_for_invoice_emails($invoice->clientid);
+        $contacts = $this->obtem_emails_contatos_da_fatura($invoice->clientid);
 
         foreach ($contacts as $contact) {
             $template = mail_template('invoice_overdue_notice', $invoice, $contact);
@@ -1497,13 +1509,13 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Send due notice to client for the given invoice
+     * Enviar aviso de vencimento ao cliente para a fatura fornecida
      *
      * @param  mxied  $id   invoiceid
      *
      * @return boolean
      */
-    public function send_invoice_due_notice($id)
+    public function envia_aviso_vencimento_fatura($id)
     {
         $invoice        = $this->get($id);
         $invoice_number = format_invoice_number($invoice->id);
@@ -1527,7 +1539,7 @@ class Faturas_model extends App_Model
             'last_due_reminder' => date('Y-m-d'),
         ]);
 
-        $contacts = $this->get_contacts_for_invoice_emails($invoice->clientid);
+        $contacts = $this->obtem_emails_contatos_da_fatura($invoice->clientid);
 
         foreach ($contacts as $contact) {
             $template = mail_template('invoice_due_notice', $invoice, $contact);
@@ -1581,19 +1593,19 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Send invoice to client
+     * Envia fatura para o Staff
      * @param  mixed  $id        invoiceid
      * @param  string  $template  email template to sent
      * @param  boolean $attachpdf attach invoice pdf or not
      * @return boolean
      */
-    public function send_invoice_to_client($id, $template_name = '', $attachpdf = true, $cc = '', $manually = false, $attachStatement = [])
+    public function envia_fatura_para_financeiro($id, $template_name = '', $attachpdf = true, $cc = '', $manually = false, $attachStatement = [])
     {
         $originalNumber = null;
 
-        if ($isDraft = $this->is_draft($id)) {
+        if ($isDraft = $this->eh_rascunho($id)) {
             // Update invoice number from draft before sending
-            $originalNumber = $this->change_invoice_number_when_status_draft($id);
+            $originalNumber = $this->muda_numero_fatura_com_status_rascunho($id);
         }
 
         $invoice = hooks()->apply_filters(
@@ -1618,7 +1630,7 @@ class Faturas_model extends App_Model
         } elseif (isset($GLOBALS['scheduled_email_contacts'])) {
             $send_to = $GLOBALS['scheduled_email_contacts'];
         } else {
-            $contacts = $this->get_contacts_for_invoice_emails($invoice->clientid);
+            $contacts = $this->obtem_emails_contatos_da_fatura($invoice->clientid);
 
             foreach ($contacts as $contact) {
                 array_push($send_to, $contact['id']);
@@ -1691,13 +1703,13 @@ class Faturas_model extends App_Model
             $this->db->where('id', $id);
             $this->db->update('invoices', ['number' => $originalNumber]);
 
-            $this->decrement_next_number();
+            $this->decrementa_prox_numero();
 
             return false;
         }
 
         if (count($emails_sent) > 0) {
-            $this->set_invoice_sent($id, false, $emails_sent, true);
+            $this->define_fatura_como_enviada($id, false, $emails_sent, true);
 
             hooks()->do_action('invoice_sent', $id);
 
@@ -1723,23 +1735,23 @@ class Faturas_model extends App_Model
     /**
      * @since  2.7.0
      *
-     * Check whether the given invoice is draft
+     * Verifique se a fatura fornecida é um rascunho
      *
      * @param  int  $id
      *
      * @return boolean
      */
-    public function is_draft($id)
+    public function eh_rascunho($id)
     {
-        return total_rows('invoices', ['id' => $id, 'status' => self::STATUS_DRAFT]) === 1;
+        return total_rows('fin_faturas', ['id' => $id, 'status' => self::STATUS_DRAFT]) === 1;
     }
 
     /**
-     * All invoice activity
+     * Todas as atividades da fatura
      * @param  mixed $id invoiceid
      * @return array
      */
-    public function get_invoice_activity($id)
+    public function obter_atividades_fatura($id)
     {
         $this->db->where('rel_id', $id);
         $this->db->where('rel_type', 'invoice');
@@ -1780,11 +1792,11 @@ class Faturas_model extends App_Model
     }
 
     /**
-     * Get the invoices years
+     * Obtenha as faturas dos anos
      *
      * @return array
      */
-    public function get_invoices_years()
+    public function obter_faturas_anos()
     {
         return $this->db->query('SELECT DISTINCT(YEAR(date)) as year FROM ' . db_prefix() . 'invoices ORDER BY year DESC')->result_array();
     }
@@ -1796,7 +1808,7 @@ class Faturas_model extends App_Model
      * @param  boolean $expense
      *
      * @return array
-     */
+
     private function map_shipping_columns($data, $expense = false)
     {
         if (!isset($data['include_shipping'])) {
@@ -1823,6 +1835,7 @@ class Faturas_model extends App_Model
 
         return $data;
     }
+     **/
 
     /**
      * @since  2.7.0
@@ -1833,32 +1846,32 @@ class Faturas_model extends App_Model
      *
      * @return int
      */
-    public function change_invoice_number_when_status_draft($id)
+    public function muda_numero_fatura_com_status_rascunho($id)
     {
-        $this->db->select('number')->where('id', $id);
-        $invoice = $this->db->get('invoices')->row();
+        $this->db->select('numero')->where('id', $id);
+        $invoice = $this->db->get('fin_faturas')->row();
 
-        $newNumber = get_option('next_invoice_number');
+        $newNumber = get_option('proxima_fatura_a_pagar');
 
         $this->db->where('id', $id);
-        $this->db->update('invoices', ['number' => $newNumber]);
+        $this->db->update('fin_faturas', ['numero' => $newNumber]);
 
-        $this->increment_next_number();
+        $this->incrementa_prox_numero();
 
-        return $invoice->number;
+        return $invoice->numero;
     }
 
     /**
      * @since  2.7.0
      *
-     * Increment the invoies next nubmer
+     * Incrementar o próximo número das faturas a pagar
      *
      * @return void
      */
-    public function increment_next_number()
+    public function incrementa_prox_numero()
     {
         // Update next invoice number in settings
-        $this->db->where('name', 'next_invoice_number');
+        $this->db->where('name', 'proxima_fatura_a_pagar');
         $this->db->set('value', 'value+1', false);
         $this->db->update(db_prefix() . 'options');
     }
@@ -1870,21 +1883,21 @@ class Faturas_model extends App_Model
      *
      * @return void
      */
-    public function decrement_next_number()
+    public function decrementa_prox_numero()
     {
-        $this->db->where('name', 'next_invoice_number');
+        $this->db->where('name', 'proxima_fatura_a_pagar');
         $this->db->set('value', 'value-1', false);
         $this->db->update(db_prefix() . 'options');
     }
 
     /**
-     * Get the contacts that should receive invoice related emails
+     * Obtenha os contatos que devem receber e-mails relacionados à fatura
      *
      * @param  int $client_id
      *
      * @return array
      */
-    protected function get_contacts_for_invoice_emails($client_id)
+    protected function obtem_emails_contatos_da_fatura($client_id)
     {
         return $this->clients_model->get_contacts($client_id, [
             'active' => 1, 'invoice_emails' => 1,

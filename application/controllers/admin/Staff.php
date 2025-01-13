@@ -2,6 +2,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * @property-read Authentication_model $authentication_model
+ * @property-read Staff_model $staff_model
+ */
 class Staff extends AdminController
 {
     /* List all staff members */
@@ -69,7 +73,7 @@ class Staff extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('staff_member_lowercase'));
+            $title = _l('add_new', _l('staff_member'));
         } else {
             $member = $this->staff_model->get($id);
             if (!$member) {
@@ -158,11 +162,8 @@ class Staff extends AdminController
 
         $this->db->where('staffid', get_staff_user_id());
         $this->db->update(db_prefix() . 'staff', ['default_language' => $lang]);
-        if (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url());
-        }
+        
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function timesheets()
@@ -363,7 +364,7 @@ class Staff extends AdminController
                 }
                 $notifications[$i]['description'] = _l($notification['description'], $additional_data);
                 $notifications[$i]['date']        = time_ago($notification['date']);
-                $notifications[$i]['full_date']   = $notification['date'];
+                $notifications[$i]['full_date']   = _dt($notification['date']);
                 $i++;
             } //$notifications as $notification
             echo json_encode($notifications);

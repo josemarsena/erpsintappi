@@ -41,7 +41,7 @@ return App_table::find('invoices')
             array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'invoices.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
         }
 
-        $where  = [];
+        $where = [];
 
         if ($filtersWhere = $this->getWhereFromRules()) {
             $where[] = $filtersWhere;
@@ -71,60 +71,66 @@ return App_table::find('invoices')
             db_prefix() . 'invoices.id',
             db_prefix() . 'invoices.clientid',
             db_prefix() . 'currencies.name as currency_name',
+            'formatted_number',
             'project_id',
             'hash',
             'recurring',
             'deleted_customer_name',
         ]);
-
         $output  = $result['output'];
         $rResult = $result['rResult'];
 
         foreach ($rResult as $aRow) {
+            $formattedNumber = format_invoice_number($aRow['id']);
+
+            if(empty($aRow['formatted_number']) || $formattedNumber !== $aRow['formatted_number']) {
+                $this->ci->invoices_model->save_formatted_number($aRow['id']);
+            }
+
             $row = [];
 
             $numberOutput = '';
 
             // If is from client area table
             if (is_numeric($clientid) || $project_id) {
-                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" target="_blank" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             } else {
-                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+                $numberOutput = '<a href="' . admin_url('invoices/list_invoices/' . $aRow['id']) . '" onclick="init_invoice(' . $aRow['id'] . '); return false;" class="tw-font-medium">' . e($formattedNumber) . '</a>';
             }
 
             if ($aRow['recurring'] > 0) {
-                $numberOutput .= '<br /><span class="label label-primary inline-block tw-mt-1"> ' . _l('invoice_recurring_indicator') . '</span>';
+                $numberOutput .= '<br /><span class="label label-primary inline-block tw-mt-1 tw-font-medium"> ' . _l('invoice_recurring_indicator') . '</span>';
             }
 
             $numberOutput .= '<div class="row-options">';
 
             $numberOutput .= '<a href="' . site_url('invoice/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
-            if (staff_can('edit',  'invoices')) {
+            if (staff_can('edit', 'invoices')) {
                 $numberOutput .= ' | <a href="' . admin_url('invoices/invoice/' . $aRow['id']) . '">' . _l('edit') . '</a>';
             }
             $numberOutput .= '</div>';
 
             $row[] = $numberOutput;
 
-            $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['total'], $aRow['currency_name'])) . '</span>';
 
-            $row[] = app_format_money($aRow['total_tax'], $aRow['currency_name']);
+            $row[] = '<span class="tw-font-medium">' . e(app_format_money($aRow['total_tax'], $aRow['currency_name'])) . '</span>';
 
-            $row[] = $aRow['year'];
+            $row[] = e($aRow['year']);
 
-            $row[] = _d($aRow['date']);
+            $row[] = e(_d($aRow['date']));
 
             if (empty($aRow['deleted_customer_name'])) {
-                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
+                $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . e($aRow['company']) . '</a>';
             } else {
-                $row[] = $aRow['deleted_customer_name'];
+                $row[] = e($aRow['deleted_customer_name']);
             }
 
-            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';;
+            $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . e($aRow['project_name']) . '</a>';
 
             $row[] = render_tags($aRow['tags']);
 
-            $row[] = _d($aRow['duedate']);
+            $row[] = e(_d($aRow['duedate']));
 
             $row[] = format_invoice_status($aRow[db_prefix() . 'invoices.status']);
 
@@ -152,9 +158,9 @@ return App_table::find('invoices')
         App_table_filter::new('sent', 'BooleanRule')->label(_l('estimate_status_sent'))->raw(function ($value) {
             if ($value == '1') {
                 return 'sent = 1';
-            } else {
-                return 'sent = 0 and ' . db_prefix() . 'invoices.status NOT IN (' . Invoices_model::STATUS_PAID . ',' . Invoices_model::STATUS_CANCELLED . ')';
             }
+
+            return 'sent = 0 and ' . db_prefix() . 'invoices.status NOT IN (' . Invoices_model::STATUS_PAID . ',' . Invoices_model::STATUS_CANCELLED . ')';
         }),
         App_table_filter::new('sale_agent', 'SelectRule')->label(_l('sale_agent_string'))
             ->withEmptyOperators()
@@ -164,7 +170,7 @@ return App_table::find('invoices')
                 return collect($ci->invoices_model->get_sale_agents())->map(function ($data) {
                     return [
                         'value' => $data['sale_agent'],
-                        'label' => get_staff_full_name($data['sale_agent'])
+                        'label' => get_staff_full_name($data['sale_agent']),
                     ];
                 })->all();
             }),
@@ -182,10 +188,10 @@ return App_table::find('invoices')
             ->label(_l('year'))
             ->raw(function ($value, $operator) {
                 if ($operator == 'in') {
-                    return "YEAR(date) IN (" . implode(',', $value) . ")";
-                } else {
-                    return "YEAR(date) NOT IN (" . implode(',', $value) . ")";
+                    return 'YEAR(date) IN (' . implode(',', $value) . ')';
                 }
+
+                return 'YEAR(date) NOT IN (' . implode(',', $value) . ')';
             })
             ->options(function ($ci) {
                 return collect($ci->invoices_model->get_invoices_years())->map(fn ($data) => [
@@ -197,7 +203,7 @@ return App_table::find('invoices')
             return $value == '1' ? 'recurring > 0' : 'recurring = 0';
         }),
         App_table_filter::new('not_have_payment', 'BooleanRule')->label(_l('invoices_list_not_have_payment'))->raw(function ($value) {
-            return '(' . db_prefix() . 'invoices.id ' . ($value == '1' ? 'NOT IN' : 'IN') . ' (SELECT invoiceid FROM ' . db_prefix() . 'invoicepaymentrecords) AND ' . db_prefix() . 'invoices.status != ' . Invoices_model::STATUS_CANCELLED . ')';
+            return '(' . db_prefix() . 'invoices.id ' . ($value == '1' ? 'NOT IN' : 'IN') . ' (SELECT invoiceid FROM ' . db_prefix() . 'invoicepaymentrecords UNION ALL SELECT invoice_id FROM ' . db_prefix() . 'credits) AND ' . db_prefix() . 'invoices.status != ' . Invoices_model::STATUS_CANCELLED . ')';
         }),
         App_table_filter::new('made_payment_by', 'MultiSelectRule')->label(str_replace(' %s', '', _l('invoices_list_made_payment_by')))->options(function ($ci) {
             return collect($ci->payment_modes_model->get('', [], true))->map(fn ($mode) => [
@@ -205,9 +211,9 @@ return App_table::find('invoices')
                 'label' => $mode['name'],
             ])->all();
         })->raw(function ($value, $operator, $sqlOperator) {
-            $dbPrefix = db_prefix();
+            $dbPrefix    = db_prefix();
             $sqlOperator = $sqlOperator['operator'];
 
-            return "({$dbPrefix}invoices.id IN (SELECT invoiceid FROM {$dbPrefix}invoicepaymentrecords WHERE paymentmode $sqlOperator ('" . implode("','", $value) . "')))";
-        })
+            return "({$dbPrefix}invoices.id IN (SELECT invoiceid FROM {$dbPrefix}invoicepaymentrecords WHERE paymentmode {$sqlOperator} ('" . implode("','", $value) . "')))";
+        }),
     ]);

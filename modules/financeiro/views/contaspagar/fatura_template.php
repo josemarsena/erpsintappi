@@ -7,7 +7,7 @@
             <div id="merge" class="col-md-6">
                 <?php
               if (isset($fatura)) {
-                  $this->load->view('admin/invoices/merge_invoice', ['invoices_to_merge' => $invoices_to_merge]);
+                  $this->load->view('financeiro/contaspagar/junta_fatura', ['invoices_to_merge' => $invoices_to_merge]);
               }
             ?>
             </div>
@@ -15,7 +15,7 @@
             <?php if (!isset($invoice_from_project)) { ?>
             <div id="expenses_to_bill" class="col-md-6">
                 <?php if (isset($fatura) && $fatura->status != Faturas_model::STATUS_CANCELLED) {
-                $this->load->view('admin/invoices/bill_expenses', ['expenses_to_bill' => $expenses_to_bill]);
+                $this->load->view('financeiro/contaspagar/bill_expenses', ['expenses_to_bill' => $expenses_to_bill]);
             } ?>
             </div>
             <?php } ?>
@@ -189,7 +189,7 @@
                 <?php } ?>
                 <div class="form-group">
                     <div class="checkbox checkbox-danger">
-                        <input type="checkbox"  id="marca_provisao" name="marca_provisao">
+                        <input type="checkbox"  id="provisao" name="provisao">
                         <label for="marca_provisao"><?php echo "É Provisão?" ?></label>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
                         <label for="tags" class="control-label"><i class="fa fa-tag" aria-hidden="true"></i>
                             <?php echo _l('tags'); ?></label>
                         <input type="text" class="tagsinput" id="tags" name="tags"
-                            value="<?php echo(isset($fatura) ? prep_tags_input(get_tags_in($fatura->id, 'invoice')) : ''); ?>"
+                            value="<?php echo(isset($fatura) ? prep_tags_input(get_tags_in($fatura->id, 'fatura')) : ''); ?>>"
                             data-role="tagsinput">
                     </div>
                     <div class="form-group mbot15<?= count($payment_modes) > 0 ? ' select-placeholder' : ''; ?>">
@@ -216,8 +216,8 @@
                         <br />
                         <?php if (count($payment_modes) > 0) { ?>
                         <select class="selectpicker"
-                            data-toggle="<?php echo $this->input->get('allowed_payment_modes'); ?>"
-                            name="allowed_payment_modes[]" data-actions-box="true" multiple="true" data-width="100%"
+                            data-toggle="<?php echo $this->input->get('modos_pagamento_permitidos'); ?>"
+                            name="modos_pagamento_permitidos[]" data-actions-box="true" multiple="true" data-width="100%"
                             data-title="<?php echo _l('dropdown_non_selected_tex'); ?>">
                             <?php foreach ($payment_modes as $mode) {
                    $selected = '';
@@ -468,8 +468,8 @@
                 <div class="mtop10">
                     <span><?php echo _l('show_quantity_as'); ?> </span>
                     <div class="radio radio-primary radio-inline">
-                        <input type="radio" value="1" id="sq_1" name="show_quantity_as"
-                            data-text="<?php echo _l('invoice_table_quantity_heading'); ?>" <?php if (isset($fatura) && $fatura->show_quantity_as == 1) {
+                        <input type="radio" value="1" id="sq_1" name="mostrar_quantidade_como"
+                            data-text="<?php echo _l('invoice_table_quantity_heading'); ?>" <?php if (isset($fatura) && $fatura->mostrar_quantidade_como == 1) {
                                 echo 'checked';
                             } elseif (!isset($hours_quantity) && !isset($qty_hrs_quantity)) {
                                 echo'checked';
@@ -477,15 +477,15 @@
                         <label for="sq_1"><?php echo _l('quantity_as_qty'); ?></label>
                     </div>
                     <div class="radio radio-primary radio-inline">
-                        <input type="radio" value="2" id="sq_2" name="show_quantity_as"
-                            data-text="<?php echo _l('invoice_table_hours_heading'); ?>" <?php if (isset($fatura) && $fatura->show_quantity_as == 2 || isset($hours_quantity)) {
+                        <input type="radio" value="2" id="sq_2" name="mostrar_quantidade_como"
+                            data-text="<?php echo _l('invoice_table_hours_heading'); ?>" <?php if (isset($fatura) && $fatura->mostrar_quantidade_como == 2 || isset($hours_quantity)) {
                                 echo 'checked';
                             } ?>>
                         <label for="sq_2"><?php echo _l('quantity_as_hours'); ?></label>
                     </div>
                     <div class="radio radio-primary radio-inline">
-                        <input type="radio" value="3" id="sq_3" name="show_quantity_as"
-                            data-text="<?php echo _l('invoice_table_quantity_heading'); ?>/<?php echo _l('invoice_table_hours_heading'); ?>" <?php if (isset($fatura) && $invoice->show_quantity_as == 3 || isset($qty_hrs_quantity)) {
+                        <input type="radio" value="3" id="sq_3" name="mostrar_quantidade_como"
+                            data-text="<?php echo _l('invoice_table_quantity_heading'); ?>/<?php echo _l('invoice_table_hours_heading'); ?>" <?php if (isset($fatura) && $fatrua->mostrar_quantidade_como == 3 || isset($qty_hrs_quantity)) {
                                 echo 'checked';
                             } ?>>
                         <label
@@ -513,9 +513,9 @@
                       echo '<th width="15%" align="left" class="custom_field">' . $cf['name'] . '</th>';
                   }
                      $qty_heading = _l('invoice_table_quantity_heading');
-                     if (isset($fatura) && $fatura->show_quantity_as == 2 || isset($hours_quantity)) {
+                     if (isset($fatura) && $fatura->mostrar_quantidade_como == 2 || isset($hours_quantity)) {
                          $qty_heading = _l('invoice_table_hours_heading');
-                     } elseif (isset($fatura) && $fatura->show_quantity_as == 3) {
+                     } elseif (isset($fatura) && $fatura->mostrar_quantidade_como == 3) {
                          $qty_heading = _l('invoice_table_quantity_heading') . '/' . _l('invoice_table_hours_heading');
                      }
                      ?>
@@ -668,17 +668,17 @@
                                     <div class="input-group" id="discount-total">
 
                                         <input type="number"
-                                            value="<?php echo(isset($fatura) ? $fatura->discount_percent : 0); ?>"
+                                            value="<?php echo(isset($fatura) ? $fatura->porcento_descto : 0); ?>"
                                             class="form-control pull-left input-discount-percent<?php if (isset($fatura) && !is_sale_discount($fatura, 'percent') && is_sale_discount_applied($fatura)) {
                       echo ' hide';
-                  } ?>" min="0" max="100" name="discount_percent">
+                  } ?>" min="0" max="100" name="porcento_descto">
 
                                         <input type="number" data-toggle="tooltip"
                                             data-title="<?php echo _l('numbers_not_formatted_while_editing'); ?>"
-                                            value="<?php echo(isset($fatura) ? $fatura->discount_total : 0); ?>"
+                                            value="<?php echo(isset($fatura) ? $fatura->total_descto : 0); ?>"
                                             class="form-control pull-left input-discount-fixed<?php if (!isset($fatura) || (isset($fatura) && !is_sale_discount($fatura, 'fixed'))) {
                       echo ' hide';
-                  } ?>" min="0" name="discount_total">
+                  } ?>" min="0" name="total_descto">
 
                                         <div class="input-group-addon">
                                             <div class="dropdown">
@@ -717,25 +717,6 @@
                         <td class="discount-total"></td>
                     </tr>
                     <tr>
-                        <td>
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <span
-                                        class="bold tw-text-neutral-700"><?php echo _l('invoice_adjustment'); ?></span>
-                                </div>
-                                <div class="col-md-5">
-                                    <input type="number" data-toggle="tooltip"
-                                        data-title="<?php echo _l('numbers_not_formatted_while_editing'); ?>" value="<?php if (isset($fatura)) {
-                                            echo $fatura->adjustment;
-                                        } else {
-                                            echo 0;
-                                        } ?>" class="form-control pull-left" name="adjustment">
-                                </div>
-                            </div>
-                        </td>
-                        <td class="adjustment"></td>
-                    </tr>
-                    <tr>
                         <td><span class="bold tw-text-neutral-700"><?php echo _l('invoice_total'); ?> :</span>
                         </td>
                         <td class="total">
@@ -759,10 +740,8 @@
     <hr class="hr-panel-separator" />
 
     <div class="panel-body">
-        <?php $value = (isset($fatura) ? $fatura->clientnote : get_option('predefined_clientnote_invoice')); ?>
-        <?php echo render_textarea('clientnote', 'invoice_add_edit_client_note', $value); ?>
-        <?php $value = (isset($fatura) ? $fatura->terms : get_option('predefined_terms_invoice')); ?>
-        <?php echo render_textarea('terms', 'terms_and_conditions', $value, [], [], 'mtop15'); ?>
+        <?php $value = (isset($fatura) ? $fatura->termos : get_option('predefined_terms_invoice')); ?>
+        <?php echo render_textarea('termos', 'terms_and_conditions', $value, [], [], 'mtop15'); ?>
     </div>
 
     <?php hooks()->do_action('after_render_invoice_template', isset($fatura) ? $fatura : false); ?>

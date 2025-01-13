@@ -271,7 +271,7 @@ class App_table
                     $valueSqlColumn = 'value';
 
                     if ($ruleInstance->type === 'NumberRule') {
-                        $valueSqlColumn = 'CAST(value as SIGNED)';
+                        $valueSqlColumn = 'CAST(value as DECIMAL(10, '.get_decimal_places().'))';
                     } else if ($ruleInstance->type === 'DateRule') {
                         $valueSqlColumn = 'CAST(value as DATE)';
                     }
@@ -392,6 +392,11 @@ class App_table
     protected function castRules($filters, $table)
     {
         foreach ($filters as $key => $filter) {
+            if(!isset($filter['builder']['rules'])) {
+                $filters[$key]['builder']['rules'] = [];
+                $filter['builder']['rules'] = [];
+            }
+
             foreach ($filter['builder']['rules'] as $rk => $rule) {
                 if ($rule instanceof App_table_filter) {
                     continue;
@@ -488,7 +493,7 @@ class App_table
             }
 
             $value = $this->getRuleValueForSql($rule);
-
+                       
             if (is_callable($ruleInstance->callback)) {
                 $whereSqls[] = call_user_func_array($ruleInstance->callback, [
                     $value,
@@ -523,6 +528,9 @@ class App_table
 
     protected function toSql($value, $operator, $operatorSql, $sqlColumn, $rule)
     {
+        if($rule->type === 'DateRule') {
+            $sqlColumn = 'CAST('.$sqlColumn.' as DATE)';
+        }
 
         if (
             $this->operatorRequiresArray(
@@ -545,6 +553,7 @@ class App_table
                 $operatorSql["operator"] === "BETWEEN" ||
                 $operatorSql["operator"] === "NOT BETWEEN"
             ) {
+
                 if ($value[0] == $value[1]) {
                     return $sqlColumn . " = " . $this->wrapValueInQuotes($value[0]);
                 } else {
@@ -577,6 +586,7 @@ class App_table
                 $value = $rule->emptyOperatorValue;
             }
         }
+
 
         $sql =
             ($sqlColumn .

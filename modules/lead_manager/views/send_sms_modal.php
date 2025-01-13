@@ -10,14 +10,27 @@
     } else {
       $name = _l('lead');
     }
-    echo _l('lead_manager_sms_modal_title'). $lead->phonenumber.' #'.$lead->id . ' - ' .  $name;
+    if(isset($is_client) && $is_client){
+      echo _l('lead_manager_sms_modal_title'). $lead->phonenumber.' #'.$lead->userid . ' - ' .  $name;
+    }else{
+      echo _l('lead_manager_sms_modal_title'). $lead->phonenumber.' #'.$lead->id . ' - ' .  $name;
+    }
   }
   ?>
 </h4>
 </div>
-<?php echo form_open(admin_url('lead_manager/send_sms/'.$lead->id),array('id'=>'sms-form-'.$lead->id,'autocomplete'=>'off')); ?>
-<?php echo render_input('lm_leadid','',$lead->id,'hidden'); ?>
-
+<?php 
+$id = isset($is_client) && $is_client ? $lead->userid : $lead->id;
+  echo form_open(admin_url('lead_manager/send_sms/'.$id),array('id'=>'sms-form-'.$id,'autocomplete'=>'off')); 
+?>
+<?php
+ echo render_input('lm_leadid','',$id,'hidden'); 
+ if(isset($is_client) && $is_client){
+  echo render_input('is_client','','client','hidden'); 
+ }else{
+   echo render_input('is_client','','lead','hidden'); 
+ }
+ ?>
 <div class="modal-body">
   <div class="row">
     <div class="col-md-12">
@@ -28,5 +41,5 @@
 <?php echo form_close(); ?>
 <div class="modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo _l('close'); ?></button>
-  <button type="button" onclick="validate_sms_form('<?= $lead->id;?>');" class="btn btn-info send_sms_btn_lm" data-lead = "<?= $lead->id;?>" data-loading-text="<?php echo _l('wait_text'); ?>" autocomplete="off" data-form="#sms-form"><?php echo _l('send'); ?></button>
+  <button type="button" onclick="validate_sms_form('<?= $id;?>');" class="btn btn-info send_sms_btn_lm" data-lead = "<?= $id;?>" data-loading-text="<?php echo _l('wait_text'); ?>" autocomplete="off" data-form="#sms-form"><?php echo _l('send'); ?></button>
 </div>

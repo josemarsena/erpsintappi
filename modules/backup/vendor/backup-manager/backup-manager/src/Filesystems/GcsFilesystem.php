@@ -20,12 +20,13 @@ class GcsFilesystem implements Filesystem {
 
     /**
      * @param array $config
-     * @return \League\Flysystem\Filesystem
+     * @return Flysystem
      */
     public function get(array $config) {
 
         $storageClient = new StorageClient([
             'projectId' => $config['project'],
+            'keyFilePath' => isset($config['keyFilePath']) ? $config['keyFilePath'] : null,
         ]);
         $bucket = $storageClient->bucket($config['bucket']);
 

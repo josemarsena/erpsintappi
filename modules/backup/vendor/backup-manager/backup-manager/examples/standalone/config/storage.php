@@ -13,6 +13,7 @@ return [
         'version' => 'latest',
         'bucket' => '',
         'root'   => '',
+        'use_path_style_endpoint' => false,
     ],
     'gcs' => [
         'type' => 'Gcs',
@@ -49,6 +50,16 @@ return [
     ],
     'sftp' => [
         'type' => 'Sftp',
+        'host' => '',
+        'username' => '',
+        'password' => '',
+        'root' => '',
+        'port' => 21,
+        'timeout' => 10,
+        'privateKey' => '',
+    ],
+    'webdav' => [
+        'type' => 'webdab',
         'host' => '',
         'username' => '',
         'password' => '',

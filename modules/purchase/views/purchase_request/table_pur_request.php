@@ -3,8 +3,6 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 $aColumns = [
-     
-    
     'pur_rq_name',
     'requester',
     'department', 

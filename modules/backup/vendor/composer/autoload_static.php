@@ -4,15 +4,21 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9ab6bea254e6a2248dcf7658f8d16d01
+class ComposerStaticInit82b3d0d7c43e2457a03514a1b458db2c
 {
+    public static $files = array (
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
+            'Symfony\\Polyfill\\Php80\\' => 23,
             'Symfony\\Component\\Process\\' => 26,
         ),
         'L' => 
         array (
+            'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\' => 17,
         ),
         'B' => 
@@ -22,9 +28,17 @@ class ComposerStaticInit9ab6bea254e6a2248dcf7658f8d16d01
     );
 
     public static $prefixDirsPsr4 = array (
+        'Symfony\\Polyfill\\Php80\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
         'Symfony\\Component\\Process\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
+        ),
+        'League\\MimeTypeDetection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
         'League\\Flysystem\\' => 
         array (
@@ -36,11 +50,21 @@ class ComposerStaticInit9ab6bea254e6a2248dcf7658f8d16d01
         ),
     );
 
+    public static $classMap = array (
+        'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9ab6bea254e6a2248dcf7658f8d16d01::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9ab6bea254e6a2248dcf7658f8d16d01::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit82b3d0d7c43e2457a03514a1b458db2c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit82b3d0d7c43e2457a03514a1b458db2c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit82b3d0d7c43e2457a03514a1b458db2c::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,35 +5,37 @@
         <?php if (isset($client) && $client->registration_confirmed == 0 && is_admin()) { ?>
         <div class="alert alert-warning">
             <h4>
-                <?php echo _l('customer_requires_registration_confirmation'); ?>
+                <?= _l('customer_requires_registration_confirmation'); ?>
             </h4>
-            <a href="<?php echo admin_url('clients/confirm_registration/' . $client->userid); ?>">
-                <?php echo _l('confirm_registration'); ?>
+            <a href="<?= admin_url('clients/confirm_registration/' . $client->userid); ?>"
+                class="alert-link">
+                <?= _l('confirm_registration'); ?>
             </a>
         </div>
         <?php } elseif (isset($client) && $client->active == 0 && $client->registration_confirmed == 1) { ?>
         <div class="alert alert-warning">
-            <?php echo _l('customer_inactive_message'); ?>
+            <?= _l('customer_inactive_message'); ?>
             <br />
-            <a href="<?php echo admin_url('clients/mark_as_active/' . $client->userid); ?>">
-                <?php echo _l('mark_as_active'); ?>
+            <a href="<?= admin_url('clients/mark_as_active/' . $client->userid); ?>"
+                class="alert-link">
+                <?= _l('mark_as_active'); ?>
             </a>
         </div>
         <?php } ?>
         <?php if (isset($client) && (staff_cant('view', 'customers') && is_customer_admin($client->userid))) {?>
         <div class="alert alert-info">
-            <?php echo _l('customer_admin_login_as_client_message', get_staff_full_name(get_staff_user_id())); ?>
+            <?= e(_l('customer_admin_login_as_client_message', get_staff_full_name(get_staff_user_id()))); ?>
         </div>
         <?php } ?>
         <div class="row">
             <div class="col-md-3">
                 <?php if (isset($client)) { ?>
-                <h4 class="tw-text-lg tw-font-semibold tw-text-neutral-800 tw-mt-0">
+                <h4 class="tw-text-lg tw-font-bold tw-text-neutral-800 tw-mt-0">
                     <div class="tw-space-x-3 tw-flex tw-items-center">
                         <span class="tw-truncate">
-                            #<?php echo $client->userid . ' ' . $title; ?>
+                            #<?= $client->userid . ' ' . $title; ?>
                         </span>
-                        <?php if (staff_can('delete',  'customers') || is_admin()) { ?>
+                        <?php if (staff_can('delete', 'customers') || is_admin()) { ?>
                         <div class="btn-group">
                             <a href="#" class="dropdown-toggle btn-link" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
@@ -42,18 +44,18 @@
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <?php if (is_admin()) { ?>
                                 <li>
-                                    <a href="<?php echo admin_url('clients/login_as_client/' . $client->userid); ?>"
+                                    <a href="<?= admin_url('clients/login_as_client/' . $client->userid); ?>"
                                         target="_blank">
                                         <i class="fa-regular fa-share-from-square"></i>
-                                        <?php echo _l('login_as_client'); ?>
+                                        <?= _l('login_as_client'); ?>
                                     </a>
                                 </li>
                                 <?php } ?>
-                                <?php if (staff_can('delete',  'customers')) { ?>
+                                <?php if (staff_can('delete', 'customers')) { ?>
                                 <li>
-                                    <a href="<?php echo admin_url('clients/delete/' . $client->userid); ?>"
+                                    <a href="<?= admin_url('clients/delete/' . $client->userid); ?>"
                                         class="text-danger delete-text _delete"><i class="fa fa-remove"></i>
-                                        <?php echo _l('delete'); ?>
+                                        <?= _l('delete'); ?>
                                     </a>
                                 </li>
                                 <?php } ?>
@@ -63,10 +65,11 @@
                     </div>
                     <?php if (isset($client) && $client->leadid != null) { ?>
                     <small class="tw-block">
-                        <b><?php echo _l('customer_from_lead', _l('lead')); ?></b>
-                        <a href="<?php echo admin_url('leads/index/' . $client->leadid); ?>"
-                            onclick="init_lead(<?php echo $client->leadid; ?>); return false;">
-                            - <?php echo _l('view'); ?>
+                        <b><?= e(_l('customer_from_lead', _l('lead'))); ?></b>
+                        <a href="<?= admin_url('leads/index/' . $client->leadid); ?>"
+                            onclick="init_lead(<?= e($client->leadid); ?>); return false;">
+                            -
+                            <?= _l('view'); ?>
                         </a>
                     </small>
                     <?php } ?>
@@ -81,12 +84,20 @@
             </div>
             <?php } ?>
 
-            <div class="tw-mt-12 sm:tw-mt-0 <?php echo isset($client) ? 'col-md-9' : 'col-md-8 col-md-offset-2'; ?>">
+            <div
+                class="tw-mt-12 sm:tw-mt-0 <?= isset($client) ? 'col-md-9' : 'col-md-8 col-md-offset-2'; ?>">
+
+                <?php if (! isset($client)) {?>
+                <h4 class="tw-mt-0 tw-font-bold tw-text-lg tw-text-neutral-700">
+                    <?= $title ?>
+                </h4>
+                <?php } ?>
+
                 <div class="panel_s">
                     <div class="panel-body">
                         <?php if (isset($client)) { ?>
-                        <?php echo form_hidden('isedit'); ?>
-                        <?php echo form_hidden('userid', $client->userid); ?>
+                        <?= form_hidden('isedit'); ?>
+                        <?= form_hidden('userid', $client->userid); ?>
                         <div class="clearfix"></div>
                         <?php } ?>
                         <div>
@@ -97,13 +108,13 @@
                     </div>
                     <?php if ($group == 'profile') { ?>
                     <div class="panel-footer text-right tw-space-x-1" id="profile-save-section">
-                        <?php if (!isset($client)) { ?>
+                        <?php if (! isset($client)) { ?>
                         <button class="btn btn-default save-and-add-contact customer-form-submiter">
-                            <?php echo _l('save_customer_and_add_contact'); ?>
+                            <?= _l('save_customer_and_add_contact'); ?>
                         </button>
                         <?php } ?>
                         <button class="btn btn-primary only-save customer-form-submiter">
-                            <?php echo _l('submit'); ?>
+                            <?= _l('submit'); ?>
                         </button>
                     </div>
                     <?php } ?>
@@ -116,9 +127,10 @@
 <?php init_tail(); ?>
 <?php if (isset($client)) { ?>
 <script>
-$(function() {
-    init_rel_tasks_table(<?php echo $client->userid; ?>, 'customer');
-});
+    $(function() {
+        init_rel_tasks_table( <?= e($client->userid); ?> ,
+            'customer');
+    });
 </script>
 <?php } ?>
 <?php $this->load->view('admin/clients/client_js'); ?>

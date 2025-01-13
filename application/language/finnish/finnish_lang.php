@@ -3846,3 +3846,28 @@ $lang['receipt']                         = 'Kuitti';
 $lang['search_proposals']                = 'Ehdotusten haku';
 $lang['search_estimates']                = 'Etsi arvioita';
 $lang['quick_create']                    = 'Pikaluo';
+
+# Version 3.1.2
+$lang['allow_non_admin_members_to_delete_tickets_and_replies'] = 'Allow non-admin staff members to delete tickets and replies';
+$lang['default_filter_info'] = 'The filter will be marked as default only for your account.';
+$lang['required_register_fields'] = 'Required fields for registration (customers area)';
+
+# Version 3.1.6
+$lang['allow_non_admin_members_to_edit_ticket_messages'] = 'Allow non-admin staff members to delete tickets and replies';
+$lang['proposal_auto_convert_to_invoice_on_client_accept'] = 'Auto convert the proposal to invoice after client accept (only customers related proposals)';
+$lang['invoice_activity_auto_converted_from_proposal']      = 'Invoice auto created from proposal with number %s';
+$lang['clients_proposal_invoiced_successfully'] = 'Thank you for accepting the proposal. Please review the created invoice for the proposal';
+
+# Version 3.2.0
+$lang['ideal_payment_failure_message'] = 'The payment failed or was canceled.';
+$lang['ideal_api_publishable_key'] = 'Stripe Publishable Key';
+$lang['ideal_api_secret_key'] = 'Stripe API Secret Key';
+$lang['filters'] = 'Filters';
+$lang['view_financial_stats'] = 'View Financial Stats';
+$lang['timesheet_summary'] = 'Timesheet Summary';
+$lang['timesheet_detailed_overview'] = 'Detailed Overview of Logged Timesheets and Hours';
+$lang['ticket_request_history'] = 'Request History';
+$lang['integrations'] = 'Integrations';
+$lang['settings_group_other'] = 'Other';
+$lang['settings_group_configure_features'] = 'Configure Features';
+$lang['disable_ticket_public_url'] = 'Disable Ticket Public URL';

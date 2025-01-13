@@ -177,42 +177,6 @@ function get_proposal_item_taxes($itemid)
 
 
 /**
- * Get all countries stored in database
- * @return array
- */
-function get_all_proposals()
-{
-    return hooks()->apply_filters('all_proposals', get_instance()->db->order_by('subject', 'asc')->get(db_prefix().'proposals')->result_array());
-}
-
-
-/**
- * Obtem o nome do Projeto baseado no ID
- * @param  mixed $id
- * @return string
- */
-function get_proposal_name_by_id($id)
-{
-    $CI      = & get_instance();
-    $proposal = $CI->app_object_cache->get('proposal-name-data-' . $id);
-
-    if (!$proposal) {
-        $CI->db->select('subject');
-        $CI->db->where('id', $id);
-        $proposal = $CI->db->get(db_prefix() . 'proposals')->row();
-        $CI->app_object_cache->add('proposal-name-data-' . $id, $proposal);
-    }
-
-    if ($proposal) {
-        return $proposal->subject;
-    }
-
-    return '';
-}
-
-
-
-/**
  * Calculate proposal percent by status
  * @param  mixed $status          proposal status
  * @param  mixed $total_estimates in case the total is calculated in other place

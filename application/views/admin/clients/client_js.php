@@ -101,7 +101,7 @@ $(function() {
             extensions: app.options.allowed_files.split(','),
         }));
     }
-    //
+
     /* Customer profile tickets table */
     $('.table-tickets-single').find('#th-submitter').removeClass('toggleable');
 
@@ -437,7 +437,7 @@ function save_longitude_and_latitude(clientid) {
     data.longitude = $('#longitude').val();
     $.post(admin_url + 'clients/save_longitude_and_latitude/' + clientid, data).done(function(response) {
         if (response == 'success') {
-            alert_float('success', "<?php echo _l('updated_successfully', _l('client')); ?>");
+            alert_float('success', "<?php echo e(_l('updated_successfully', _l('client'))); ?>");
         }
         setTimeout(function() {
             window.location.reload();

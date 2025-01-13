@@ -13,6 +13,7 @@ return [
         'version' => 'latest',
         'bucket' => '',
         'root'   => '',
+        'use_path_style_endpoint' => false,
     ],
     'gcs' => [
         'type'            => 'Gcs',
@@ -58,5 +59,15 @@ return [
         'timeout' => 10,
         'privateKey' => '',
         'root' => '',
+    ],
+    'doSpaces' => [
+        'type' => 'AwsS3',
+        'key' => '',
+        'secret' => '',
+        'region' => '',
+        'bucket' => '',
+        'root' => '',
+        'endpoint' => '',
+        'use_path_style_endpoint' => false,
     ],
 ];

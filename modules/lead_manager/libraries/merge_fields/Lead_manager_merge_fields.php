@@ -166,61 +166,81 @@ class Lead_manager_merge_fields extends App_merge_fields
                     'new-web-to-lead-form-submitted',
                 ],
             ],
-
-            [
-                'name'      => 'Customer Name',
-                'key'       => '{customer_name}',
-                'available' => [
-                  
-                ],
-            ],
             [
                 'name'      => 'Staff Name',
                 'key'       => '{staff_name}',
                 'available' => [
-                  
+
                 ],
             ],
             [
                 'name'      => 'Topic',
                 'key'       => '{topic}',
                 'available' => [
-                 
+
                 ],
             ],
             [
                 'name'      => 'Meeting ID',
                 'key'       => '{meeting_id}',
                 'available' => [
-                   
+
                 ],
             ],
             [
                 'name'      => 'Meeting Time',
                 'key'       => '{meeting_time}',
                 'available' => [
-                    
+
                 ],
             ],
             [
                 'name'      => 'Duration',
                 'key'       => '{meeting_duration}',
                 'available' => [
-                    
+
                 ],
             ],
             [
                 'name'      => 'Password',
                 'key'       => '{meeting_password}',
                 'available' => [
-                    
+
                 ],
             ],
             [
                 'name'      => 'Join Link',
                 'key'       => '{join_url}',
                 'available' => [
-                    
+
+                ],
+            ],
+            [
+                'name'      => 'Description',
+                'key'       => '{meeting_description}',
+                'available' => [
+
+                ],
+            ],
+            [
+                'name'      => 'Created at',
+                'key'       => '{created_at}',
+                'available' => [
+
+                ],
+            ],
+            [
+                'name'      => 'Staff email',
+                'key'       => '{staff_email}',
+                'available' => [
+
+                ],
+            ],
+            [
+                'name'      => 'Staff contact no.',
+                'key'       => '{staff_phonenumber}',
+                'available' => [
+
                 ],
             ],
         ];
@@ -234,7 +254,6 @@ class Lead_manager_merge_fields extends App_merge_fields
      */
     public function format($id,$meeting_data)
     {
-  //echo $id; die();
         $fields = [];
 
         $fields['{lead_name}']               = '';
@@ -255,8 +274,6 @@ class Lead_manager_merge_fields extends App_merge_fields
         $fields['{lead_description}']        = '';
         $fields['{lead_public_form_url}']    = '';
         $fields['{lead_public_consent_url}'] = '';
-
-        $fields['{customer_name}'] = '';
         $fields['{staff_name}'] = '';
         $fields['{topic}'] = '';
         $fields['{meeting_id}'] = '';
@@ -264,40 +281,64 @@ class Lead_manager_merge_fields extends App_merge_fields
         $fields['{meeting_duration}'] = '';
         $fields['{meeting_password}'] = '';
         $fields['{join_url}'] = '';
+        $fields['{meeting_description}'] = '';
+        $fields['{created_at}'] = '';
+        $fields['{staff_email}'] = '';
+        $fields['{staff_phonenumber}'] = '';
 
-        if (is_numeric($id)) {
+        if (is_numeric($id) && !$meeting_data->is_client) {
             $this->ci->db->where('id', $id);
             $lead = $this->ci->db->get(db_prefix().'leads')->row();
         } else {
-            $lead = $id;
+            $this->ci->db->where(['id'=>$id, 'is_primary' => 1]);
+            $lead = $this->ci->db->get(db_prefix().'contacts')->row();
         }
 
         if (!$lead) {
             return $fields;
         }
 
-        $fields['{lead_public_form_url}']    = leads_public_url($lead->id);
-        $fields['{lead_public_consent_url}'] = lead_consent_url($lead->id);
-        $fields['{lead_link}']               = admin_url('leads/index/' . $lead->id);
-        $fields['{lead_name}']               = $lead->name;
-        $fields['{lead_email}']              = $lead->email;
-        $fields['{lead_position}']           = $lead->title;
-        $fields['{lead_phonenumber}']        = $lead->phonenumber;
-        $fields['{lead_company}']            = $lead->company;
-        $fields['{lead_zip}']                = $lead->zip;
-        $fields['{lead_city}']               = $lead->city;
-        $fields['{lead_state}']              = $lead->state;
-        $fields['{lead_address}']            = $lead->address;
-        $fields['{lead_website}']            = $lead->website;
-        $fields['{lead_description}']        = $lead->description;
-        $fields['{customer_name}'] = $meeting_data->name;
+        if (is_numeric($meeting_data->staff_id)) {
+            $this->ci->load->model('staff_model');
+            $staff = $this->ci->staff_model->get($meeting_data->staff_id);
+            $fields['{staff_email}'] = $staff->email;
+            $fields['{staff_phonenumber}'] = $staff->phonenumber;
+        }
+
+        $dateTime = new DateTime();
+        $dateTime->setTimeZone(new DateTimeZone($meeting_data->timezone));
+        $time_zone_abbreviation = $dateTime->format('T');
+        if(!$meeting_data->is_client){
+            $fields['{lead_public_form_url}']    = leads_public_url($lead->id);
+            $fields['{lead_public_consent_url}'] = lead_consent_url($lead->id);
+            $fields['{lead_link}']               = admin_url('leads/index/' . $lead->id);
+            $fields['{lead_name}']               = $lead->name;
+            $fields['{lead_email}']              = $lead->email;
+            $fields['{lead_position}']           = $lead->title;
+            $fields['{lead_phonenumber}']        = $lead->phonenumber;
+            $fields['{lead_company}']            = $lead->company;
+            $fields['{lead_zip}']                = $lead->zip;
+            $fields['{lead_city}']               = $lead->city;
+            $fields['{lead_state}']              = $lead->state;
+            $fields['{lead_address}']            = $lead->address;
+            $fields['{lead_website}']            = $lead->website;
+            $fields['{lead_description}']        = $lead->description;
+        }else{
+            $fields['{lead_name}']               = $meeting_data->name;
+            $fields['{lead_email}']              = $meeting_data->email;
+            $fields['{lead_position}']           = $lead->title;
+            $fields['{lead_phonenumber}']        = $lead->phonenumber;
+        }
         $fields['{staff_name}'] = $meeting_data->staff_name;
         $fields['{topic}'] = $meeting_data->meeting_agenda;
         $fields['{meeting_id}'] = $meeting_data->meeting_id;
-        $fields['{meeting_time}'] = $meeting_data->meeting_date;
+        $fields['{meeting_time}'] = _dt($meeting_data->meeting_date).' '.$time_zone_abbreviation;
         $fields['{meeting_duration}'] = $meeting_data->meeting_duration;
         $fields['{meeting_password}'] = $meeting_data->password;
         $fields['{join_url}'] = $meeting_data->join_url;
+        $fields['{meeting_description}'] = $meeting_data->meeting_description;
+        $fields['{created_at}'] = _dt($meeting_data->created_at);
+        
         return $fields;
     }
 }

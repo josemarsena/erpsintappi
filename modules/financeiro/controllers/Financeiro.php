@@ -222,9 +222,7 @@ class Financeiro extends AdminController
         if ($this->input->post()) {
             $dados_fatura = $this->input->post();
 
-          //  $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
-       //     fwrite($myfile, var_dump($dados_fatura));
-        //    fclose($myfile);
+
 
             if ($id == '') {
 
@@ -247,9 +245,10 @@ class Financeiro extends AdminController
                 }
 
                 $id = $this->faturas_model->add($dados_fatura);
+
                 if ($id) {
                     set_alert('success', _l('added_successfully', _l('invoice')));
-                    $redUrl = admin_url('financeiro/contaspagar/list_invoices/' . $id);
+                    $redUrl = admin_url('financeiro/contaspagar/' . $id);
 
                     if (isset($dados_fatura['save_and_record_payment'])) {
                         $this->session->set_userdata('record_payment', true);
@@ -344,23 +343,28 @@ class Financeiro extends AdminController
         $this->load->view('financeiro/contaspagar/fatura', $data);
     }
 
+    /***************
+     * @return void
+     * Funcao: Valida a Fatura a Pagar
+     * Parametros: nd
+     */
     public function valida_fatura_a_pagar()
     {
         $isedit          = $this->input->post('isedit');
-        $number          = $this->input->post('number');
-        $date            = $this->input->post('date');
+        $number          = $this->input->post('numero');
+        $date            = $this->input->post('data');
         $original_number = $this->input->post('original_number');
         $number          = trim($number);
         $number          = ltrim($number, '0');
 
         if ($isedit == 'true') {
             if ($number == $original_number) {
-                echo json_encode(true);
+                echo json_encode(true);   // retorna a representacao JsON de um numero
                 die;
             }
         }
 
-        if (total_rows('invoices', [
+        if (total_rows('fin_faturas', [
                 'YEAR(date)' => date('Y', strtotime(to_sql_date($date))),
                 'number' => $number,
                 'status !=' => Invoices_model::STATUS_DRAFT,
@@ -404,9 +408,9 @@ class Financeiro extends AdminController
         $data['id_fatura']            = $id;
         $data['titulo']                = 'Contas a Pagar';
         $data['fornecedores'] = $this->purchase_model->get_vendor();
-        $data['invoices_years']       = $this->faturas_model->get_invoices_years();    // Array de Anos das Faturas
-        $data['invoices_sale_agents'] = $this->faturas_model->get_compradores();    // Array dos Vendedores
-        $data['invoices_statuses']    = $this->faturas_model->get_status_naopagos();    // Array dos não Pagos
+        $data['invoices_years']       = $this->faturas_model->obter_faturas_anos();    // Array de Anos das Faturas
+        $data['invoices_sale_agents'] = $this->faturas_model->obter_compradores();    // Array dos Vendedores
+        $data['invoices_statuses']    = $this->faturas_model->obter_status_naopagos();    // Array dos não Pagos
 
         $data['bodyclass']            = 'invoices-total-manual';
         $this->load->view('contaspagar/gerenciar', $data);
@@ -426,6 +430,7 @@ class Financeiro extends AdminController
         }
 
         $this->load->model('invoices_model');
+        $this->load->model('receber_model');
         $this->load->model('credit_notes_model');
 
         if (staff_cant('view', 'invoices')
@@ -440,10 +445,6 @@ class Financeiro extends AdminController
         }
         close_setup_menu();
 
-    //    if ($this->input->is_ajax_request()) {
-     //       $this->app->get_table_data(module_views_path('financeiro', 'tables/contasreceber'));
-     //   }
-//
         $invoices_table = App_table::find('invoices');
 
         $this->load->model('payment_modes_model');
@@ -452,7 +453,7 @@ class Financeiro extends AdminController
         $data['title']                = 'Contas a Receber';
         $data['invoices_years']       = $this->invoices_model->get_invoices_years();    // Array de Anos das Faturas
         $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();    // Array dos Vendedores
-        $data['invoices_statuses']    = $this->invoices_model->get_status_naopagos();    // Array dos não Pagos
+        $data['invoices_statuses']    = $this->receber_model->get_status_naopagos();    // Array dos não Pagos
         $data['invoices_table']       = $invoices_table;   // Tabela de Fatura
         $data['bodyclass']            = 'invoices-total-manual';
         $this->load->view('contasreceber/gerenciar', $data);
@@ -477,10 +478,6 @@ class Financeiro extends AdminController
             die;
         }
 
-
-        $myfile = fopen("erro.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, 'Passou1');
-        fclose($myfile);
 
         if (!$id) {
             die(_l('invoice_not_found'));

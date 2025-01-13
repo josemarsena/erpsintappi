@@ -32,6 +32,9 @@ define('FINANCEIRO_REVISION', 106);
 
 register_activation_hook(FINANCEIRO_MODULE_NAME, 'financeiro_module_activation_hook');
 
+$CI = &get_instance();
+$CI->load->helper(FINANCEIRO_MODULE_NAME . '/financeiro');
+
 /**
  * Registre arquivos de idioma, deve ser registrado se o módulo estiver usando idiomas
  */

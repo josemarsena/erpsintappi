@@ -5,7 +5,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /**
  * Defined styling areas for the theme style feature
  * Those string are not translated to keep the language file neat
- * @param  string $type
+ *
+ * @param string $type
+ *
  * @return array
  */
 function get_styling_areas($type = 'admin')
@@ -31,7 +33,7 @@ function get_styling_areas($type = 'admin')
                 'id'                   => 'admin-menu-links',
                 'target'               => '.admin #side-menu li a,.admin #setup-menu li a, .admin #side-menu li a i.menu-icon',
                 'css'                  => 'color',
-                'additional_selectors' => '',
+                'additional_selectors' => '.admin #setup-menu-wrapper .customizer-heading|color+.admin #setup-menu-wrapper .close-customizer|color',
             ],
             // [
             //     'name'                 => _l('theme_style_sidebar_user_welcome_text_color'),
@@ -57,9 +59,14 @@ function get_styling_areas($type = 'admin')
                 'name'   => _l('theme_style_sidebar_active_item_color'),
                 'id'     => 'admin-menu-active-item-color',
                 'target' => '
-                .admin #side-menu li.active > a,
-                .admin #setup-menu li.active > a,
-                .admin #side-menu li.active a i.menu-icon',
+                .admin #side-menu li.active > a:first-child,                
+                .admin #side-menu li.active a i.menu-icon,
+                .admin #side-menu li:hover a:first-child,
+                .admin #side-menu li:hover a:first-child i.menu-icon,
+                .admin #setup-menu li.active > a:first-child,                
+                .admin #setup-menu li.active a i.menu-icon,
+                .admin #setup-menu li:hover a:first-child,
+                .admin #setup-menu li:hover a:first-child i.menu-icon',
                 'css'                  => 'color',
                 'additional_selectors' => '',
             ],
@@ -87,9 +94,9 @@ function get_styling_areas($type = 'admin')
             [
                 'name'                 => _l('theme_style_top_header_bg_links_color'),
                 'id'                   => 'top-header-links',
-                'target'               => '.admin .navbar-nav > li > a, .admin .navbar-nav > li > a > span > svg, ul.mobile-icon-menu>li>a,.mobile-menu-toggle, .open-customizer-mobile',
+                'target'               => '.admin .navbar-nav > li > a, .admin .navbar-nav > li > a > span > i, ul.mobile-icon-menu>li>a,.mobile-menu-toggle, .open-customizer-mobile',
                 'css'                  => 'color',
-                'additional_selectors' => '',
+                'additional_selectors' => '.admin button.hide-menu|color',
             ],
         ],
         'customers' => [
@@ -210,35 +217,35 @@ function get_styling_areas($type = 'admin')
             ],
         ],
         'tabs' => [
-            [
-                'name'                 => _l('theme_style_tabs_bg_color'),
-                'id'                   => 'tabs-bg',
-                'target'               => '.nav-tabs',
-                'css'                  => 'background',
-                'additional_selectors' => '',
-            ],
-            [
-                'name'                 => _l('theme_style_tabs_links_color'),
-                'id'                   => 'tabs-links',
-                'target'               => '.nav-tabs>li>a',
-                'css'                  => 'color',
-                'additional_selectors' => '',
-            ],
-            [
-                'name'                 => _l('theme_style_tabs_active_links_color'),
-                'id'                   => 'tabs-links-active-hover',
-                'target'               => '.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover',
-                'css'                  => 'color',
-                'additional_selectors' => '',
-            ],
+            // [
+            //     'name'                 => _l('theme_style_tabs_bg_color'),
+            //     'id'                   => 'tabs-bg',
+            //     'target'               => '.nav-tabs',
+            //     'css'                  => 'background',
+            //     'additional_selectors' => '',
+            // ],
+            // [
+            //     'name'                 => _l('theme_style_tabs_links_color'),
+            //     'id'                   => 'tabs-links',
+            //     'target'               => '.nav-tabs>li>a',
+            //     'css'                  => 'color',
+            //     'additional_selectors' => '',
+            // ],
+            // [
+            //     'name'                 => _l('theme_style_tabs_active_links_color'),
+            //     'id'                   => 'tabs-links-active-hover',
+            //     'target'               => '.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover',
+            //     'css'                  => 'color',
+            //     'additional_selectors' => '',
+            // ],
 
-            [
-                'name'                 => _l('theme_style_tabs_active_border_color'),
-                'id'                   => 'tabs-active-border',
-                'target'               => '.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover',
-                'css'                  => 'border-bottom-color',
-                'additional_selectors' => '',
-            ],
+            // [
+            //     'name'                 => _l('theme_style_tabs_active_border_color'),
+            //     'id'                   => 'tabs-active-border',
+            //     'target'               => '.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover, .nav-tabs>li>a:focus, .nav-tabs>li>a:hover',
+            //     'css'                  => 'border-bottom-color',
+            //     'additional_selectors' => '',
+            // ],
         ],
         'modals' => [
             [
@@ -314,30 +321,30 @@ function get_styling_areas($type = 'admin')
         ],
     ];
 
-
-    $CI   = & get_instance();
+    $CI   = &get_instance();
     $tags = get_tags();
 
     $areas['tags'] = [];
 
     foreach ($tags as $tag) {
         array_push($areas['tags'], [
-                'name'                 => $tag['name'],
-                'id'                   => 'tag-' . $tag['id'],
-                'target'               => '.tag-id-' . $tag['id'],
-                'css'                  => 'color',
-                'additional_selectors' => '.tag-id-' . $tag['id'] . '|border-color+ul.tagit li.tagit-choice-editable.tag-id-' . $tag['id'] . '|border-color+ul.tagit li.tagit-choice.tag-id-' . $tag['id'] . ' .tagit-label:not(a)|color',
-                'example'              => '<span class="label label-tag tag-id-' . $tag['id'] . '">' . $tag['name'] . '</span>',
-            ]);
+            'name'                 => $tag['name'],
+            'id'                   => 'tag-' . $tag['id'],
+            'target'               => '.tag-id-' . $tag['id'],
+            'css'                  => 'color',
+            'additional_selectors' => 'ul.tagit li.tagit-choice.tag-id-' . $tag['id'] . ' .tagit-label:not(a)|color',
+            'example'              => '<span class="label label-tag tag-id-' . $tag['id'] . '">' . $tag['name'] . '</span>',
+        ]);
     }
 
     $areas = hooks()->apply_filters('get_styling_areas', $areas);
 
-    if (!is_array($type)) {
+    if (! is_array($type)) {
         return $areas[$type];
     }
 
     $_areas = [];
+
     foreach ($type as $t) {
         $_areas[] = $areas[$t];
     }
@@ -346,6 +353,7 @@ function get_styling_areas($type = 'admin')
 }
 /**
  * Will fetch from database the stored applied styles and return
+ *
  * @return object
  */
 function get_applied_styling_area()
@@ -354,20 +362,20 @@ function get_applied_styling_area()
     if ($theme_style == '') {
         return [];
     }
-    $theme_style = json_decode($theme_style);
 
-    return $theme_style;
+    return json_decode($theme_style);
 }
 /**
  * Function that will parse and render the applied styles
- * @param  string $type
+ *
+ * @param string $type
+ *
  * @return void
  */
 function theme_style_render($type)
 {
     $theme_style   = get_applied_styling_area();
     $styling_areas = get_styling_areas($type);
-
 
     foreach ($styling_areas as $type => $area) {
         foreach ($area as $_area) {
@@ -416,6 +424,7 @@ function theme_style_render($type)
                     }
                     if ($_area['additional_selectors'] != '') {
                         $additional_selectors = explode('+', $_area['additional_selectors']);
+
                         foreach ($additional_selectors as $as) {
                             $_temp = explode('|', $as);
                             echo $_temp[0] . ' {' . PHP_EOL;
@@ -431,8 +440,10 @@ function theme_style_render($type)
 }
 /**
  * Get selected value for some styling area for the Theme style feature
- * @param  string $type
- * @param  string $selector
+ *
+ * @param string $type
+ * @param string $selector
+ *
  * @return string
  */
 function get_custom_style_values($type, $selector)
@@ -440,6 +451,7 @@ function get_custom_style_values($type, $selector)
     $value         = '';
     $theme_style   = get_applied_styling_area();
     $styling_areas = get_styling_areas($type);
+
     foreach ($styling_areas as $area) {
         if ($area['id'] == $selector) {
             foreach ($theme_style as $applied_style) {

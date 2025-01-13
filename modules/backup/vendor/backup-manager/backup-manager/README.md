@@ -1,4 +1,4 @@
-# Database Backup Manager 1.2
+# Database Backup Manager
 
 [![Latest Stable Version](https://poser.pugx.org/backup-manager/backup-manager/version.png)](https://packagist.org/packages/backup-manager/backup-manager)
 [![License](https://poser.pugx.org/backup-manager/backup-manager/license.png)](https://packagist.org/packages/backup-manager/backup-manager)
@@ -7,6 +7,9 @@
 [![Total Downloads](https://poser.pugx.org/backup-manager/backup-manager/downloads.png)](https://packagist.org/packages/backup-manager/backup-manager)
 
 This package provides a framework-agnostic database backup manager for dumping to and restoring databases from S3, Dropbox, FTP, SFTP, and Rackspace Cloud.
+
+- use version 2 for &gt;=PHP 7.3
+- use version 1 for &lt;PHP 7.2
 
 [Watch a video tour](https://www.youtube.com/watch?v=vWXy0R8OavM) showing the Laravel driver in action to give you an idea what is possible.
 
@@ -19,18 +22,15 @@ This package provides a framework-agnostic database backup manager for dumping t
 
 ### Table of Contents
 
-- [Stability Notice](#stability-notice)
-- [Quick and Dirty](#quick-and-dirty)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contribution Guidelines](#contribution-guidelines)
-- [Maintainers](#maintainers)
-- [License](#license)
-
-### Stability Notice
-
-It's stable enough, you'll need to understand permissions.
+- [Database Backup Manager](#database-backup-manager)
+    - [Table of Contents](#table-of-contents)
+    - [Quick and Dirty](#quick-and-dirty)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Usage](#usage)
+    - [Contribution Guidelines](#contribution-guidelines)
+    - [Maintainers](#maintainers)
+    - [License](#license)
 
 ### Quick and Dirty
 
@@ -85,6 +85,7 @@ It's stable enough, you'll need to understand permissions.
     'version' => 'latest',
     'bucket' => '',
     'root'   => '',
+    'use_path_style_endpoint' => false,
 ],
 'b2' => [
     'type' => 'B2',
@@ -136,6 +137,28 @@ It's stable enough, you'll need to understand permissions.
     'port' => 21,
     'timeout' => 10,
     'privateKey' => '',
+],
+'flysystem' => [
+    'type' => 'Flysystem',
+    'name' => 's3_backup',
+    //'prefix' => 'upload',
+],
+'doSpaces' => [
+    'type' => 'AwsS3',
+    'key' => '',
+    'secret' => '',
+    'region' => '',
+    'bucket' => '',
+    'root' => '',
+    'endpoint' => '',
+    'use_path_style_endpoint' => false,
+],
+'webdav' => [
+    'type' => 'Webdav',
+    'baseUri' => 'http://myserver.com',
+    'userName' => '',
+    'password' => '',
+    'prefix' => '',
 ],
 ```
 
@@ -191,7 +214,10 @@ composer require mhetreramesh/flysystem-backblaze
 # to support google cs
 composer require league/flysystem-aws-s3-v2
 
-# to support dropbox (api v2)
+# to install the preferred dropbox v2 driver
+composer required spatie/flysystem-dropbox
+
+# to install legacy dropbox v2 driver
 composer require srmklive/flysystem-dropbox-v2
 
 # to support rackspace
@@ -199,15 +225,19 @@ composer require league/flysystem-rackspace
 
 # to support sftp
 composer require league/flysystem-sftp
+
+# to support webdav (supported by owncloud nad many other)
+composer require league/flysystem-webdav
 ```
 
 ### Usage
 
-Once installed, the package must be bootstrapped (initial configuration) before it can be used. 
+Once installed, the package must be bootstrapped (initial configuration) before it can be used.
 
 We've provided a native PHP example [here](https://github.com/backup-manager/backup-manager/tree/master/examples).
 
 The required bootstrapping can [be found in the example here](https://github.com/backup-manager/backup-manager/blob/master/examples/standalone/bootstrap.php).
+
 
 ### Contribution Guidelines
 
@@ -215,17 +245,16 @@ We recommend using the vagrant configuration supplied with this package for deve
 
 When contributing please consider the following guidelines:
 
-- please conform to the code style of the project, it's essentially PSR-2 with a few differences.
-    1. The NOT operator when next to parenthesis should be surrounded by a single space. `if ( ! is_null(...)) {`.
-    2. Interfaces should NOT be suffixed with `Interface`, Traits should NOT be suffixed with `Trait`.
+- Code style is PSR-2
+    - Interfaces should NOT be suffixed with `Interface`, Traits should NOT be suffixed with `Trait`.
 - All methods and classes must contain docblocks.
-- Ensure that you submit tests that have minimal 100% coverage.
+- Ensure that you submit tests that have minimal 100% coverage. Given the project's simplicity it just makes sense.
 - When planning a pull-request to add new functionality, it may be wise to [submit a proposal](https://github.com/backup-manager/backup-manager/issues/new) to ensure compatibility with the project's goals.
 
 ### Maintainers
 
-This package is maintained by [Shawn McCool](http://shawnmc.cool), [Mitchell van Wijngaarden](http://blog.mitchellvanw.io), and you!
+This package is maintained by [Shawn McCool](http://shawnmc.cool) and you!
 
 ### License
 
-This package is licensed under the [MIT license](https://github.com/backup-manager/backup-manager/blob/master/LICENSE).
+This package is licensed under the [MIT license](https://github.com/backup-manager/backup-manager/blob/master/LICENSE). Go wild.

@@ -27,7 +27,6 @@ if(isset($vendor)){
     'order_date',
     'subtotal',
     'approve_status',
-    
     ];
 }
 

@@ -16,7 +16,7 @@ function format_task_status($status, $text = false, $clean = false)
 
     $status_name = $status['name'];
 
-    $status_name = hooks()->apply_filters('task_status_name', $status_name, $status);
+    $status_name = e(hooks()->apply_filters('task_status_name', $status_name, $status));
 
     if ($clean == true) {
         return $status_name;
@@ -176,9 +176,9 @@ function format_members_by_ids_and_names($ids, $names, $size = 'md')
                     ($size == 'md' ? 'tw-h-7 tw-w-7' : 'tw-h-5 tw-w-5') . ' tw-inline-block tw-rounded-full tw-ring-2 tw-ring-white',
                 ], 'small', [
                     'data-toggle' => 'tooltip',
-                    'data-title'  => $assigned,
+                    'data-title'  => e($assigned),
                 ]) . '</a>';
-            $exportAssignees .= $assigned . ', ';
+            $exportAssignees .= e($assigned) . ', ';
         }
     }
 
@@ -270,7 +270,7 @@ function tasks_rel_name_select_query()
  * @param  array  $table_attributes
  * @return string
  */
-function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = 'vueApp')
+function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = 'vueApp', $filtersDetached = false)
 {
     $table_data = [
         _l('the_number_sign'),
@@ -336,6 +336,7 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
     $CI->load->view('admin/tasks/filters', [
         'tasks_table'=>$tasks_table,
         'filters_wrapper_id'=>$filtersWrapperId,
+        'detached'=>$filtersDetached,
     ]);
 
     if (staff_can('create',  'tasks')) {
@@ -356,11 +357,13 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
     }
 
     if ($table_attributes['data-new-rel-type'] == 'project') {
-        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default mright5 mbot15 hidden-xs' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
-        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-success pull-rigsht mbot15'>" . _l('detailed_overview') . '</a>';
+        echo "<div class='tw-mb-4 tw-space-x-3 rtl:tw-space-x-reverse'><a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default mright5 hidden-xs' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
+        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold'>" . _l('detailed_overview') . ' &rarr;</a></div>';
         echo '<div class="clearfix"></div>';
         echo $CI->load->view('admin/tasks/_bulk_actions', ['table' => '.table-rel-tasks'], true);
+        echo '<div class="tw-mb-4">';
         echo $CI->load->view('admin/tasks/_summary', ['rel_id' => $table_attributes['data-new-rel-id'], 'rel_type' => 'project', 'table' => $table_name], true);
+        echo '</div>';
         echo '<a href="#" data-toggle="modal" data-target="#tasks_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-rel-tasks">' . _l('bulk_actions') . '</a>';
     } elseif ($table_attributes['data-new-rel-type'] == 'customer') {
         echo '<div class="clearfix"></div>';
@@ -406,7 +409,7 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
         <input type="checkbox" value="proposal" id="ts_rel_to_proposal" name="tasks_related_to[]">
         <label for="ts_rel_to_proposal">' . _l('proposals') . '</label>
         </div>';
-
+        echo form_hidden('tasks_related_to');
         echo '</div>';
     }
     echo "<div class='clearfix'></div>";

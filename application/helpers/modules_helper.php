@@ -230,6 +230,11 @@ function module_dir_path($module, $concat = '')
  */
 function module_dir_url($module, $segment = '')
 {
+    if (function_exists('getSubDomain')) {
+        if (getSubDomain()) {
+            return site_url('tenant_modules/' . basename(APP_MODULES_PATH) . '/' . $module . '/' . ltrim($segment, '/'));
+        }
+    }
     return site_url(basename(APP_MODULES_PATH) . '/' . $module . '/' . ltrim($segment, '/'));
 }
 

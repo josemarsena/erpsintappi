@@ -5,6 +5,6 @@ class Migration_Version_100 extends App_module_migration
 {
     public function up()
     {
-    	$CI = &get_instance();
+    	//
     }
 }

@@ -9,6 +9,11 @@
       <sourceFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/twilio-web/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/twilio-web/tests/Twilio" isTestSource="true" packagePrefix="Twilio\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/modules/saas/controllers/api" isTestSource="false" packagePrefix="PerfexSaaSApi\" />
+      <sourceFolder url="file://$MODULE_DIR$/modules/saas/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/modules/saas/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/application/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/authorizenet/authorizenet" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/bainternet/php-hooks" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/braintree/braintree_php" />
@@ -110,7 +115,6 @@
       <excludeFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/vendor/ralouphie/getallheaders" />
       <excludeFolder url="file://$MODULE_DIR$/modules/saas/vendor/athlon1600/php-proxy" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/saas/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/modules/saas/vendor/greenlion/php-sql-parser" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/ezyang/htmlpurifier" />
@@ -130,6 +134,17 @@
       <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league" />
       <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/bacon/bacon-qr-code" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/carbonphp/carbon-doctrine-types" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/dasprid/enum" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/fakerphp/faker" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/illuminate/conditionable" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/paragonie/constant_time_encoding" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/pragmarx/google2fa" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/psr/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/clock" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
+      <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/var-dumper" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

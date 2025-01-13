@@ -89,8 +89,6 @@ Meeting Details
       </tr>
 
        <tr>
-        <th>Password:</th>
-        <td><?php echo (isset($meeting_details))?$meeting_details->password:'NA'; ?></td>
         <th>Remark :</th>
         <td colspan="4"><?php echo get_latest_zoom_meeting_remark($meeting_details->id); ?></td>
       </tr>

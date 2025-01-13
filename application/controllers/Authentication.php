@@ -163,7 +163,11 @@ class Authentication extends ClientsController
                     }
                 }
 
-                define('CONTACT_REGISTERING', true);
+                if (get_option('email_verification_require_after_tenant_register') == '1') {
+                    define('CONTACT_REGISTERING', true);
+                } else {
+                    define('IS_REGISTERED_FROM_CLIENT_SIDE', true);
+                }
 
                 $clientid = $this->clients_model->add([
                       'billing_street'      => $data['address'],

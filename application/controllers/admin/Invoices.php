@@ -81,30 +81,6 @@ class Invoices extends AdminController
         }
     }
 
-    public function table_contrato($clientid = '', $contrato_id = '')
-    {
-        if (staff_cant('view', 'invoices')
-            && staff_cant('view_own', 'invoices')
-            && get_option('allow_staff_view_invoices_assigned') == '0') {
-            ajax_access_denied();
-        }
-
-        $this->load->model('payment_modes_model');
-        $data['payment_modes'] = $this->payment_modes_model->get('', [], true);
-
-        if($this->input->get('recurring')) {
-            $this->app->get_table_data('recurring_invoices', [
-                'data'     => $data,
-            ]);
-        } else {
-            App_table::find('invoices')->output([
-                'clientid' => $clientid,
-                'contrato_id' => $contrato_id,
-                'data'     => $data,
-            ]);
-        }
-    }
-
     public function client_change_data($customer_id, $current_invoice = '')
     {
         if ($this->input->is_ajax_request()) {
@@ -141,22 +117,21 @@ class Invoices extends AdminController
             'success' => false,
             'message' => '',
         ];
-        if (staff_can('edit',  'invoices')) {
-            $affected_rows = 0;
 
+        if (staff_can('edit',  'invoices')) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'invoices', [
                 'prefix' => $this->input->post('prefix'),
             ]);
+            
             if ($this->db->affected_rows() > 0) {
-                $affected_rows++;
-            }
-
-            if ($affected_rows > 0) {
+                $this->invoices_model->save_formatted_number($id);
+               
                 $response['success'] = true;
                 $response['message'] = _l('updated_successfully', _l('invoice'));
             }
         }
+        
         echo json_encode($response);
         die;
     }
@@ -401,7 +376,7 @@ class Invoices extends AdminController
             $data['edit']           = true;
             $data['billable_tasks'] = $this->tasks_model->get_billable_tasks($invoice->clientid, !empty($invoice->project_id) ? $invoice->project_id : '');
 
-            $title = _l('edit', _l('invoice_lowercase')) . ' - ' . format_invoice_number($invoice->id);
+            $title = _l('edit', _l('invoice')) . ' - ' . format_invoice_number($invoice->id);
         }
 
         if ($this->input->get('customer_id')) {
@@ -651,11 +626,7 @@ class Invoices extends AdminController
         } else {
             set_alert('warning', _l('problem_deleting', _l('invoice_lowercase')));
         }
-        if (strpos($_SERVER['HTTP_REFERER'], 'list_invoices') !== false) {
-            redirect(admin_url('invoices/list_invoices'));
-        } else {
-            redirect($_SERVER['HTTP_REFERER']);
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     public function delete_attachment($id)

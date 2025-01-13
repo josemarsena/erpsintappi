@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <style type="text/css">
-.bootstrap-select>select.bs-select-hidden, select.bs-select-hidden, select.selectpicker {
-  display: block!important;
-}
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
-  background-color: #eef1f6;
-  border-color: #d1dbe5;
-  color: #9b9ea2;
-  cursor: not-allowed;
-}
+  .bootstrap-select>select.bs-select-hidden, select.bs-select-hidden, select.selectpicker {
+    display: block!important;
+  }
+  .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+    background-color: #eef1f6;
+    border-color: #d1dbe5;
+    color: #9b9ea2;
+    cursor: not-allowed;
+  }
 </style>
 <div class="modal-header">
  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -23,12 +23,13 @@
    <div class="col-md-12"> 
      <div class="row">
       <div class="col-md-6">
-        <?php $value = (isset($lead) ? $lead->name : ''); ?>
-        <?php echo render_input('user_name','customer_name',$value,'text',array('readonly'=>true)); ?>
+        <?php 
+        $value = (isset($lead) && isset($lead->name) ? $lead->name : $lead->firstname.' '.$lead->lastname); 
+         echo render_input('user_name',_l('lm_customer_name'),$value,'text',array('readonly'=>true)); ?>
       </div>
       <div class="col-md-6">
-        <?php $value = (isset($lead) ? $lead->email : ''); ?>
-        <?php echo render_input('user_email','customer_email',$value,'email',array('readonly'=>true)); ?>
+        <?php $value = (isset($lead) ? $lead->email : ''); 
+         echo render_input('user_email',_l('lm_customer_email'),$value,'email',array('readonly'=>true)); ?>
       </div>
 
     </div>
@@ -36,25 +37,36 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-6">
-        <?php $value = (isset($lead) ? get_staff_full_name($lead->assigned) : ''); ?>
-        <?php echo render_input('staff_name','Staff Name',$value,'text',array('readonly'=>true)); ?>
+        <?php
+        if(!$is_client){
+          $value = (isset($lead) ? get_staff_full_name($lead->assigned) : '');
+          echo render_input('staff_name',_l('lm_staff_name'),$value,'text',array('readonly'=>true)); 
+        }else{
+          echo render_select('staff_name',$staffs,['staffid','full_name'],_l('lm_staff_name'));
+        }
+        ?>
       </div>
       <div class="col-md-6">
        <div class="form-group">
         <label for="zoom_timezone" class="control-label"><?php echo _l('Country'); ?></label>
         <select name="meeting_country" id="meeting_country" class="form-control selectpicker" data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>" data-live-search="true">
           <?php foreach(get_all_countries() as $key => $countres){ ?>
-            <option value="<?php echo $countres['country_id']; ?>" <?php if($lead->country == $countres['country_id']){echo 'selected';} ?>><?php echo $countres['short_name']; ?></option>
+            <option value="<?php echo $countres['country_id']; ?>" <?php if(isset($lead->country) && $lead->country == $countres['country_id']){echo 'selected';} ?>><?php echo $countres['short_name']; ?></option>
           <?php } ?>
         </select>
       </div>
 
     </div>
     <?php
-    $staff_data=get_staff($lead->assigned);
-    echo render_input('staff_email','',$staff_data->email,'hidden'); ?>
-    <?php echo render_input('staff_id','',$lead->assigned,'hidden'); ?>
-    <?php echo render_input('lead_id','',$lead->id,'hidden'); ?>
+    if(!$is_client){
+      $staff_data=get_staff($lead->assigned);
+      echo render_input('staff_email','',$staff_data->email,'hidden');
+      echo render_input('staff_id','',$lead->assigned,'hidden');
+    }else{
+      echo render_input('is_client','',$is_client,'hidden'); 
+    }
+    echo render_input('lead_id','',$lead->id,'hidden'); 
+    ?>
   </div>
 </div>
 <div class="col-md-12">
@@ -127,5 +139,6 @@
 <script type="text/javascript">
   $(function() {
     jQuery('#meeting_start_date').datetimepicker();
+    jQuery('#staff_name').selectpicker();
   });
 </script>

@@ -35,9 +35,6 @@ class Contracts extends AdminController
         $this->load->view('admin/contracts/manage', $data);
     }
 
-    /* function table
-       Chama o Controlador para buscar a Tabela de Contratos conforme o filtro (cliente)
-    */
     public function table($clientid = '')
     {
         if (staff_cant('view', 'contracts') && staff_cant('view_own', 'contracts')) {
@@ -81,7 +78,7 @@ class Contracts extends AdminController
             }
         }
         if ($id == '') {
-            $title = _l('add_new', _l('contract_lowercase'));
+            $title = _l('add_new', _l('contract'));
         } else {
             $data['contract']                 = $this->contracts_model->get($id, [], true);
             $data['contract_renewal_history'] = $this->contracts_model->get_contract_renewal_history($id);
@@ -342,11 +339,8 @@ class Contracts extends AdminController
         } else {
             set_alert('warning', _l('problem_deleting', _l('contract_lowercase')));
         }
-        if (strpos($_SERVER['HTTP_REFERER'], 'clients/') !== false) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url('contracts'));
-        }
+        
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 
     /* Manage contract types Since Version 1.0.3 */
@@ -443,22 +437,4 @@ class Contracts extends AdminController
             ]);
         }
     }
-
-
-    /*
-     * Função que busca os dados das Faturas conforme o contrato e o Cliente
-     */
-    public function contrato_faturas($client_id, $proposta_id, $data_inicio, $data_fim)
-    {
-        // Obtem os dados da table faturas_contrato
-        $result = $this->app->get_table_data('faturas_contrato', [
-            'client_id' => $client_id,
-            'proposta_id' => $proposta_id,
-            'data_inicio' => $data_inicio,
-            'data_fim' => $data_fim,
-        ]);
-
-        echo $result;
-    }
-
 }

@@ -25,7 +25,6 @@ class Estimates extends AdminController
             access_denied('estimates');
         }
 
-        // É pipeline????
         $isPipeline = $this->session->userdata('estimate_pipeline') == 'true';
 
         $data['estimate_statuses'] = $this->estimates_model->get_statuses();
@@ -67,7 +66,6 @@ class Estimates extends AdminController
             ajax_access_denied();
         }
 
-        // busca os orçamentos baseado no ID do Cliente
         App_table::find('estimates')->output([
             'clientid' => $clientid,
         ]);
@@ -131,7 +129,7 @@ class Estimates extends AdminController
 
             $data['estimate'] = $estimate;
             $data['edit']     = true;
-            $title            = _l('edit', _l('estimate_lowercase'));
+            $title            = _l('edit', _l('estimate'));
         }
 
         if ($this->input->get('customer_id')) {
@@ -181,12 +179,16 @@ class Estimates extends AdminController
             'success' => false,
             'message' => '',
         ];
+        
         if (staff_can('edit',  'estimates')) {
             $this->db->where('id', $id);
             $this->db->update(db_prefix() . 'estimates', [
                 'prefix' => $this->input->post('prefix'),
             ]);
+
             if ($this->db->affected_rows() > 0) {
+                $this->estimates_model->save_formatted_number($id);
+
                 $response['success'] = true;
                 $response['message'] = _l('updated_successfully', _l('estimate'));
             }
@@ -347,7 +349,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('estimate_status_changed_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -371,7 +373,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('sent_expiry_reminder_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -408,7 +410,7 @@ class Estimates extends AdminController
             set_alert('danger', _l('estimate_sent_to_client_fail'));
         }
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/list_estimates/' . $id));
         }
@@ -436,7 +438,7 @@ class Estimates extends AdminController
                 $this->session->set_flashdata('estimateid', $id);
             }
             if ($this->set_estimate_pipeline_autoload($id)) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 redirect(admin_url('estimates/list_estimates/' . $id));
             }
@@ -455,14 +457,14 @@ class Estimates extends AdminController
         if ($new_id) {
             set_alert('success', _l('estimate_copied_successfully'));
             if ($this->set_estimate_pipeline_autoload($new_id)) {
-                redirect($_SERVER['HTTP_REFERER']);
+                redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
             } else {
                 redirect(admin_url('estimates/estimate/' . $new_id));
             }
         }
         set_alert('danger', _l('estimate_copied_fail'));
         if ($this->set_estimate_pipeline_autoload($id)) {
-            redirect($_SERVER['HTTP_REFERER']);
+            redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
         } else {
             redirect(admin_url('estimates/estimate/' . $id));
         }

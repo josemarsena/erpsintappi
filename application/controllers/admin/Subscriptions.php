@@ -79,7 +79,7 @@ class Subscriptions extends AdminController
             $data['customer_id'] = $this->input->get('customer_id');
         }
 
-        $data['title'] = _l('add_new', _l('subscription_lowercase'));
+        $data['title'] = _l('add_new', _l('subscription'));
 
         $data['taxes']      = $this->taxes_model->get();
         $data['currencies'] = $this->currencies_model->get();
@@ -300,10 +300,6 @@ class Subscriptions extends AdminController
             set_alert('warning', _l('problem_deleting', _l('subscription')));
         }
 
-        if (strpos($_SERVER['HTTP_REFERER'], 'clients/') !== false) {
-            redirect($_SERVER['HTTP_REFERER']);
-        } else {
-            redirect(admin_url('subscriptions'));
-        }
+        redirect(previous_url() ?: $_SERVER['HTTP_REFERER']);
     }
 }

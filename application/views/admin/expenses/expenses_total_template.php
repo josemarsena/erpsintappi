@@ -1,36 +1,45 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <?php if (count($expenses_years) > 1 || isset($currencies)) { ?>
-<div class="tw-flex tw-space-x-3 tw-mb-2">
+<div class="tw-flex tw-space-x-3 rtl:tw-space-x-reverse tw-mb-2">
     <?php if (isset($currencies)) { ?>
-    <div class="!tw-w-28 simple-bootstrap-select">
+    <div class="!tw-w-28 simple-bootstrap-select -tw-mb-2 rtl:-tw-mr-4">
         <select class="selectpicker !tw-w-28" data-width="auto" name="expenses_total_currency"
             onchange="init_expenses_total();">
             <?php foreach ($currencies as $currency) {
-    $selected = '';
-    if (!$this->input->post('currency')) {
-        if ($currency['isdefault'] == 1 || isset($_currency) && $_currency == $currency['id']) {
-            $selected = 'selected';
-        }
-    } else {
-        if ($this->input->post('currency') == $currency['id']) {
-            $selected = 'selected';
-        }
-    } ?>
-            <option value="<?php echo $currency['id']; ?>" <?php echo $selected; ?>
-                data-subtext="<?php echo $currency['name']; ?>"><?php echo $currency['symbol']; ?></option>
+                $selected = '';
+                if (! $this->input->post('currency')) {
+                    if ($currency['isdefault'] == 1 || isset($_currency) && $_currency == $currency['id']) {
+                        $selected = 'selected';
+                    }
+                } else {
+                    if ($this->input->post('currency') == $currency['id']) {
+                        $selected = 'selected';
+                    }
+                } ?>
+            <option
+                value="<?= e($currency['id']); ?>"
+                <?= e($selected); ?>
+                data-subtext="<?= e($currency['name']); ?>"><?= e($currency['symbol']); ?>
+            </option>
             <?php
-} ?>
+            } ?>
         </select>
     </div>
     <?php } ?>
     <?php if (count($expenses_years) > 1) { ?>
     <div class="simple-bootstrap-select !tw-max-w-xs">
-        <select data-none-selected-text="<?php echo date('Y'); ?>" data-width="auto" class="selectpicker tw-w-full"
-            multiple name="expenses_total_years" onchange="init_expenses_total();">
+        <select
+            data-none-selected-text="<?= date('Y'); ?>"
+            data-width="auto" class="selectpicker tw-w-full" multiple name="expenses_total_years"
+            onchange="init_expenses_total();">
             <?php foreach ($expenses_years as $year) { ?>
-            <option value="<?php echo $year['year']; ?>" <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || !$this->input->post('years') && date('Y') == $year['year']) {
-        echo ' selected';
-    } ?>><?php echo $year['year']; ?></option>
+            <option
+                value="<?= e($year['year']); ?>"
+                <?php if ($this->input->post('years') && in_array($year['year'], $this->input->post('years')) || ! $this->input->post('years') && date('Y') == $year['year']) {
+                    echo ' selected';
+                } ?>>
+                <?= e($year['year']); ?>
+            </option>
             <?php } ?>
         </select>
     </div>
@@ -46,20 +55,20 @@
         ['key' => 'unbilled', 'class' => 'text-danger', 'label' => _l('expenses_list_unbilled')],
         ['key' => 'billed', 'class' => 'text-success', 'label' => _l('expense_billed')],
     ] as $totalSection) { ?>
-    <div class="tw-border tw-border-solid tw-border-neutral-200 tw-rounded-md tw-bg-white">
-        <div class="tw-px-4 tw-py-5 sm:tw-px-4 sm:tw-py-2">
-            <dt class="tw-font-medium <?php echo $totalSection['class']; ?>">
-                <?php echo $totalSection['label']; ?>
-            </dt>
-            <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
-                <div class="tw-flex tw-items-baseline tw-text-base tw-font-semibold tw-text-primary-600">
-                    <?php echo $totals[$totalSection['key']]['total']; ?>
-                </div>
-            </dd>
-        </div>
+    <div
+        class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2 tw-px-3.5 tw-rounded-lg tw-text-sm">
+        <dt
+            class="tw-font-medium tw-text-base <?= e($totalSection['class']); ?>">
+            <?= e($totalSection['label']); ?>
+        </dt>
+        <dd class="tw-mt-1 tw-flex tw-items-baseline tw-justify-between md:tw-block lg:tw-flex">
+            <div class="tw-font-semibold tw-text-neutral-600">
+                <?= e($totals[$totalSection['key']]['total']); ?>
+            </div>
+        </dd>
     </div>
     <?php } ?>
 </dl>
 <script>
-init_selectpicker();
+    init_selectpicker();
 </script>
