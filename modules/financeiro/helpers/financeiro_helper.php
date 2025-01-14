@@ -102,7 +102,7 @@ function financeiro_status_color_class($id, $replace_default_by_muted = false)
 
 
 /**
- * Atualiza Status da Fatura
+ * Atualiza Status da Fatura a Pagar
  * @param  mixed $id id da fatura
  * @return mixed status de atualizações de fatura / se nenhuma atualização retornar falso
  * @return boolean $prevent_logging não registre alterações se o status for atualizado para o log de atividades da fatura

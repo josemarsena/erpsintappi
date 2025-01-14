@@ -1,0 +1,190 @@
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('fonts/font-awesome/fontawesome-webfont.eot?v=4.7.0');
+    src: url('fonts/font-awesome/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('fonts/font-awesome/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('fonts/font-awesome/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('fonts/font-awesome/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('fonts/font-awesome/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body.authentication.forgot-password,
+body.login_admin {
+    background: url('./images/login_bg.jpg');
+    background-position: center center center center;
+    background-repeat: no-repeat;
+}
+
+body.login_admin .alert-danger {
+    color: #fb9f9d !important;
+    background-color: #adadad36 !important;
+    border-color: transparent !important;
+}
+
+form {
+    margin: 0 auto;
+    width: 450px !important;
+}
+
+.row {
+    margin: 0 auto;
+}
+
+.authentication-form {
+    background: transparent;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+    border: none;
+    align-items: center;
+    box-shadow: unset;
+}
+
+h2 {
+    color: #fff;
+    width: 25vw;
+    font-weight: 600;
+    font-size: 37px;
+    margin-bottom: 35px;
+}
+
+button:hover {
+    background: transparent !important;
+    border-color: #fff !important;
+}
+
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+    outline: 0px;
+    outline-offset: 0px;
+}
+
+.btn {
+    font-size: 16px;
+}
+
+button {
+    margin: 0 auto;
+    height: 50px;
+    border: 1px solid #cacaca !important;
+    border-radius: 30px !important;
+    background: transparent !important;
+    max-width: 103px !important;
+    -moz-border-radius: 30px !important;
+    -ms-border-radius: 30px !important;
+    -o-border-radius: 30px !important;
+    -webkit-border-radius: 30px !important;
+}
+
+.line_toggler {
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+form input:focus {
+    outline: none;
+}
+
+form input {
+    font-size: 17px !important;
+    padding: 8px;
+    border: none !important;
+    border-radius: 10px !important;
+    -webkit-border-radius: 10px !important;
+    -moz-border-radius: 10px !important;
+    -ms-border-radius: 10px !important;
+    -o-border-radius: 10px !important;
+    background-color: transparent !important;
+    caret-color: #fff;
+}
+
+body.login_admin .company-logo {
+    padding: 25px 10px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 30px;
+}
+
+body form .form-control {
+    height: 46px !important;
+    font-size: 13px !important;
+    border-radius: 46px !important;
+    border: none !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+    margin-top: 1.5rem !important;
+    background: rgb(255 255 255) !important;
+    -webkit-border-radius: 46px !important;
+    -moz-border-radius: 46px !important;
+    -ms-border-radius: 46px !important;
+    -o-border-radius: 46px !important;
+}
+
+::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #fff !important;
+    opacity: 0.8 !important;
+    /* Firefox */
+}
+
+.form-group a {
+    margin: 0 auto;
+    padding-left: 14px;
+}
+
+body.login_admin a {
+    color: #fff;
+}
+
+.checkbox {
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+}
+
+body .form-group:last-child {
+    text-align: center;
+    padding: 20px;
+    font-size: 16px;
+}
+
+body.authentication.forgot-password .authentication-form h2 {
+    display: none;
+}
+
+.control-label {
+    display: none;
+}
+
+body.authentication.forgot-password .control-label {
+    display: block !important;
+    text-align: center;
+    color: #fff;
+    margin: auto;
+}
+
+form input:focus+.line_toggler::before {
+    width: calc(100% - 30px);
+    background: #764abc
+}
+
+.form-group label {
+    margin-left: -26px;
+    font-weight: 500 !important;
+}
+
+@media (max-width: 320px) {
+    .authentication-form {
+        height: 450px;
+    }
+}
