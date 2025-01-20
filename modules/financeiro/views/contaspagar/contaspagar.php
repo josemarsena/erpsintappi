@@ -67,9 +67,9 @@ foreach ($rResult as $aRow) {
 
     // If is from client area table
     if (is_numeric($id_fornecedor) || $id_projeto) {
-        $numberOutput = '<a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '" target="_blank">' . formata_numero_faturapagar($aRow['id']) . '</a>';
+        $numberOutput = '<a href="' . admin_url('financeiro/fatura_a_pagar/' . $aRow['id']) . '" target="_blank">' . formata_numero_faturapagar($aRow['id']) . '</a>';
     } else {
-        $numberOutput = '<a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '" onclick="init_contaspagar(' . $aRow['id'] . '); return false;">' . formata_numero_faturapagar($aRow['id']) . '</a>';
+        $numberOutput = '<a href="' . admin_url('financeiro/fatura_a_pagar/' . $aRow['id']) . '" onclick="init_contaspagar(' . $aRow['id'] . '); return false;">' . formata_numero_faturapagar($aRow['id']) . '</a>';
     }
 
     if ($aRow['recorrente'] > 0) {
@@ -80,7 +80,7 @@ foreach ($rResult as $aRow) {
 
     $numberOutput .= '<a href="' . site_url('financeiro/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
     if (staff_can('edit',  'invoices')) {
-        $numberOutput .= ' | <a href="' . admin_url('financeiro/contaspagar/' . $aRow['id']) . '">' . _l('edit') . '</a>';
+        $numberOutput .= ' | <a href="' . admin_url('financeiro/fatura_a_pagar/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }
     $numberOutput .= '</div>';
 

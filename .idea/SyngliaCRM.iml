@@ -101,10 +101,6 @@
       <excludeFolder url="file://$MODULE_DIR$/modules/appointly/vendor/psr/http-message" />
       <excludeFolder url="file://$MODULE_DIR$/modules/appointly/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/modules/appointly/vendor/ralouphie/getallheaders" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/backup-manager/backup-manager" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league/flysystem" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony/process" />
       <excludeFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/vendor/firebase/php-jwt" />
       <excludeFolder url="file://$MODULE_DIR$/modules/lead_manager/third_party/vendor/guzzlehttp/guzzle" />
@@ -130,9 +126,6 @@
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor/symfony/polyfill-mbstring" />
       <excludeFolder url="file://$MODULE_DIR$/.idea_old/shelf" />
       <excludeFolder url="file://$MODULE_DIR$/assets/plugins/elFinder/files/.trash" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/backup-manager" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony" />
       <excludeFolder url="file://$MODULE_DIR$/modules/surveys/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/bacon/bacon-qr-code" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/carbonphp/carbon-doctrine-types" />
@@ -145,6 +138,13 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/clock" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/var-dumper" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/backup-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/backup-manager/backup-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/league" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/league/flysystem" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/symfony" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/symfony/process" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

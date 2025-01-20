@@ -18,43 +18,6 @@ class Purchase_model extends App_Model
         $this->contact_columns = hooks()->apply_filters('contact_columns', ['firstname', 'lastname', 'email', 'phonenumber', 'title', 'password', 'send_set_password_email', 'donotsendwelcomeemail', 'permissions', 'direction', 'invoice_emails', 'estimate_emails', 'credit_note_emails', 'contract_emails', 'task_emails', 'project_emails', 'ticket_emails', 'is_primary']);
     }
 
-    /**
-     * Gets the vendor.
-     *
-     * @param      string        $id     The identifier
-     * @param      array|string  $where  The where
-     *
-     * @return     <type>        The vendor or list vendors.
-     */
-    public function get_vendor($id = '', $where = [])
-    {
-        $this->db->select(implode(',', prefixed_table_fields_array(db_prefix() . 'pur_vendor')) . ',' . get_sql_select_vendor_company());
-
-        $this->db->join(db_prefix() . 'countries', '' . db_prefix() . 'countries.country_id = ' . db_prefix() . 'pur_vendor.country', 'left');
-        $this->db->join(db_prefix() . 'pur_contacts', '' . db_prefix() . 'pur_contacts.userid = ' . db_prefix() . 'pur_vendor.userid AND is_primary = 1', 'left');
-
-        if ((is_array($where) && count($where) > 0) || (is_string($where) && $where != '')) {
-            $this->db->where($where);
-        }
-
-        if (is_numeric($id)) {
-
-            $this->db->where(db_prefix().'pur_vendor.userid', $id);
-            $vendor = $this->db->get(db_prefix() . 'pur_vendor')->row();
-
-            if ($vendor && get_option('company_requires_vat_number_field') == 0) {
-                $vendor->vat = null;
-            }
-
-
-            return $vendor;
-
-        }
-
-        $this->db->order_by('company', 'asc');
-
-        return $this->db->get(db_prefix() . 'pur_vendor')->result_array();
-    }
 
     /**
      * Gets the contacts.

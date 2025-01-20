@@ -229,7 +229,11 @@ class Plans extends AdminController
             }
         }
 
-        echo json_encode($result);
+        echo json_encode([
+            'success' => true,
+            'message' => 'User has Create Database privileges',
+            'color'   => 'success',
+        ]);
     }
 
     public function changeSaasPlan()

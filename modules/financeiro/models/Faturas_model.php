@@ -152,7 +152,8 @@ class Faturas_model extends App_Model
                     }
                 }
 
-                $fornecedor          = $this->purchase_model->get_vendor($fatura->id_fornecedor);   // obtem o Fornecedor da Fatura
+                $fornecedor          = $this->faturas_model->obter_fornecedor($fatura->id_fornecedor);
+                    // obtem o Fornecedor da Fatura
                 $fatura->fornecedor = $fornecedor;
                 if (!$fatura->fornecedor) {
                     $fatura->fornecedor          = new stdClass();
@@ -1903,4 +1904,103 @@ class Faturas_model extends App_Model
             'active' => 1, 'invoice_emails' => 1,
         ]);
     }
+
+
+
+
+    /**
+     * Gets the vendor.
+     *
+     * @param      string        $id     The identifier
+     * @param      array|string  $where  The where
+     *
+     * @return     <type>        The vendor or list vendors.
+     */
+    public function obter_fornecedor($id = '', $where = [])
+    {
+        $this->db->select(implode(',', prefixed_table_fields_array(db_prefix() . 'pur_vendor')) . ',' . get_sql_select_vendor_company());
+
+        $this->db->join(db_prefix() . 'countries', '' . db_prefix() . 'countries.country_id = ' . db_prefix() . 'pur_vendor.country', 'left');
+        $this->db->join(db_prefix() . 'pur_contacts', '' . db_prefix() . 'pur_contacts.userid = ' . db_prefix() . 'pur_vendor.userid AND is_primary = 1', 'left');
+
+        if ((is_array($where) && count($where) > 0) || (is_string($where) && $where != '')) {
+            $this->db->where($where);
+        }
+
+        if (is_numeric($id)) {
+
+            $this->db->where(db_prefix().'pur_vendor.userid', $id);
+            $vendor = $this->db->get(db_prefix() . 'pur_vendor')->row();
+
+            if ($vendor && get_option('company_requires_vat_number_field') == 0) {
+                $vendor->vat = null;
+            }
+
+
+            return $vendor;
+
+        }
+
+        $this->db->order_by('company', 'asc');
+
+        return $this->db->get(db_prefix() . 'pur_vendor')->result_array();
+    }
+
+    public function check_for_merge_invoice($fornecedor_id, $current_invoice = '')
+    {
+        if ($current_invoice != '') {
+            $this->db->select('status');
+            $this->db->where('id', $current_invoice);
+            $row = $this->db->get(db_prefix() . 'fin_faturas')->row();
+            // Cant merge on paid invoice and partialy paid and cancelled
+            if ($row->status == self::STATUS_PAID || $row->status == self::STATUS_PARTIALLY || $row->status == self::STATUS_CANCELLED) {
+                return [];
+            }
+        }
+
+        $statuses = [
+            self::STATUS_UNPAID,
+            self::STATUS_OVERDUE,
+            self::STATUS_DRAFT,
+        ];
+        $noPermissionsQuery  = get_invoices_where_sql_for_staff(get_staff_user_id());
+        $has_permission_view = staff_can('view',  'invoices');
+        $this->db->select('id');
+        $this->db->where('id_fornecedor', $fornecedor_id);
+        $this->db->where('STATUS IN (' . implode(', ', $statuses) . ')');
+        if (!$has_permission_view) {
+            $whereUser = $noPermissionsQuery;
+            $this->db->where('(' . $whereUser . ')');
+        }
+        if ($current_invoice != '') {
+            $this->db->where('id !=', $current_invoice);
+        }
+
+        $invoices = $this->db->get(db_prefix() . 'fin_faturas')->result_array();
+        $invoices = hooks()->apply_filters('invoices_ids_available_for_merging', $invoices);
+
+        $_invoices = [];
+
+        foreach ($invoices as $invoice) {
+            $inv = $this->get($invoice['id']);
+            if ($inv) {
+                $_invoices[] = $inv;
+            }
+        }
+
+        return $_invoices;
+    }
+
+    public function obter_despesas_para_faturar($clientid)
+    {
+        $this->load->model('expenses_model');
+        $where = 'billable=1 AND clientid=' . $clientid . ' AND invoiceid IS NULL';
+        if (staff_cant('view', 'expenses')) {
+            $where .= ' AND ' . db_prefix() . 'expenses.addedfrom=' . get_staff_user_id();
+        }
+
+        return $this->expenses_model->get('', $where);
+    }
+
+
 }

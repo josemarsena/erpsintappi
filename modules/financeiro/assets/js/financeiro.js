@@ -23,7 +23,8 @@ var fnServerParams = {};
 
     initDataTable('.table-contasreceber', admin_url + 'financeiro/table_contasreceber', undefined, undefined,
         'undefined',[1, 'desc']);
-   // init_contasreceber();
+    init_contasreceber();
+
     $.each(Params, function(i, obj) {
         $('select' + obj).on('change', function() {
             table_contasreceber.DataTable().ajax.reload()
@@ -36,7 +37,8 @@ var fnServerParams = {};
     initDataTable('.table-contaspagar', admin_url + 'financeiro/table_contaspagar', undefined, undefined,
         'undefined',[1, 'desc']);
 
-    init_contasreceber();
+    init_contaspagar();
+
 
     $.each(Params, function(i, obj) {
         $('select' + obj).on('change', function() {
@@ -84,6 +86,12 @@ var fnServerParams = {};
 
 
 })(jQuery);
+
+// Init single invoice
+function init_contaspagar(id) {
+
+    load_small_table_item(id, '#contaspagar', 'faturaid', 'financeiro/get_contaspagar_data_ajax', '.table-contasreceber');
+}
 
 
 

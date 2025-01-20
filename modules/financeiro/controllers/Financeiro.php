@@ -221,9 +221,6 @@ class Financeiro extends AdminController
 
         if ($this->input->post()) {
             $dados_fatura = $this->input->post();
-
-
-
             if ($id == '') {
 
                 // Verifica permissão para a Equipe
@@ -297,7 +294,7 @@ class Financeiro extends AdminController
             }
 
             $data['invoices_to_merge'] = $this->faturas_model->check_for_merge_invoice($fatura->id_fornecedor, $fatura->id);
-            $data['expenses_to_bill']  = $this->faturas_model->get_expenses_to_bill($fatura->id_fornecedor);
+            $data['expenses_to_bill']  = $this->faturas_model->obter_despesas_para_faturar($fatura->id_fornecedor);
 
             $data['fatura']        = $fatura;
             $data['edit']           = true;
@@ -337,8 +334,8 @@ class Financeiro extends AdminController
         $data['titulo']     = $titulo;
         $data['bodyclass'] = 'invoice';
 
-        $this->load->model('purchase_model');
-        $data['fornecedores'] = $this->purchase_model->get_vendor();
+        $this->load->model('faturas_model');
+        $data['fornecedores'] = $this->faturas_model->obter_fornecedor();
 
         $this->load->view('financeiro/contaspagar/fatura', $data);
     }
@@ -407,14 +404,13 @@ class Financeiro extends AdminController
         $data['payment_modes']        = $this->payment_modes_model->get('', [], true);     // Array de modos de Pagamento
         $data['id_fatura']            = $id;
         $data['titulo']                = 'Contas a Pagar';
-        $data['fornecedores'] = $this->purchase_model->get_vendor();
+        $data['fornecedores'] = $this->faturas_model->obter_fornecedor();
         $data['invoices_years']       = $this->faturas_model->obter_faturas_anos();    // Array de Anos das Faturas
         $data['invoices_sale_agents'] = $this->faturas_model->obter_compradores();    // Array dos Vendedores
         $data['invoices_statuses']    = $this->faturas_model->obter_status_naopagos();    // Array dos não Pagos
 
         $data['bodyclass']            = 'invoices-total-manual';
         $this->load->view('contaspagar/gerenciar', $data);
-
     }
 
     /***************

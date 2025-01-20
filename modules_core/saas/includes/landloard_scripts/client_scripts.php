@@ -21,7 +21,8 @@ hooks()->add_action('clients_authentication_constructor', function ($obj) {
 });
 
 hooks()->add_filter('before_client_added', function ($data) {
-    if ('' != get_option('mysql_verification_message')) {
+    if ('' != get_option('mysql_verification_message'))
+    {
         $redUrl = admin_url('clients');
         if (defined('CONTACT_REGISTERING')) {
             $redUrl = site_url('authentication/login');
