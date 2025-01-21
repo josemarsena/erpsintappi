@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.6
+Version: 1.0.7
 Requires at least: 1.0.*
 Author: Synglia
 Author URI: https://synglia.com.br
