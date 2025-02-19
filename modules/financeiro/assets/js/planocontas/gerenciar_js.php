@@ -17,21 +17,21 @@
       "ft_active": '[name="ft_active"]',
     };
     $('select[name="ft_type"]').on('change', function() {
-      init_account_table();
+        init_tabela_contas();
     });
     $('select[name="ft_active"]').on('change', function() {
-      init_account_table();
+        init_tabela_contas();
     });
     $('select[name="ft_detail_type"]').on('change', function() {
-      init_account_table();
+        init_tabela_contas();
     });
 
     $('select[name="ft_parent_account"]').on('change', function() {
-      init_account_table();
+        init_tabela_contas();
     });
     
     $('select[name="ft_account"]').on('change', function() {
-      init_account_table();
+        init_tabela_contas();
     });
 
 	 	list_account_type_details = <?php echo json_encode($detail_types); ?>;
@@ -78,7 +78,7 @@
           }
       });
 
-	 	init_account_table();
+	 	init_tabela_contas();
 
 		$('select[name="account_type_id"]').on('change', function() {
 
@@ -207,7 +207,7 @@ function account_form_handler(form) {
         if (response.success === true || response.success == 'true' || $.isNumeric(response.success)) {
           	alert_float('success', response.message);
 
-	 		    init_account_table();
+            init_tabela_contas();
         }else{
           alert_float('danger', response.message);
         }
@@ -283,13 +283,13 @@ function formatCurrency(input, blur) {
   input[0].setSelectionRange(caret_pos, caret_pos);
 }
 
-function init_account_table() {
+function init_tabela_contas() {
   "use strict";
 
   if ($.fn.DataTable.isDataTable('.table-accounts')) {
     $('.table-accounts').DataTable().destroy();
   }
-  initDataTable('.table-accounts', admin_url + 'accounting/accounts_table', [0], [0,1,2,3,4,5,6,7,8], fnServerParams, []);
+  initDataTable('.table-contas', admin_url + 'accounting/accounts_table', [0], [0,1,2,3,4,5,6,7,8], fnServerParams, []);
   $('.dataTables_filter').addClass('hide');
 }
 

@@ -11028,4 +11028,12 @@ class Planocontas_model extends App_Model
         return $contas;
     }
 
+   public function obter_contas_credito() {
+
+   }
+
+   public function obter_subcontas_credito() {
+
+   }
+
 }

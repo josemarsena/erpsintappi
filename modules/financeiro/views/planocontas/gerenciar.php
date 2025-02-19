@@ -33,17 +33,17 @@
             </div>
           </div>
           <hr>
-          <a href="#" data-toggle="modal" data-target="#accounts_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-accounts"><?php echo _l('bulk_actions'); ?></a>
-          <table class="table table-accounts">
+          <a href="#" data-toggle="modal" data-target="#accounts_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-contas"><?php echo _l('bulk_actions'); ?></a>
+          <table class="table table-contas">
             <thead>
               <th><span class="hide"> - </span><div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="accounts"><label></label></div></th>
-              <th><?php echo _l('name'); ?></th>
-              <th><?php echo _l('parent_account'); ?></th>
-              <th><?php echo _l('type'); ?></th>
-              <th><?php echo _l('detail_type'); ?></th>
-              <th><?php echo _l('primary_balance'); ?></th>
-              <th><?php echo _l('bank_balance'); ?></th>
-              <th><?php echo _l('staff_dt_active'); ?></th>
+              <th><?php echo 'Chave'; ?></th>
+              <th><?php echo 'Nome da Conta'; ?></th>
+              <th><?php echo 'Conta Pai'; ?></th>
+              <th><?php echo 'Descrição'; ?></th>
+              <th><?php echo 'Tipo de Conta'; ?></th>
+              <th><?php echo 'Saldo do Ano'; ?></th>
+              <th><?php echo 'Status'; ?></th>
               <th><?php echo _l('options'); ?></th>
             </thead>
             <tbody>
@@ -101,7 +101,7 @@
 </div>
 
 
-<div class="modal fade bulk_actions" id="accounts_bulk_actions" tabindex="-1" role="dialog" data-table=".table-accounts">
+<div class="modal fade bulk_actions" id="accounts_bulk_actions" tabindex="-1" role="dialog" data-table=".table-contas">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">

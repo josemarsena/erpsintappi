@@ -78,7 +78,7 @@ foreach ($rResult as $aRow) {
 
     $numberOutput .= '<div class="row-options">';
 
-    $numberOutput .= '<a href="' . site_url('financeiro/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
+    $numberOutput .= '<a href="' . site_url('financeiro/fatura/' . $aRow['id'] . '/' . $aRow['hash']) . '" target="_blank">' . _l('view') . '</a>';
     if (staff_can('edit',  'invoices')) {
         $numberOutput .= ' | <a href="' . admin_url('financeiro/fatura_a_pagar/' . $aRow['id']) . '">' . _l('edit') . '</a>';
     }

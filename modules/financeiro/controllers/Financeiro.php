@@ -126,7 +126,7 @@ class Financeiro extends AdminController
      * Funcao: Mostrar e gerenciar as ContasBancarias
      * Parametros: nd
      */
-    public function gerenciar_contasbancarias()
+    public function contasbancarias()
     {
         if (!has_permission('financeiro_contasbancarias', '', 'view')) {
             access_denied('financeiro_contasbancarias');
@@ -158,9 +158,7 @@ class Financeiro extends AdminController
                 if(!has_permission('financeiro_contasbancarias','','edit') && !is_admin()){
                     access_denied('financeiro_contasbancarias');
                 }
-                //$myfile = fopen("erro.txt", "w") or die("Unable to open file!");
-                //fwrite($myfile, $data);
-                //fclose($myfile);
+
                 $success = $this->contasbancarias_model->update($data);
                 if ($success) {
                     $message = _l('updated_successfully');
@@ -174,6 +172,28 @@ class Financeiro extends AdminController
 
         $this->load->view('contasbancarias/gerenciar', $data);
 
+    }
+
+    /***************
+     * @return void
+     * Funcao: Obtem os dados da tabela baseado nos parametros
+     * Parametros: nd
+     */
+    public function table_contasbancarias()
+    {
+        if (
+            staff_cant('view', 'contasbancarias')
+            && staff_cant('view_own', 'contasbancarias')
+            && get_option('allow_staff_view_contasbancarias_assigned') == 0
+        ) {
+            ajax_access_denied();
+        }
+
+        // obtem os dados da Tabela
+        $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/contasbancarias'));
+        $this->app->get_table_data('contasbancarias');
+
+        //     App_table::find('bancos')->output();
     }
 
     /***************
@@ -340,6 +360,108 @@ class Financeiro extends AdminController
         $this->load->view('financeiro/contaspagar/fatura', $data);
     }
 
+
+    /***************
+     * @return void
+     * Funcao: Obter todas os dados da fatura usados quando o usuario clica no nro da invoice no Datable à esquerdsa
+     * Parametros: $id
+     */
+    public function get_contaspagar_data_ajax($id)
+    {
+        if (staff_cant('view', 'invoices')
+            && staff_cant('view_own', 'invoices')
+            && get_option('allow_staff_view_invoices_assigned') == '0') {
+            echo _l('access_denied');
+            die;
+        }
+
+        $this->load->model('faturas_model');
+
+        if (!$id) {
+            die(_l('invoice_not_found'));
+        }
+
+        $myfile = fopen("invoice.txt", "w") or die("Unable to open file!");
+        fwrite($myfile, 'Teste de Arquivo');
+        // obtem os dados da fatura selecionada
+        $invoice = $this->faturas_model->get($id);
+
+
+        // Captura e slava os dados da Fatura a pagar
+    //    fwrite($myfile, $id);
+     //   fwrite($myfile, $invoice);
+     //   fclose($myfile);
+
+
+        if (!$invoice || !usuario_pode_ver_faturapagar($id)) {
+            echo _l('invoice_not_found');
+            die;
+        }
+
+        // Template de email
+        $template_name = 'invoice_send_to_customer';
+
+        // Fatura já enviada para o financeiro
+        if ($invoice->enviado == 1) {
+            $template_name = 'invoice_send_to_customer_already_sent';
+        }
+
+        $data = prepare_mail_preview_data($template_name, $invoice->fatura_id);
+
+
+        // Verifica por registros de pagamento de fatura a pagar
+        $this->load->model('payments_model');
+
+        $data['faturas_a_juntar']          = $this->faturas_model->verifica_faturas_a_juntar($invoice->fatura_id, $id);
+
+        $data['membros']                    = $this->staff_model->get('', ['active' => 1]);
+
+        $data['payments']                   = $this->payments_model->get_invoice_payments($id);
+
+        $data['activity']                   = $this->faturas_model->obter_atividade_fatura($id);
+
+        $data['totalNotes']                 = total_rows(db_prefix() . 'notes', ['rel_id' => $id, 'rel_type' => 'invoice']);
+
+        $data['invoice_recurring_invoices'] = $this->faturas_model->obter_faturas_recorrentes($id);
+
+
+        $data['applied_credits'] = $this->credit_notes_model->get_applied_invoice_credits($id);
+        // This data is used only when credit can be applied to invoice
+        if (credits_can_be_applied_to_invoice($invoice->status)) {
+            $data['credits_available'] = $this->credit_notes_model->total_remaining_credits_by_customer($invoice->id_fornecedor);
+
+            if ($data['credits_available'] > 0) {
+                $data['open_credits'] = $this->credit_notes_model->get_open_credits($invoice->id_fornecedor);
+            }
+
+            $customer_currency = $this->clients_model->get_customer_default_currency($invoice->id_fornecedor);
+            $this->load->model('currencies_model');
+
+            if ($customer_currency != 0) {
+                $data['customer_currency'] = $this->currencies_model->get($customer_currency);
+            } else {
+                $data['customer_currency'] = $this->currencies_model->get_base_currency();
+            }
+        }
+
+        $data['invoice'] = $invoice;
+
+        $data['record_payment'] = false;
+        $data['send_later']     = false;
+
+        if ($this->session->has_userdata('record_payment')) {
+            $data['record_payment'] = true;
+            $this->session->unset_userdata('record_payment');
+        } elseif ($this->session->has_userdata('send_later')) {
+            $data['send_later'] = true;
+            $this->session->unset_userdata('send_later');
+        }
+
+
+        $this->load->view(FINANCEIRO_MODULE_NAME . '/contaspagar/contaspagar_preview_template', $data);
+    }
+
+
     /***************
      * @return void
      * Funcao: Valida a Fatura a Pagar
@@ -458,7 +580,7 @@ class Financeiro extends AdminController
 
 
     /**
-     * Gets the pur order data ajax.
+     * Obtem os dados do contas a receber
      *
      * @param      <type>   $id         The identifier
      * @param      boolean  $to_return  To return
@@ -535,14 +657,14 @@ class Financeiro extends AdminController
             $this->session->unset_userdata('send_later');
         }
 
-        $this->load->view('financeiro/contasreceber/invoice_preview_template', $data);
+        $this->load->view('financeiro/contasreceber/template_preview_fatura_a_receber', $data);
     }
 
     // $clientid = ''
 
     public function table_contasreceber()
     {
-        $this->app->get_table_data(module_views_path('financeiro', 'contasreceber/contasreceber'));
+        $this->app->get_table_data(module_views_path('financeiro', 'tables/contasreceber'));
     }
 
     /***************
@@ -555,27 +677,6 @@ class Financeiro extends AdminController
         if ($this->input->is_ajax_request()) {
             $this->contasbancarias_model->muda_status_contabancaria($id, $status);
         }
-    }
-
-    /***************
-     * @return void
-     * Funcao: Obtem os dados da tabela baseado nos parametros
-     * Parametros: nd
-     */
-    public function table_contasbancarias()
-    {
-        if (
-            staff_cant('view', 'contasbancarias')
-            && staff_cant('view_own', 'contasbancarias')
-            && get_option('allow_staff_view_contasbancarias_assigned') == 0
-        ) {
-            ajax_access_denied();
-        }
-
-        $this->app->get_table_data(module_views_path(FINANCEIRO_MODULE_NAME, 'tables/contasbancarias'));
-        $this->app->get_table_data('contasbancarias');
-
-        //     App_table::find('bancos')->output();
     }
 
     /***************
@@ -839,5 +940,70 @@ class Financeiro extends AdminController
     }
 
 
+    /* Gravar nova visualização de pagamento de fatura a receber */
+    public function registra_pagamento_areceber_ajax($id)
+    {
+        $this->load->model('payment_modes_model');
+        $this->load->model('payments_model');
+        $this->load->model('contasbancarias_model');
+        $this->load->model('caixa_model');
+        $this->load->model('cartaocredito_model');
+        $data['payment_modes'] = $this->payment_modes_model->get('', [
+            'expenses_only !=' => 1,
+        ]);
+
+        $data['contasbancarias'] = $this->contasbancarias_model->get('');
+        $data['contascaixa'] = $this->caixa_model->get('');
+        $data['contascredito'] = $this->planocontas_model->obter_contas_credito();
+        $data['subcontascredito'] = $this->planocontas_model->obter_subcontas_credito();
+        $data['invoice']  = $this->invoices_model->get($id);
+        $data['payments'] = $this->payments_model->get_invoice_payments($id);
+        $this->load->view('financeiro/contasreceber/template_registra_pagamento', $data);
+    }
+
+    /* é aqui que os dados do registro de pagamento da fatura $_POST são enviados */
+    public function registra_pagamento_a_receber()
+    {
+        if (staff_cant('create', 'payments')) {
+            access_denied('Record Payment');
+        }
+        if ($this->input->post()) {
+            $this->load->model('payments_model');
+            // carrega o modelo de historico de pagamento
+            // processa o pagamento e atualiza os registros de pagamento, bancos, caixa
+            $id = $this->payments_model->process_payment($this->input->post(), '');
+            if ($id) {
+                set_alert('success', _l('invoice_payment_recorded'));
+                redirect(admin_url('payments/payment/' . $id));
+            } else {
+                set_alert('danger', _l('invoice_payment_record_failed'));
+            }
+            redirect(admin_url('financeiro/lista_faturas_areceber/' . $this->input->post('invoiceid')));
+        }
+    }
+
+
+    /* List all invoices datatables */
+    public function lista_faturas_areceber($id = '')
+    {
+        if (staff_cant('view', 'invoices')
+            && staff_cant('view_own', 'invoices')
+            && get_option('allow_staff_view_invoices_assigned') == '0') {
+            access_denied('invoices');
+        }
+
+        close_setup_menu();
+
+        $this->load->model('payment_modes_model');
+        $data['payment_modes']        = $this->payment_modes_model->get('', [], true);
+        $data['invoiceid']            = $id;
+        $data['title']                = _l('invoices');
+        $data['invoices_years']       = $this->invoices_model->get_invoices_years();
+        $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
+        $data['invoices_statuses']    = $this->invoices_model->get_statuses();
+        $data['invoices_table'] = App_table::find('invoices');
+        $data['bodyclass']            = 'invoices-total-manual';
+        $this->load->view('financeiro/contasreceber/gerenciar', $data);
+    }
 
 }

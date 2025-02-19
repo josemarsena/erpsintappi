@@ -8,6 +8,8 @@ $where = [];
 
 $project_id = $this->ci->input->post('project_id');
 
+$clientid = $this->ci->input->post('client_id');
+
 $aColumns = [
     'number',
     'date',
@@ -40,7 +42,8 @@ foreach ($custom_fields as $key => $field) {
     array_push($join, 'LEFT JOIN ' . db_prefix() . 'customfieldsvalues as ctable_' . $key . ' ON ' . db_prefix() . 'invoices.id = ctable_' . $key . '.relid AND ctable_' . $key . '.fieldto="' . $field['fieldto'] . '" AND ctable_' . $key . '.fieldid=' . $field['id']);
 }
 
-array_push($where, ' AND ' . db_prefix() . 'invoices.status <> 9 ');
+array_push($where, ' AND ' . db_prefix() . 'invoices.status = 1 OR ' . db_prefix() . 'invoices.status = 3 OR ' . db_prefix()
+    . 'invoices.status = 4 OR ' . db_prefix() . 'invoices.status = 6');
 
 
 if ($project_id) {
@@ -78,9 +81,9 @@ foreach ($rResult as $aRow) {
 
     // If is from client area table
     if (is_numeric($clientid) || $project_id) {
-        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
+        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/' . $aRow['id']) . '" target="_blank">' . format_invoice_number($aRow['id']) . '</a>';
     } else {
-        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/list_invoices/' . $aRow['id']) . '" onclick="init_contasreceber(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
+        $numberOutput = '<a href="' . admin_url('financeiro/contasreceber/' . $aRow['id']) . '" onclick="init_contasreceber(' . $aRow['id'] . '); return false;">' . format_invoice_number($aRow['id']) . '</a>';
     }
 
     if ($aRow['recurring'] > 0) {
@@ -97,13 +100,10 @@ foreach ($rResult as $aRow) {
 
     $row[] = $numberOutput;
 
-    $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
-
-    $row[] = app_format_money($aRow['total_tax'], $aRow['currency_name']);
-
-    $row[] = $aRow['year'];
-
     $row[] = _d($aRow['date']);
+
+    $row[] = _d($aRow['duedate']);
+
 
     if (empty($aRow['deleted_customer_name'])) {
         $row[] = '<a href="' . admin_url('clients/client/' . $aRow['clientid']) . '">' . $aRow['company'] . '</a>';
@@ -111,11 +111,16 @@ foreach ($rResult as $aRow) {
         $row[] = $aRow['deleted_customer_name'];
     }
 
+    $row[] = $aRow['year'];
+
+
     $row[] = '<a href="' . admin_url('projects/view/' . $aRow['project_id']) . '">' . $aRow['project_name'] . '</a>';;
 
     $row[] = render_tags($aRow['tags']);
 
-    $row[] = _d($aRow['duedate']);
+    $row[] = app_format_money($aRow['total_tax'], $aRow['currency_name']);
+
+    $row[] = app_format_money($aRow['total'], $aRow['currency_name']);
 
     $row[] = format_invoice_status($aRow[db_prefix() . 'invoices.status']);
 
@@ -129,4 +134,5 @@ foreach ($rResult as $aRow) {
     $row = hooks()->apply_filters('invoices_table_row_data', $row, $aRow);
 
     $output['aaData'][] = $row;
+
 }

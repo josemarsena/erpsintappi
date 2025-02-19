@@ -133,10 +133,18 @@ class Faturas_model extends App_Model
         if (is_numeric($id)) {
             $this->db->where(db_prefix() . 'fin_faturas' . '.id', $id);
             $fatura = $this->db->get()->row();
-            if ($fatura) {
-                $fatura->total_left_to_pay = get_invoice_total_left_to_pay($fatura->id, $fatura->total);   // total a pagar que falta
 
-                $fatura->items       = get_items_by_type('invoice', $id);
+     //       $myfile = fopen("fatura.txt", "w") or die("Unable to open file!");
+     //       fwrite($myfile, 'id = ' . $id);
+     //       fwrite($myfile, "Fatura = ");
+     //       fwrite($myfile, $fatura);
+     //       fclose($myfile);
+
+
+            if ($fatura) {
+                $fatura->total_left_to_pay = obter_total_que_falta_fatura($fatura->id, $fatura->total);   // total a pagar que falta
+
+                $fatura->items       = get_items_by_type('fatura', $id);
                 $fatura->attachments = $this->obter_anexos($id);
 
                 if ($fatura->id_projeto) {
@@ -151,10 +159,15 @@ class Faturas_model extends App_Model
                         break;
                     }
                 }
+                $myfile = fopen("fatura.txt", "w") or die("Unable to open file!");
+                fwrite($myfile, "ID Fonrecedor = " . $fatura->id_fornecedor);
+                fclose($myfile);
 
-                $fornecedor          = $this->faturas_model->obter_fornecedor($fatura->id_fornecedor);
-                    // obtem o Fornecedor da Fatura
+                $fornecedor  = $this->obter_fornecedor($fatura->id_fornecedor);
+
+                // obtem o Fornecedor da Fatura
                 $fatura->fornecedor = $fornecedor;
+
                 if (!$fatura->fornecedor) {
                     $fatura->fornecedor          = new stdClass();
                     $fatura->fornecedor->company = $fatura->deleted_customer_name;
@@ -170,9 +183,7 @@ class Faturas_model extends App_Model
             return hooks()->apply_filters('get_invoice', $fatura);
         }
 
-        $this->db->order_by('numero,YEAR(data)', 'desc');
-
-        return $this->db->get()->result_array();
+        $this->db->order_by('numero,YEAR(data)', 'desc');   return $this->db->get()->result_array();
     }
 
     /**
@@ -1936,7 +1947,6 @@ class Faturas_model extends App_Model
                 $vendor->vat = null;
             }
 
-
             return $vendor;
 
         }
@@ -1946,7 +1956,7 @@ class Faturas_model extends App_Model
         return $this->db->get(db_prefix() . 'pur_vendor')->result_array();
     }
 
-    public function check_for_merge_invoice($fornecedor_id, $current_invoice = '')
+    public function verifica_faturas_a_juntar($fornecedor_id, $current_invoice = '')
     {
         if ($current_invoice != '') {
             $this->db->select('status');
@@ -2002,5 +2012,38 @@ class Faturas_model extends App_Model
         return $this->expenses_model->get('', $where);
     }
 
+    /**
+     * All invoice activity
+     * @param  mixed $id invoiceid
+     * @return array
+     */
+    public function obter_atividade_fatura($id)
+    {
+        $this->db->where('rel_id', $id);
+        $this->db->where('rel_type', 'invoice');
+        $this->db->order_by('date', 'asc');
+
+        return $this->db->get(db_prefix() . 'sales_activity')->result_array();
+    }
+
+    /**
+     * Get this invoice generated recurring invoices
+     * @since  Version 1.0.1
+     * @param  mixed $id main invoice id
+     * @return array
+     */
+    public function obter_faturas_recorrentes($id)
+    {
+        $this->db->select('id');
+        $this->db->where('e_recorrente_de', $id);
+        $invoices           = $this->db->get(db_prefix() . 'fin_faturas')->result_array();
+        $recurring_invoices = [];
+
+        foreach ($invoices as $invoice) {
+            $recurring_invoices[] = $this->get($invoice['id']);
+        }
+
+        return $recurring_invoices;
+    }
 
 }

@@ -141,6 +141,15 @@
                                 <?= _l('contract_content'); ?>
                             </a>
                         </li>
+
+
+                        <li role="presentation">
+                            <a href="#tab_faturas" aria-controls="tab_faturas" role="tab" data-toggle="tab"
+                               onclick="init_rel_tasks_table(<?= e($contract->id); ?>,'contract'); return false;">
+                                <?= 'Faturas'; ?>
+                            </a>
+                        </li>
+
                         <li role="presentation"
                             class="<?= $this->input->get('tab') == 'attachments' ? 'active' : ''; ?>">
                             <a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">
@@ -307,13 +316,13 @@
                                 </div>
                             </div>
                             <?php
-                                                $selected = (isset($contract) ? $contract->contract_type : '');
-if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
-    echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
-} else {
-    echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
-}
-?>
+                            $selected = (isset($contract) ? $contract->contract_type : '');
+                            if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
+                                echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
+                            } else {
+                                echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
+                            }
+                            ?>
                             <div class="row">
                                 <div class="col-md-6">
                                     <?php $value = (isset($contract) ? _d($contract->datestart) : _d(date('Y-m-d'))); ?>
@@ -434,6 +443,14 @@ if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1
                             </div>
                             <?php } ?>
                         </div>
+
+                        <div role="tabpanel"  class="tab-pane<?= $this->input->get('tab') == 'tab_faturas' ? ' active' : ''; ?>" id="tab_faturas">
+                            <?php
+                                    $this->load->view('admin/invoices/table_html', ['class' => 'invoices-single-client']);
+
+                            ?>
+                        </div>
+
                         <div role="tabpanel"
                             class="tab-pane<?= $this->input->get('tab') == 'attachments' ? ' active' : ''; ?>"
                             id="attachments">
@@ -450,7 +467,7 @@ if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1
 
                             <div id="contract_attachments" class="mtop30">
                                 <?php
-            $data = '<div class="row">';
+                                    $data = '<div class="row">';
 
                             foreach ($contract->attachments as $attachment) {
                                 $href_url = site_url('download/file/contract/' . $attachment['attachment_key']);
@@ -558,9 +575,7 @@ if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1
                             </div>
                             <?php } ?>
                         </div>
-                        <div role="tabpanel"
-                            class="tab-pane<?= $this->input->get('tab') == 'tab_tasks' ? ' active' : ''; ?>"
-                            id="tab_tasks">
+                        <div role="tabpanel"  class="tab-pane<?= $this->input->get('tab') == 'tab_tasks' ? ' active' : ''; ?>" id="tab_tasks">
                             <?php init_relation_tasks_table(['data-new-rel-id' => $contract->id, 'data-new-rel-type' => 'contract']); ?>
                         </div>
                         <div role="tabpanel"

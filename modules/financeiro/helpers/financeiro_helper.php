@@ -402,3 +402,84 @@ function formata_numero_faturapagar($id)
         'invoice' => $invoice,
     ]);
 }
+
+
+
+/**
+ * Check if staff member can view invoice
+ * @param  mixed $id invoice id
+ * @param  mixed $staff_id
+ * @return boolean
+ */
+function usuario_pode_ver_faturapagar($id, $staff_id = false)
+{
+    $CI = &get_instance();
+
+    $staff_id = $staff_id ? $staff_id : get_staff_user_id();
+
+    if (has_permission('invoices', $staff_id, 'view')) {
+        return true;
+    }
+
+ //   $CI->db->select('id, addedfrom, sale_agent');
+ //   $CI->db->from(db_prefix() . 'fin_faturas');
+ //   $CI->db->where('id', $id);
+ //   $invoice = $CI->db->get()->row();
+
+ //   if ((has_permission('invoices', $staff_id, 'view_own') && $invoice->addedfrom == $staff_id)
+//        || ($invoice->sale_agent == $staff_id && get_option('allow_staff_view_invoices_assigned') == '1')
+//    ) {
+//        return true;
+//    }
+
+//    return false;
+}
+
+/**
+ * Get invoice total left for paying if not payments found the original total from the invoice will be returned
+ * @since  Version 1.0.1
+ * @param  mixed $id     invoice id
+ * @param  mixed $invoice_total
+ * @return mixed  total left
+ */
+function obter_total_que_falta_fatura($id, $invoice_total = null)
+{
+    $CI = &get_instance();
+
+    if ($invoice_total === null) {
+        $CI->db->select('total')
+            ->where('id', $id);
+        $invoice_total = $CI->db->get(db_prefix() . 'fin_faturas')->row()->total;
+    }
+
+    if (!class_exists('payments_model')) {
+        $CI->load->model('payments_model');
+    }
+
+    if (!class_exists('credit_notes_model')) {
+        $CI->load->model('credit_notes_model');
+    }
+
+    $payments = $CI->payments_model->get_invoice_payments($id);
+    $credits  = $CI->credit_notes_model->get_applied_invoice_credits($id);
+
+    $payments = array_merge($payments, $credits);
+
+    $totalPayments = 0;
+
+    $bcadd = function_exists('bcadd');
+
+    foreach ($payments as $payment) {
+        if ($bcadd) {
+            $totalPayments = bcadd($totalPayments, $payment['amount'], get_decimal_places());
+        } else {
+            $totalPayments += $payment['amount'];
+        }
+    }
+
+    if (function_exists('bcsub')) {
+        return bcsub($invoice_total, $totalPayments, get_decimal_places());
+    }
+
+    return number_format($invoice_total - $totalPayments, get_decimal_places(), '.', '');
+}

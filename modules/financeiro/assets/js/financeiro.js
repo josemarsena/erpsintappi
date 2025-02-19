@@ -37,7 +37,7 @@ var fnServerParams = {};
     initDataTable('.table-contaspagar', admin_url + 'financeiro/table_contaspagar', undefined, undefined,
         'undefined',[1, 'desc']);
 
-    init_contaspagar();
+    // init_contaspagar();
 
 
     $.each(Params, function(i, obj) {
@@ -90,7 +90,11 @@ var fnServerParams = {};
 // Init single invoice
 function init_contaspagar(id) {
 
-    load_small_table_item(id, '#contaspagar', 'faturaid', 'financeiro/get_contaspagar_data_ajax', '.table-contasreceber');
+    load_small_table_item(id,
+        '#contas_pagar',
+        'id_fatura',
+        'financeiro/get_contaspagar_data_ajax',
+        '.table-contas_pagar');
 }
 
 
@@ -101,7 +105,7 @@ function init_contasreceber(id) {
     load_small_table_item(id, '#invoice', 'invoiceid', 'financeiro/get_contasreceber_data_ajax', '.table-invoices');
 }
 
-function load_small_contasreceber_table_item(id, selector, input_name, url, table) {
+function load_small_contaspagar_table_item(id, selector, input_name, url, table) {
     "use strict";
     var _tmpID = $('input[name="' + input_name + '"]').val();
     // Check if id passed from url, hash is prioritized becuase is last
@@ -140,3 +144,12 @@ function load_small_contasreceber_table_item(id, selector, input_name, url, tabl
     initDataTable('table.table-contasreceber', admin_url + 'financeiro/table_contasreceber');
 
  */
+
+
+// Registra um Pagamento do Contas a Receber
+function registra_pagamento_areceber(id) {
+    if (typeof id == "undefined" || id === "") {
+        return;
+    }
+    $("#invoice").load(admin_url + "financeiro/registra_pagamento_areceber_ajax/" + id);
+}

@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.7
+Version: 1.0.8
 Requires at least: 1.0.*
 Author: Synglia
 Author URI: https://synglia.com.br
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'financeiro_load_js');
 hooks()->add_action('admin_init', 'financeiro_module_init_menu_items');
 hooks()->add_action('admin_init', 'financeiro_permissions');
 
-define('FINANCEIRO_REVISION', 106);
+define('FINANCEIRO_REVISION', 108);
 
 
 /**
@@ -149,7 +149,7 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_bancos',
                 'name'     => _l('bancos'),
-                'icon'     => 'fa fa-ban',
+                'icon'     => 'fa fa-book',
                 'href'     => admin_url('financeiro/bancos'),
                 'position' => 15,
             ]);
@@ -161,7 +161,7 @@ function financeiro_module_init_menu_items()
                 'slug'     => 'financeiro_contasbancarias',
                 'name'     => _l('contasbancarias'),
                 'icon'     => 'fa fa-credit-card',
-                'href'     => admin_url('financeiro/gerenciar_contasbancarias'),
+                'href'     => admin_url('financeiro/contasbancarias'),
                 'position' => 20,
             ]);
         }
@@ -170,13 +170,11 @@ function financeiro_module_init_menu_items()
             $CI->app_menu->add_sidebar_children_item('financeiro', [
                 'slug'     => 'financeiro_contacaixa',
                 'name'     => _l('contacaixa'),
-                'icon'     => 'fa fa-credit-card',
+                'icon'     => 'fa fa-desktop',
                 'href'     => admin_url('financeiro/contacaixa'),
                 'position' => 25,
             ]);
         }
-
-
 
         if (has_permission('financeiro_cartaocredito', '', 'view')) {
             $CI->app_menu->add_sidebar_children_item('financeiro', [
