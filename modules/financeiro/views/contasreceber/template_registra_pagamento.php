@@ -13,7 +13,7 @@
                        <?php echo render_date_input('date', 'record_payment_date', _d(date('Y-m-d'))); ?>
                     <div class="form-group">
                         <label for="paymentmode" class="control-label"><?php echo _l('payment_mode'); ?></label>
-                        <select class="selectpicker" name="paymentmode" data-width="100%"
+                        <select class="selectpicker" name="paymentmode" id="paymentmode" data-width="100%" onchange="verificaSelecao()"
                             data-none-selected-text="<?php echo _l('dropdown_non_selected_tex'); ?>">
                             <option value=""></option>
                             <?php foreach ($payment_modes as $mode) { ?>
@@ -27,18 +27,29 @@
                         </select>
                     </div>
 
+                    <div id="contabanco">
+                        <?php
+                            // Se Pagamento é PIX, Débito, Transferencia, Boleto: Mostra Banco, Conta de Banco e Conta e Subconta Financeira
+                            $selected = (isset($invoice) ? $invoice->conta_id : '');
+                            echo render_select('contasbancarias', $contasbancarias, ['id', 'conta'], 'Selecione a Conta Bancária', $selected, []);?>
+                    </div>
 
+                    <div id="contacaixa">
+                        <?php
+                        // Se Pagamenbto é Dinheiro: Mostra Caixa e Conta e SubConta Financeria
+                            echo render_select('contascaixa', $contascaixa, ['id', 'nome'], 'Conta Caixa', $selected, []);
+                        ?>
+                    </div>
+                    <div id="contacartao">
+                        <?php
+                        // Se Pagamenbto é Dinheiro: Mostra Caixa e Conta e SubConta Financeria
+                        echo render_select('contascaixa', $contascaixa, ['id', 'nome'], 'Cartão de Crédito', $selected, []);
+                        ?>
+                    </div>
                     <?php
-                    // Se Pagamento é PIX, Débito, Transferencia, Boleto: Mostra Banco, Conta de Banco e Conta e Subconta Financeira
-                    $selected = (isset($invoice) ? $invoice->conta_id : '');
-                    echo render_select('contasbancarias', $contasbancarias, ['id', 'nome'], 'Selecione a Conta Bancária', $selected, []);
-
-                    // Se Pagamenbto é Dinheiro: Mostra Caixa e Conta e SubConta Financeria
-                    echo render_select('contascaixa', $contascaixa, ['id', 'nome'], 'Conta de Crédito', $selected, []);
-
-                    // Se Pagamento é Cartao de Credito: Mostra a Conta de Cartao e Conta e Subconta Financeira
-                    echo render_select('contascredito', $contascredito, ['id', 'nome'], 'Conta de Crédito', $selected, []);
-                    echo render_select('subcontascredito', $subcontascredito, ['id', 'nome'], 'SubConta de Crédito', $selected, []);
+                        // Se Pagamento é Cartao de Credito: Mostra a Conta de Cartao e Conta e Subconta Financeira
+                        echo render_select('contascredito', $contascredito, ['id', 'nomeconta'], 'Conta Financeira', $selected, []);
+                        echo render_select('subcontascredito', $subcontascredito, ['id', 'nomeconta'], 'SubConta Financeira', $selected, []);
                     ?>
 
                     <?php
@@ -120,7 +131,50 @@
     </div>
 </div>
 <?php echo form_close(); ?>
+<style>
+    /* Esconde a div por padrão */
+    #contabanco {
+        display: none;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+    }
+    /* Esconde a div por padrão */
+    #contacaixa {
+        display: none;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+    }
+    /* Esconde a div por padrão */
+    #contacartao {
+        display: none;
+        padding: 10px;
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        background-color: #f9f9f9;
+    }
+</style>
 <script>
+    function verificaSelecao() {
+
+        let opcao = document.getElementById("paymentmode").value;
+        let divcontabanco = document.getElementById("contabanco");
+        let divcontacaixa = document.getElementById("contacaixa");
+        let divcontacartao = document.getElementById("contacartao");
+
+        // Exibe a div apenas se "opcao2" for selecionada
+
+        if (opcao === "1") {    // Bancos
+            divcontabanco.style.display = "block";
+        } else {
+            divcontabanco.style.display = "none";
+            divcontacaixa.style.display = "none";
+            divcontacartao.style.display = "none";
+        }
+    }
 $(function() {
     init_selectpicker();
     init_datepicker();
@@ -135,5 +189,8 @@ $(function() {
         $sMode.selectpicker('val', $sMode.find('option').eq(1).attr('value'));
         $sMode.trigger('change');
     }
+
+
+
 });
 </script>

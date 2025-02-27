@@ -89,6 +89,15 @@ class Caixa_model extends App_Model
         }
     }
 
+    /**
+     * Obtem um registro conforme o ID
+     * @param  mixed $id group id
+     * @param $data
+     * @return boolean
+     */
+    public function atualiza_saldo($id = '')
+    {
 
+    }
 }
 

@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.8
+Version: 1.0.9
 Requires at least: 1.0.*
 Author: Synglia
 Author URI: https://synglia.com.br
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'financeiro_load_js');
 hooks()->add_action('admin_init', 'financeiro_module_init_menu_items');
 hooks()->add_action('admin_init', 'financeiro_permissions');
 
-define('FINANCEIRO_REVISION', 108);
+define('FINANCEIRO_REVISION', 109);
 
 
 /**

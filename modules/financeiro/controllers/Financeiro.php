@@ -973,6 +973,17 @@ class Financeiro extends AdminController
             // processa o pagamento e atualiza os registros de pagamento, bancos, caixa
             $id = $this->payments_model->process_payment($this->input->post(), '');
             if ($id) {
+                // Atualiza o Movimento de Banco, Caixa, Cartao e Contas Financeiras
+                // Atualiza Saldos de Banco, Caixa, Cartao e Contas Financerias
+                $this->load->model('caixa_model');
+                $this->load->model('cartaocredito_model');
+                $this->load->model('contasbancarias_model');
+                $this->load->model('planocontas_model');
+                $this->contasbancarias_model->atualiza_saldo($id->contabancaria_id);
+                $this->caixa_model->atualiza_saldo($id->caixa_id);
+                $this->cartaocredito_model->atualiza_sado($id->cartao_id);
+                $this->planocontas_model->atualiza_sado($id->conta_id, $id->subconta_id);
+                $this->movimento_model->adiciona_movimento();
                 set_alert('success', _l('invoice_payment_recorded'));
                 redirect(admin_url('payments/payment/' . $id));
             } else {
