@@ -38,7 +38,7 @@ class Caixa_model extends App_Model
     public function delete($id)
     {
         $this->db->where('id', $id);
-        $this->db->delete(db_prefix().'fin_bancos');
+        $this->db->delete(db_prefix().'fin_contacaixa');
 
         return true;
     }
@@ -90,7 +90,7 @@ class Caixa_model extends App_Model
     }
 
     /**
-     * Obtem um registro conforme o ID
+     * atualiza o Saldo apos lançamento
      * @param  mixed $id group id
      * @param $data
      * @return boolean
@@ -99,5 +99,11 @@ class Caixa_model extends App_Model
     {
 
     }
+
+    /**
+     * Reistra o Movimento do Caixa após baixa do Contas a Pagar e Receber
+     */
+
+
 }
 

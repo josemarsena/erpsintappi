@@ -9,6 +9,7 @@ $table_data = [
    'name'     => _l('contract_list_client'),
    'th_attrs' => ['class' => (isset($client) ? 'not_visible' : '')],
  ],
+    'Proposta',
  _l('contract_types_list_name'),
  _l('contract_value'),
  _l('contract_list_start_date'),

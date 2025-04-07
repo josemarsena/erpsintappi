@@ -4,7 +4,7 @@
 	<div class="content">
 		<div class="panel_s">
 			<div class="panel-body">
-        <div class="row _buttons">
+            <div class="row _buttons">
           <div class="col-md-6">
   				  <h4 class="no-margin text-bold ptop-15"><i class="fa fa-dashboard menu-icon"></i> <?php echo html_entity_decode($title); ?></h4>
           </div>

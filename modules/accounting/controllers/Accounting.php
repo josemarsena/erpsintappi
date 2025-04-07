@@ -872,6 +872,7 @@ class Accounting extends AdminController
             $sTable       = db_prefix() . 'acc_accounts';
             $join         = [];
             $result       = $this->accounting_model->get_account_data_tables($aColumns, $sIndexColumn, $sTable, $join, $where, ['number', 'description', 'balance_as_of', $debit, $credit, 'default_account']);
+
             $output  = $result['output'];
             $rResult = $result['rResult'];
 

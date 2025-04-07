@@ -3,7 +3,7 @@
 	(function($) {
 		"use strict";
 
-		appValidateForm($('#account-form'), {
+		appValidateForm($('#planocontas-form'), {
 			account_type_id: 'required',
 			account_detail_type_id: 'required',
 			name: 'required',
@@ -11,8 +11,7 @@
 
 		fnServerParams = {
       "ft_type": '[name="ft_type"]',
-      "ft_detail_type": '[name="ft_detail_type"]',
-      "ft_parent_account": '[name="ft_parent_account"]',
+       "ft_parent_account": '[name="ft_parent_account"]',
       "ft_account": '[name="ft_account"]',
       "ft_active": '[name="ft_active"]',
     };
@@ -20,9 +19,6 @@
         init_tabela_contas();
     });
     $('select[name="ft_active"]').on('change', function() {
-        init_tabela_contas();
-    });
-    $('select[name="ft_detail_type"]').on('change', function() {
         init_tabela_contas();
     });
 
@@ -34,27 +30,28 @@
         init_tabela_contas();
     });
 
-	 	list_account_type_details = <?php echo json_encode($detail_types); ?>;
+	 	list_account_type_details = [];
 
-		  $('.add-new-account').on('click', function(){
-          if($('select[name="account_type_id"]').val() <= 10 && $('select[name="account_type_id"]').val() != 1 && $('select[name="account_type_id"]').val() != 6){
-            $('#div_balance').removeClass('hide');
-          }else{
-            $('#div_balance').addClass('hide');
-          }
+		  $('.add-new-account').on('click', function()
+          {
+              if($('select[name="account_type_id"]').val() <= 10 && $('select[name="account_type_id"]').val() != 1 && $('select[name="account_type_id"]').val() != 6){
+                $('#div_balance').removeClass('hide');
+              }else{
+                $('#div_balance').addClass('hide');
+              }
 
-          $('#account-modal').find('button[type="submit"]').prop('disabled', false);
+              $('#account-modal').find('button[type="submit"]').prop('disabled', false);
 
-          $('select[name="parent_account"]').val('').change();
+              $('select[name="parent_account"]').val('').change();
 
-          $('input[name="name"]').val('');
-          $('input[name="balance"]').val('');
-          $('input[name="balance_as_of"]').val('');
+              $('input[name="name"]').val('');
+              $('input[name="balance"]').val('');
+              $('input[name="balance_as_of"]').val('');
 
-          tinyMCE.activeEditor.setContent('');
-          $('textarea[name="description"]').val('');
-          $('input[name="id"]').val('');
-	        $('#account-modal').modal('show');
+              tinyMCE.activeEditor.setContent('');
+              $('textarea[name="description"]').val('');
+              $('input[name="id"]').val('');
+                $('#account-modal').modal('show');
 	    });
 
     var html = '';
@@ -82,32 +79,32 @@
 
 		$('select[name="account_type_id"]').on('change', function() {
 
-      if($(this).val() <= 10 && $(this).val() != 1 && $(this).val() != 6 && $('input[name="id"]').val() == ''){
-        $('#div_balance').removeClass('hide');
-      }else{
-        $('#div_balance').addClass('hide');
-      }
+              if($(this).val() <= 10 && $(this).val() != 1 && $(this).val() != 6 && $('input[name="id"]').val() == ''){
+                $('#div_balance').removeClass('hide');
+              }else{
+                $('#div_balance').addClass('hide');
+              }
 
-			var html = '';
-			var note = 0;
-		  	$.each(list_account_type_details, function( index, value ) {
-		  		if(value.account_type_id == $('select[name="account_type_id"]').val()){
-		  			if(note == 0){
-			  			$('#detail_type_note').val(value.note);
-			  			note = 1;
-		  			}
-			  		html += '<option value="'+value.id+'">'+value.name+'</option>';
-		  		}
-			});
+                    var html = '';
+                    var note = 0;
+                    $.each(list_account_type_details, function( index, value ) {
+                        if(value.account_type_id == $('select[name="account_type_id"]').val()){
+                            if(note == 0){
+                                $('#detail_type_note').val(value.note);
+                                note = 1;
+                            }
+                            html += '<option value="'+value.id+'">'+value.name+'</option>';
+                        }
+                    });
 
-			$('select[name="account_detail_type_id"]').html(html);
-			$('select[name="account_detail_type_id"]').selectpicker('refresh');
+                    $('select[name="account_detail_type_id"]').html(html);
+                    $('select[name="account_detail_type_id"]').selectpicker('refresh');
 
-      $.each(list_account_type_details, function( index, value ) {
-          if(value.id == $('select[name="account_detail_type_id"]').val()){
-            $('.detail_type_note').html(value.note);
-          }
-      });
+              $.each(list_account_type_details, function( index, value ) {
+                  if(value.id == $('select[name="account_detail_type_id"]').val()){
+                    $('.detail_type_note').html(value.note);
+                  }
+              });
 		});
 
 	  	$('select[name="account_detail_type_id"]').on('change', function() {
@@ -286,10 +283,16 @@ function formatCurrency(input, blur) {
 function init_tabela_contas() {
   "use strict";
 
-  if ($.fn.DataTable.isDataTable('.table-accounts')) {
-    $('.table-accounts').DataTable().destroy();
+  if ($.fn.DataTable.isDataTable('.table-planocontas')) {
+    $('.table-planocontas').DataTable().destroy();
   }
-  initDataTable('.table-contas', admin_url + 'accounting/accounts_table', [0], [0,1,2,3,4,5,6,7,8], fnServerParams, []);
+  // selector = seletor
+    //  url = url para o datable
+    //  notsearchable = nao pesquisavel
+    //  notsortable = não ordenavel
+    //  fnserverparams, = parametros do servidor
+    //  defaultorder = ordem default
+  initDataTable('.table-planocontas', admin_url + 'financeiro/table_planocontas', [0], [0,1,2,3,4,5,6,7], fnServerParams, []);
   $('.dataTables_filter').addClass('hide');
 }
 

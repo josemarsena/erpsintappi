@@ -145,7 +145,7 @@
 
                         <li role="presentation">
                             <a href="#tab_faturas" aria-controls="tab_faturas" role="tab" data-toggle="tab"
-                               onclick="init_rel_tasks_table(<?= e($contract->id); ?>,'contract'); return false;">
+                               onclick="init_rel_invoicescontrato_table('', <?php echo($contract->id) ?>); return false;">
                                 <?= 'Faturas'; ?>
                             </a>
                         </li>
@@ -302,16 +302,28 @@
                             <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
                                 title="<?= _l('contract_subject_tooltip'); ?>"></i>
                             <?= render_input('subject', 'contract_subject', $value); ?>
-                            <div class="form-group">
-                                <label
-                                    for="contract_value"><?= _l('contract_value'); ?></label>
-                                <div class="input-group" data-toggle="tooltip"
-                                    title="<?= isset($contract) && $isSignedOrMarkedSigned == 1 ? '' : _l('contract_value_tooltip'); ?>">
-                                    <input type="number" class="form-control" name="contract_value"
-                                        value="<?= $contract->contract_value ?? ''; ?>"
-                                        <?= isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
-                                    <div class="input-group-addon">
-                                        <?= e($base_currency->symbol); ?>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php
+                                    $selected = (isset($contract) ? $contract->proposta_id : '');
+                                    echo render_select('proposta_id', $proposals, [ 'id', ['id','subject']], 'Proposta Vinculada', $selected, ['data-none-selected-text' => _l('dropdown_non_selected_tex')]);
+                                    ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+
+                                        <label
+                                            for="contract_value"><?= _l('contract_value'); ?></label>
+                                        <div class="input-group" data-toggle="tooltip"
+                                            title="<?= isset($contract) && $isSignedOrMarkedSigned == 1 ? '' : _l('contract_value_tooltip'); ?>">
+                                            <input type="number" class="form-control" name="contract_value"
+                                                value="<?= $contract->contract_value ?? ''; ?>"
+                                                <?= isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
+                                            <div class="input-group-addon">
+                                                <?= e($base_currency->symbol); ?>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -446,9 +458,27 @@
 
                         <div role="tabpanel"  class="tab-pane<?= $this->input->get('tab') == 'tab_faturas' ? ' active' : ''; ?>" id="tab_faturas">
                             <?php
-                                    $this->load->view('admin/invoices/table_html', ['class' => 'invoices-single-client']);
-
+                                //   init_relation_contracts_table(['data-new-rel-id' => $contract->id, 'data-new-rel-type' => 'contract']);
+                                if (isset($contract->client)) {
                             ?>
+                            <?php if (staff_can('create', 'invoices')) { ?>
+                            <a href="#"
+                               class="btn btn-primary mbot15<?= $contract->client == 0 ? ' disabled' : ''; ?>" onclick="chama_gerador_faturas(<?php echo($contract->id) ?>)">
+                                <i class="fa-regular fa-plus tw-mr-1"></i>
+                                <?= 'Gerar Faturas'; ?>
+                            </a>
+                            <?php } ?>
+                            <?php if (staff_can('view', 'invoices') || staff_can('view_own', 'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
+
+                            <div id="faturascontrato_total" class="tw-mb-5">
+                                <?php //  echo(carrega_faturascontrato_total_template()); ?>
+                            </div>
+                            <?php
+                            $this->load->view('crm/contratos/invoices_contrato_html', ['class' => 'invoicescontrato']);
+                            $this->load->view('admin/clients/modals/zip_invoices');
+                            ?>
+                            <?php } ?>
+                            <?php } ?>
                         </div>
 
                         <div role="tabpanel"
@@ -623,6 +653,7 @@
 <!-- init table tasks -->
 <script>
     var contract_id = '<?= $contract->id; ?>';
+    var proposta_id = '<?php echo $contract->proposta_id; ?>';
 </script>
 <?php $this->load->view('admin/contracts/send_to_client'); ?>
 <?php $this->load->view('admin/contracts/renew_contract'); ?>
@@ -667,7 +698,8 @@
         appValidateForm($('#contract-form'), {
             client: 'required',
             datestart: 'required',
-            subject: 'required'
+            subject: 'required',
+            proposta_id: 'required'
         });
 
         appValidateForm($('#renew-contract-form'), {
@@ -811,6 +843,11 @@
             var location = window.location.href;
             window.location.href = location.split('?')[0] + '?tab=attachments';
         });
+    }
+
+
+    function chama_gerador_faturas(contrato_id) {
+       $.post(admin_url + 'crm/gerar_faturas/' + contrato_id).done;
     }
 </script>
 </body>

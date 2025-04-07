@@ -7,20 +7,17 @@
           <h4 class="no-margin font-bold"><?php echo _l($title); ?></h4>
           <hr />
           <div>
-            <a href="#" class="btn btn-info add-new-account mbot15"><?php echo _l('add'); ?></a>
+            <a href="#" class="btn btn-info add-new-account mbot15"><?php echo 'Nova Conta'; ?></a>
           </div>
           <div class="row">
             <div class="col-md-3">
-              <?php echo render_select('ft_account',$contas,array('id','name', 'account_type_name'),'acc_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_account',$contas,array('id','nomeconta'),'acc_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
-              <?php echo render_select('ft_parent_account',$contas,array('id','name', 'account_type_name'),'parent_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
+              <?php echo render_select('ft_parent_account',$contas,array('id','nomeconta'),'parent_account', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
               <?php echo render_select('ft_type',$tipos_conta,array('id','name'),'type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
-            </div>
-            <div class="col-md-3">
-              <?php echo render_select('ft_detail_type',$tipos_detalhes,array('id','name'),'detail_type', '', array('multiple' => true, 'data-actions-box' => true), array(), '', '', false); ?>
             </div>
             <div class="col-md-3">
               <?php $active = [ 
@@ -33,15 +30,16 @@
             </div>
           </div>
           <hr>
-          <a href="#" data-toggle="modal" data-target="#accounts_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-contas"><?php echo _l('bulk_actions'); ?></a>
-          <table class="table table-contas">
+          <a href="#" data-toggle="modal" data-target="#accounts_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-planocontas"><?php echo _l('bulk_actions'); ?></a>
+          <table class="table table-planocontas">
             <thead>
-              <th><span class="hide"> - </span><div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="accounts"><label></label></div></th>
+              <th><span class="hide"> - </span>
+                  <div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="planocontas"><label></label></div></th>
               <th><?php echo 'Chave'; ?></th>
               <th><?php echo 'Nome da Conta'; ?></th>
               <th><?php echo 'Conta Pai'; ?></th>
-              <th><?php echo 'Descrição'; ?></th>
               <th><?php echo 'Tipo de Conta'; ?></th>
+              <th><?php echo 'Descrição'; ?></th>
               <th><?php echo 'Saldo do Ano'; ?></th>
               <th><?php echo 'Status'; ?></th>
               <th><?php echo _l('options'); ?></th>
@@ -101,7 +99,7 @@
 </div>
 
 
-<div class="modal fade bulk_actions" id="accounts_bulk_actions" tabindex="-1" role="dialog" data-table=".table-contas">
+<div class="modal fade bulk_actions" id="accounts_bulk_actions" tabindex="-1" role="dialog" data-table=".table-planocontas">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <div class="modal-header">

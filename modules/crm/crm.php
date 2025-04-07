@@ -73,8 +73,9 @@ function crm_load_js()
     $viewuri     = $_SERVER['REQUEST_URI'];
     $mediaLocale = get_media_locale();
 
+    echo '<script src="' . module_dir_url(CRM_MODULE_NAME, 'assets/js/crm.js') . '"></script>';
  
-    if (!(strpos($viewuri, '/admin/financeiro/dashboard') === false)) 
+    if (!(strpos($viewuri, '/admin/crm/dashboard') === false))
 	{
 		echo '<script src="' . module_dir_url(CRM_MODULE_NAME, 'assets/plugins/highcharts/highcharts.js') . '"></script>';
 		echo '<script src="' . module_dir_url(CRM_MODULE_NAME, 'assets/plugins/highcharts/modules/variable-pie.js') . '"></script>';

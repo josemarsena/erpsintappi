@@ -99,10 +99,12 @@ class Contracts extends AdminController
         }
 
         $this->load->model('currencies_model');
+        $this->load->model('proposals_model');
         $data['base_currency'] = $this->currencies_model->get_base_currency();
         $data['types']         = $this->contracts_model->get_contract_types();
         $data['title']         = $title;
         $data['bodyclass']     = 'contract';
+        $data['proposals']  = $this->proposals_model->get('',['rel_id = ' . $id]);
         $this->load->view('admin/contracts/contract', $data);
     }
 

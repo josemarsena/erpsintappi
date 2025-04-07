@@ -138,13 +138,13 @@
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/clock" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/polyfill-php83" />
       <excludeFolder url="file://$MODULE_DIR$/application/vendor/symfony/var-dumper" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/backup-manager" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/backup-manager/backup-manager" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/league" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/league/flysystem" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/symfony" />
-      <excludeFolder url="file://$MODULE_DIR$/modules/backup_/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/backup-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/backup-manager/backup-manager" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/league/flysystem" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony" />
+      <excludeFolder url="file://$MODULE_DIR$/modules/backup/vendor/symfony/process" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

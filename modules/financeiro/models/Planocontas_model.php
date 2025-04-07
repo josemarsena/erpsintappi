@@ -7,1575 +7,12 @@ class Planocontas_model extends App_Model
     public function __construct()
     {
         parent::__construct();
-    }
-
-
-    /**
-     * obter detalhe do tipo de conta
-     * @param integer $id member group id
-     * @param array $where
-     * @return object
-     */
-    public function obter_detalhes_tipo_conta()
-    {
-        $account_type_details = hooks()->apply_filters('before_get_account_type_details', [
-            [
-                'id' => 1,
-                'account_type_id' => 1,
-                'name' => _l('acc_accounts_receivable'),
-                'note' => _l('acc_accounts_receivable_note'),
-                'order' => 1,
-            ],
-            [
-                'id' => 2,
-                'account_type_id' => 2,
-                'name' => _l('acc_allowance_for_bad_debts'),
-                'note' => _l('acc_allowance_for_bad_debts_note'),
-                'order' => 2,
-            ],
-            [
-                'id' => 3,
-                'account_type_id' => 2,
-                'name' => _l('acc_assets_available_for_sale'),
-                'note' => _l('acc_assets_available_for_sale_note'),
-                'order' => 3,
-            ],
-            [
-                'id' => 4,
-                'account_type_id' => 2,
-                'name' => _l('acc_development_costs'),
-                'note' => _l('acc_development_costs_note'),
-                'order' => 4,
-            ],
-            [
-                'id' => 141,
-                'account_type_id' => 2,
-                'name' => _l('acc_employee_cash_advances'),
-                'note' => _l('acc_employee_cash_advances_note'),
-                'order' => 5,
-            ],
-            [
-                'id' => 5,
-                'account_type_id' => 2,
-                'name' => _l('acc_inventory'),
-                'note' => _l('acc_inventory_note'),
-                'order' => 5,
-            ],
-            [
-                'id' => 6,
-                'account_type_id' => 2,
-                'name' => _l('acc_investments_other'),
-                'note' => _l('acc_investments_other_note'),
-                'order' => 6,
-            ],
-            [
-                'id' => 7,
-                'account_type_id' => 2,
-                'name' => _l('acc_loans_to_officers'),
-                'note' => _l('acc_loans_to_officers_note'),
-                'order' => 7,
-            ],
-            [
-                'id' => 8,
-                'account_type_id' => 2,
-                'name' => _l('acc_loans_to_others'),
-                'note' => _l('acc_loans_to_others_note'),
-                'order' => 8,
-            ],
-            [
-                'id' => 9,
-                'account_type_id' => 2,
-                'name' => _l('acc_loans_to_shareholders'),
-                'note' => _l('acc_loans_to_shareholders_note'),
-                'order' => 9,
-            ],
-            [
-                'id' => 10,
-                'account_type_id' => 2,
-                'name' => _l('acc_other_current_assets'),
-                'note' => _l('acc_other_current_assets_note'),
-                'order' => 10,
-            ],
-            [
-                'id' => 11,
-                'account_type_id' => 2,
-                'name' => _l('acc_prepaid_expenses'),
-                'note' => _l('acc_prepaid_expenses_note'),
-                'order' => 11,
-            ],
-            [
-                'id' => 12,
-                'account_type_id' => 2,
-                'name' => _l('acc_retainage'),
-                'note' => _l('acc_retainage_note'),
-                'order' => 12,
-            ],
-            [
-                'id' => 13,
-                'account_type_id' => 2,
-                'name' => _l('acc_undeposited_funds'),
-                'note' => _l('acc_undeposited_funds_note'),
-                'order' => 13,
-            ],
-            [
-                'id' => 14,
-                'account_type_id' => 3,
-                'name' => _l('acc_bank'),
-                'note' => _l('acc_bank_note'),
-                'order' => 14,
-            ],
-            [
-                'id' => 15,
-                'account_type_id' => 3,
-                'name' => _l('acc_cash_and_cash_equivalents'),
-                'note' => _l('acc_cash_and_cash_equivalents_note'),
-                'order' => 15,
-            ],
-            [
-                'id' => 16,
-                'account_type_id' => 3,
-                'name' => _l('acc_cash_on_hand'),
-                'note' => _l('acc_cash_on_hand_note'),
-                'order' => 16,
-            ],
-            [
-                'id' => 17,
-                'account_type_id' => 3,
-                'name' => _l('acc_client_trust_account'),
-                'note' => _l('acc_client_trust_account_note'),
-                'order' => 17,
-            ],
-            [
-                'id' => 18,
-                'account_type_id' => 3,
-                'name' => _l('acc_money_market'),
-                'note' => _l('acc_money_market_note'),
-                'order' => 18,
-            ],
-            [
-                'id' => 19,
-                'account_type_id' => 3,
-                'name' => _l('acc_rents_held_in_trust'),
-                'note' => _l('acc_rents_held_in_trust_note'),
-                'order' => 19,
-            ],
-            [
-                'id' => 20,
-                'account_type_id' => 3,
-                'name' => _l('acc_savings'),
-                'note' => _l('acc_savings_note'),
-                'order' => 20,
-            ],
-            [
-                'id' => 21,
-                'account_type_id' => 4,
-                'name' => _l('acc_accumulated_depletion'),
-                'note' => _l('acc_accumulated_depletion_note'),
-                'order' => 21,
-            ],
-            [
-                'id' => 22,
-                'account_type_id' => 4,
-                'name' => _l('acc_accumulated_depreciation_on_property_plant_and_equipment'),
-                'note' => _l('acc_accumulated_depreciation_on_property_plant_and_equipment_note'),
-                'order' => 22,
-            ],
-            [
-                'id' => 23,
-                'account_type_id' => 4,
-                'name' => _l('acc_buildings'),
-                'note' => _l('acc_buildings_note'),
-                'order' => 23,
-            ],
-            [
-                'id' => 24,
-                'account_type_id' => 4,
-                'name' => _l('acc_depletable_assets'),
-                'note' => _l('acc_depletable_assets_note'),
-                'order' => 24,
-            ],
-            [
-                'id' => 25,
-                'account_type_id' => 4,
-                'name' => _l('acc_furniture_and_fixtures'),
-                'note' => _l('acc_furniture_and_fixtures_note'),
-                'order' => 25,
-            ],
-            [
-                'id' => 26,
-                'account_type_id' => 4,
-                'name' => _l('acc_land'),
-                'note' => _l('acc_land_note'),
-                'order' => 26,
-            ],
-            [
-                'id' => 27,
-                'account_type_id' => 4,
-                'name' => _l('acc_leasehold_improvements'),
-                'note' => _l('acc_leasehold_improvements_note'),
-                'order' => 27,
-            ],
-            [
-                'id' => 28,
-                'account_type_id' => 4,
-                'name' => _l('acc_machinery_and_equipment'),
-                'note' => _l('acc_machinery_and_equipment_note'),
-                'order' => 28,
-            ],
-            [
-                'id' => 29,
-                'account_type_id' => 4,
-                'name' => _l('acc_other_fixed_assets'),
-                'note' => _l('acc_other_fixed_assets_note'),
-                'order' => 29,
-            ],
-            [
-                'id' => 30,
-                'account_type_id' => 4,
-                'name' => _l('acc_vehicles'),
-                'note' => _l('acc_vehicles_note'),
-                'order' => 30,
-            ],
-            [
-                'id' => 31,
-                'account_type_id' => 5,
-                'name' => _l('acc_accumulated_amortisation_of_non_current_assets'),
-                'note' => _l('acc_accumulated_amortisation_of_non_current_assets_note'),
-                'order' => 31,
-            ],
-            [
-                'id' => 32,
-                'account_type_id' => 5,
-                'name' => _l('acc_assets_held_for_sale'),
-                'note' => _l('acc_assets_held_for_sale_note'),
-                'order' => 32,
-            ],
-            [
-                'id' => 33,
-                'account_type_id' => 5,
-                'name' => _l('acc_deferred_tax'),
-                'note' => _l('acc_deferred_tax_note'),
-                'order' => 33,
-            ],
-            [
-                'id' => 34,
-                'account_type_id' => 5,
-                'name' => _l('acc_goodwill'),
-                'note' => _l('acc_goodwill_note'),
-                'order' => 34,
-            ],
-            [
-                'id' => 35,
-                'account_type_id' => 5,
-                'name' => _l('acc_intangible_assets'),
-                'note' => _l('acc_intangible_assets_note'),
-                'order' => 35,
-            ],
-            [
-                'id' => 36,
-                'account_type_id' => 5,
-                'name' => _l('acc_lease_buyout'),
-                'note' => _l('acc_lease_buyout_note'),
-                'order' => 36,
-            ],
-            [
-                'id' => 37,
-                'account_type_id' => 5,
-                'name' => _l('acc_licences'),
-                'note' => _l('acc_licences_note'),
-                'order' => 37,
-            ],
-            [
-                'id' => 38,
-                'account_type_id' => 5,
-                'name' => _l('acc_long_term_investments'),
-                'note' => _l('acc_long_term_investments_note'),
-                'order' => 38,
-            ],
-            [
-                'id' => 39,
-                'account_type_id' => 5,
-                'name' => _l('acc_organisational_costs'),
-                'note' => _l('acc_organisational_costs_note'),
-                'order' => 39,
-            ],
-            [
-                'id' => 40,
-                'account_type_id' => 5,
-                'name' => _l('acc_other_non_current_assets'),
-                'note' => _l('acc_other_non_current_assets_note'),
-                'order' => 40,
-            ],
-            [
-                'id' => 41,
-                'account_type_id' => 5,
-                'name' => _l('acc_security_deposits'),
-                'note' => _l('acc_security_deposits_note'),
-                'order' => 41,
-            ],
-            [
-                'id' => 42,
-                'account_type_id' => 6,
-                'name' => _l('acc_accounts_payable'),
-                'note' => _l('acc_accounts_payable_note'),
-                'order' => 42,
-            ],
-            [
-                'id' => 43,
-                'account_type_id' => 7,
-                'name' => _l('acc_credit_card'),
-                'note' => _l('acc_credit_card_note'),
-                'order' => 43,
-            ],
-            [
-                'id' => 44,
-                'account_type_id' => 8,
-                'name' => _l('acc_accrued_liabilities'),
-                'note' => _l('acc_accrued_liabilities_note'),
-                'order' => 44,
-            ],
-            [
-                'id' => 45,
-                'account_type_id' => 8,
-                'name' => _l('acc_client_trust_accounts_liabilities'),
-                'note' => _l('acc_client_trust_accounts_liabilities_note'),
-                'order' => 45,
-            ],
-            [
-                'id' => 46,
-                'account_type_id' => 8,
-                'name' => _l('acc_current_tax_liability'),
-                'note' => _l('acc_current_tax_liability_note'),
-                'order' => 46,
-            ],
-            [
-                'id' => 47,
-                'account_type_id' => 8,
-                'name' => _l('acc_current_portion_of_obligations_under_finance_leases'),
-                'note' => _l('acc_current_portion_of_obligations_under_finance_leases_note'),
-                'order' => 47,
-            ],
-            [
-                'id' => 48,
-                'account_type_id' => 8,
-                'name' => _l('acc_dividends_payable'),
-                'note' => _l('acc_dividends_payable_note'),
-                'order' => 48,
-            ],
-            [
-                'id' => 50,
-                'account_type_id' => 8,
-                'name' => _l('acc_income_tax_payable'),
-                'note' => _l('acc_income_tax_payable_note'),
-                'order' => 50,
-            ],
-            [
-                'id' => 51,
-                'account_type_id' => 8,
-                'name' => _l('acc_insurance_payable'),
-                'note' => _l('acc_insurance_payable_note'),
-                'order' => 51,
-            ],
-            [
-                'id' => 52,
-                'account_type_id' => 8,
-                'name' => _l('acc_line_of_credit'),
-                'note' => _l('acc_line_of_credit_note'),
-                'order' => 52,
-            ],
-            [
-                'id' => 53,
-                'account_type_id' => 8,
-                'name' => _l('acc_loan_payable'),
-                'note' => _l('acc_loan_payable_note'),
-                'order' => 53,
-            ],
-            [
-                'id' => 54,
-                'account_type_id' => 8,
-                'name' => _l('acc_other_current_liabilities'),
-                'note' => _l('acc_other_current_liabilities_note'),
-                'order' => 54,
-            ],
-            [
-                'id' => 55,
-                'account_type_id' => 8,
-                'name' => _l('acc_payroll_clearing'),
-                'note' => _l('acc_payroll_clearing_note'),
-                'order' => 55,
-            ],
-            [
-                'id' => 56,
-                'account_type_id' => 8,
-                'name' => _l('acc_payroll_liabilities'),
-                'note' => _l('acc_payroll_liabilities_note'),
-                'order' => 56,
-            ],
-            [
-                'id' => 58,
-                'account_type_id' => 8,
-                'name' => _l('acc_prepaid_expenses_payable'),
-                'note' => _l('acc_prepaid_expenses_payable_note'),
-                'order' => 58,
-            ],
-            [
-                'id' => 59,
-                'account_type_id' => 8,
-                'name' => _l('acc_rents_in_trust_liability'),
-                'note' => _l('acc_rents_in_trust_liability_note'),
-                'order' => 59,
-            ],
-            [
-                'id' => 60,
-                'account_type_id' => 8,
-                'name' => _l('acc_sales_and_service_tax_payable'),
-                'note' => _l('acc_sales_and_service_tax_payable_note'),
-                'order' => 60,
-            ],
-            [
-                'id' => 61,
-                'account_type_id' => 9,
-                'name' => _l('acc_accrued_holiday_payable'),
-                'note' => _l('acc_accrued_holiday_payable_note'),
-                'order' => 61,
-            ],
-            [
-                'id' => 62,
-                'account_type_id' => 9,
-                'name' => _l('acc_accrued_non_current_liabilities'),
-                'note' => _l('acc_accrued_non_current_liabilities_note'),
-                'order' => 62,
-            ],
-            [
-                'id' => 63,
-                'account_type_id' => 9,
-                'name' => _l('acc_liabilities_related_to_assets_held_for_sale'),
-                'note' => _l('acc_liabilities_related_to_assets_held_for_sale_note'),
-                'order' => 63,
-            ],
-            [
-                'id' => 64,
-                'account_type_id' => 9,
-                'name' => _l('acc_long_term_debt'),
-                'note' => _l('acc_long_term_debt_note'),
-                'order' => 64,
-            ],
-            [
-                'id' => 65,
-                'account_type_id' => 9,
-                'name' => _l('acc_notes_payable'),
-                'note' => _l('acc_notes_payable_note'),
-                'order' => 65,
-            ],
-            [
-                'id' => 66,
-                'account_type_id' => 9,
-                'name' => _l('acc_other_non_current_liabilities'),
-                'note' => _l('acc_other_non_current_liabilities_note'),
-                'order' => 66,
-            ],
-            [
-                'id' => 67,
-                'account_type_id' => 9,
-                'name' => _l('acc_shareholder_potes_payable'),
-                'note' => _l('acc_shareholder_potes_payable_note'),
-                'order' => 67,
-            ],
-            [
-                'id' => 68,
-                'account_type_id' => 10,
-                'name' => _l('acc_accumulated_adjustment'),
-                'note' => _l('acc_accumulated_adjustment_note'),
-                'order' => 68,
-            ],
-            [
-                'id' => 69,
-                'account_type_id' => 10,
-                'name' => _l('acc_dividend_disbursed'),
-                'note' => _l('acc_dividend_disbursed_note'),
-                'order' => 69,
-            ],
-            [
-                'id' => 70,
-                'account_type_id' => 10,
-                'name' => _l('acc_equity_in_earnings_of_subsidiaries'),
-                'note' => _l('acc_equity_in_earnings_of_subsidiaries_note'),
-                'order' => 70,
-            ],
-            [
-                'id' => 71,
-                'account_type_id' => 10,
-                'name' => _l('acc_opening_balance_equity'),
-                'note' => _l('acc_opening_balance_equity_note'),
-                'order' => 71,
-            ],
-            [
-                'id' => 72,
-                'account_type_id' => 10,
-                'name' => _l('acc_ordinary_shares'),
-                'note' => _l('acc_ordinary_shares_note'),
-                'order' => 72,
-            ],
-            [
-                'id' => 73,
-                'account_type_id' => 10,
-                'name' => _l('acc_other_comprehensive_income'),
-                'note' => _l('acc_other_comprehensive_income_note'),
-                'order' => 73,
-            ],
-            [
-                'id' => 74,
-                'account_type_id' => 10,
-                'name' => _l('acc_owner_equity'),
-                'note' => _l('acc_owner_equity_note'),
-                'order' => 74,
-            ],
-            [
-                'id' => 75,
-                'account_type_id' => 10,
-                'name' => _l('acc_paid_in_capital_or_surplus'),
-                'note' => _l('acc_paid_in_capital_or_surplus_note'),
-                'order' => 75,
-            ],
-            [
-                'id' => 76,
-                'account_type_id' => 10,
-                'name' => _l('acc_partner_contributions'),
-                'note' => _l('acc_partner_contributions_note'),
-                'order' => 76,
-            ],
-            [
-                'id' => 77,
-                'account_type_id' => 10,
-                'name' => _l('acc_partner_distributions'),
-                'note' => _l('acc_partner_distributions_note'),
-                'order' => 77,
-            ],
-            [
-                'id' => 78,
-                'account_type_id' => 10,
-                'name' => _l('acc_partner_equity'),
-                'note' => _l('acc_partner_equity_note'),
-                'order' => 78,
-            ],
-            [
-                'id' => 79,
-                'account_type_id' => 10,
-                'name' => _l('acc_preferred_shares'),
-                'note' => _l('acc_preferred_shares_note'),
-                'order' => 79,
-            ],
-            [
-                'id' => 80,
-                'account_type_id' => 10,
-                'name' => _l('acc_retained_earnings'),
-                'note' => _l('acc_retained_earnings_note'),
-                'order' => 80,
-            ],
-            [
-                'id' => 81,
-                'account_type_id' => 10,
-                'name' => _l('acc_share_capital'),
-                'note' => _l('acc_share_capital_note'),
-                'order' => 81,
-            ],
-            [
-                'id' => 82,
-                'account_type_id' => 10,
-                'name' => _l('acc_treasury_shares'),
-                'note' => _l('acc_treasury_shares_note'),
-                'order' => 82,
-            ],
-            [
-                'id' => 83,
-                'account_type_id' => 11,
-                'name' => _l('acc_discounts_refunds_given'),
-                'note' => _l('acc_discounts_refunds_given_note'),
-                'order' => 83,
-            ],
-            [
-                'id' => 84,
-                'account_type_id' => 11,
-                'name' => _l('acc_non_profit_income'),
-                'note' => _l('acc_non_profit_income_note'),
-                'order' => 84,
-            ],
-            [
-                'id' => 85,
-                'account_type_id' => 11,
-                'name' => _l('acc_other_primary_income'),
-                'note' => _l('acc_other_primary_income_note'),
-                'order' => 85,
-            ],
-            [
-                'id' => 86,
-                'account_type_id' => 11,
-                'name' => _l('acc_revenue_general'),
-                'note' => _l('acc_revenue_general_note'),
-                'order' => 86,
-            ],
-            [
-                'id' => 87,
-                'account_type_id' => 11,
-                'name' => _l('acc_sales_retail'),
-                'note' => _l('acc_sales_retail_note'),
-                'order' => 87,
-            ],
-            [
-                'id' => 88,
-                'account_type_id' => 11,
-                'name' => _l('acc_sales_wholesale'),
-                'note' => _l('acc_sales_wholesale_note'),
-                'order' => 88,
-            ],
-            [
-                'id' => 89,
-                'account_type_id' => 11,
-                'name' => _l('acc_sales_of_product_income'),
-                'note' => _l('acc_sales_of_product_income_note'),
-                'order' => 89,
-            ],
-            [
-                'id' => 90,
-                'account_type_id' => 11,
-                'name' => _l('acc_service_fee_income'),
-                'note' => _l('acc_service_fee_income_note'),
-                'order' => 90,
-            ],
-            [
-                'id' => 91,
-                'account_type_id' => 11,
-                'name' => _l('acc_unapplied_cash_payment_income'),
-                'note' => _l('acc_unapplied_cash_payment_income_note'),
-                'order' => 91,
-            ],
-            [
-                'id' => 92,
-                'account_type_id' => 12,
-                'name' => _l('acc_dividend_income'),
-                'note' => _l('acc_dividend_income_note'),
-                'order' => 92,
-            ],
-            [
-                'id' => 93,
-                'account_type_id' => 12,
-                'name' => _l('acc_interest_earned'),
-                'note' => _l('acc_interest_earned_note'),
-                'order' => 93,
-            ],
-            [
-                'id' => 94,
-                'account_type_id' => 12,
-                'name' => _l('acc_loss_on_disposal_of_assets'),
-                'note' => _l('acc_loss_on_disposal_of_assets_note'),
-                'order' => 94,
-            ],
-            [
-                'id' => 95,
-                'account_type_id' => 12,
-                'name' => _l('acc_other_investment_income'),
-                'note' => _l('acc_other_investment_income_note'),
-                'order' => 95,
-            ],
-            [
-                'id' => 96,
-                'account_type_id' => 12,
-                'name' => _l('acc_other_miscellaneous_income'),
-                'note' => _l('acc_other_miscellaneous_income_note'),
-                'order' => 96,
-            ],
-            [
-                'id' => 97,
-                'account_type_id' => 12,
-                'name' => _l('acc_other_operating_income'),
-                'note' => _l('acc_other_operating_income_note'),
-                'order' => 97,
-            ],
-            [
-                'id' => 98,
-                'account_type_id' => 12,
-                'name' => _l('acc_tax_exempt_interest'),
-                'note' => _l('acc_tax_exempt_interest_note'),
-                'order' => 98,
-            ],
-            [
-                'id' => 99,
-                'account_type_id' => 12,
-                'name' => _l('acc_unrealised_loss_on_securities_net_of_tax'),
-                'note' => _l('acc_unrealised_loss_on_securities_net_of_tax_note'),
-                'order' => 99,
-            ],
-            [
-                'id' => 100,
-                'account_type_id' => 13,
-                'name' => _l('acc_cost_of_labour_cos'),
-                'note' => _l('acc_cost_of_labour_cos_note'),
-                'order' => 100,
-            ],
-            [
-                'id' => 101,
-                'account_type_id' => 13,
-                'name' => _l('acc_equipment_rental_cos'),
-                'note' => _l('acc_equipment_rental_cos_note'),
-                'order' => 101,
-            ],
-            [
-                'id' => 102,
-                'account_type_id' => 13,
-                'name' => _l('acc_freight_and_delivery_cos'),
-                'note' => _l('acc_freight_and_delivery_cos_note'),
-                'order' => 102,
-            ],
-            [
-                'id' => 103,
-                'account_type_id' => 13,
-                'name' => _l('acc_other_costs_of_sales_cos'),
-                'note' => _l('acc_other_costs_of_sales_cos_note'),
-                'order' => 103,
-            ],
-            [
-                'id' => 104,
-                'account_type_id' => 13,
-                'name' => _l('acc_supplies_and_materials_cos'),
-                'note' => _l('acc_supplies_and_materials_cos_note'),
-                'order' => 104,
-            ],
-            [
-                'id' => 105,
-                'account_type_id' => 14,
-                'name' => _l('acc_advertising_promotional'),
-                'note' => _l('acc_advertising_promotional_note'),
-                'order' => 105,
-            ],
-            [
-                'id' => 106,
-                'account_type_id' => 14,
-                'name' => _l('acc_amortisation_expense'),
-                'note' => _l('acc_amortisation_expense_note'),
-                'order' => 106,
-            ],
-            [
-                'id' => 107,
-                'account_type_id' => 14,
-                'name' => _l('acc_auto'),
-                'note' => _l('acc_auto_note'),
-                'order' => 107,
-            ],
-            [
-                'id' => 108,
-                'account_type_id' => 14,
-                'name' => _l('acc_bad_debts'),
-                'note' => _l('acc_bad_debts_note'),
-                'order' => 108,
-            ],
-            [
-                'id' => 109,
-                'account_type_id' => 14,
-                'name' => _l('acc_bank_charges'),
-                'note' => _l('acc_bank_charges_note'),
-                'order' => 109,
-            ],
-            [
-                'id' => 110,
-                'account_type_id' => 14,
-                'name' => _l('acc_charitable_contributions'),
-                'note' => _l('acc_charitable_contributions_note'),
-                'order' => 110,
-            ],
-            [
-                'id' => 111,
-                'account_type_id' => 14,
-                'name' => _l('acc_commissions_and_fees'),
-                'note' => _l('acc_commissions_and_fees_note'),
-                'order' => 111,
-            ],
-            [
-                'id' => 112,
-                'account_type_id' => 14,
-                'name' => _l('acc_cost_of_labour'),
-                'note' => _l('acc_cost_of_labour_note'),
-                'order' => 112,
-            ],
-            [
-                'id' => 113,
-                'account_type_id' => 14,
-                'name' => _l('acc_dues_and_subscriptions'),
-                'note' => _l('acc_dues_and_subscriptions_note'),
-                'order' => 113,
-            ],
-            [
-                'id' => 114,
-                'account_type_id' => 14,
-                'name' => _l('acc_equipment_rental'),
-                'note' => _l('acc_equipment_rental_note'),
-                'order' => 114,
-            ],
-            [
-                'id' => 115,
-                'account_type_id' => 14,
-                'name' => _l('acc_finance_costs'),
-                'note' => _l('acc_finance_costs_note'),
-                'order' => 115,
-            ],
-            [
-                'id' => 116,
-                'account_type_id' => 14,
-                'name' => _l('acc_income_tax_expense'),
-                'note' => _l('acc_income_tax_expense_note'),
-                'order' => 116,
-            ],
-            [
-                'id' => 117,
-                'account_type_id' => 14,
-                'name' => _l('acc_insurance'),
-                'note' => _l('acc_insurance_note'),
-                'order' => 117,
-            ],
-            [
-                'id' => 118,
-                'account_type_id' => 14,
-                'name' => _l('acc_interest_paid'),
-                'note' => _l('acc_interest_paid_note'),
-                'order' => 118,
-            ],
-            [
-                'id' => 119,
-                'account_type_id' => 14,
-                'name' => _l('acc_legal_and_professional_fees'),
-                'note' => _l('acc_legal_and_professional_fees_note'),
-                'order' => 119,
-            ],
-            [
-                'id' => 120,
-                'account_type_id' => 14,
-                'name' => _l('acc_loss_on_discontinued_operations_net_of_tax'),
-                'note' => _l('acc_loss_on_discontinued_operations_net_of_tax_note'),
-                'order' => 120,
-            ],
-            [
-                'id' => 121,
-                'account_type_id' => 14,
-                'name' => _l('acc_management_compensation'),
-                'note' => _l('acc_management_compensation_note'),
-                'order' => 121,
-            ],
-            [
-                'id' => 122,
-                'account_type_id' => 14,
-                'name' => _l('acc_meals_and_entertainment'),
-                'note' => _l('acc_meals_and_entertainment_note'),
-                'order' => 122,
-            ],
-            [
-                'id' => 123,
-                'account_type_id' => 14,
-                'name' => _l('acc_office_general_administrative_expenses'),
-                'note' => _l('acc_office_general_administrative_expenses_note'),
-                'order' => 123,
-            ],
-            [
-                'id' => 124,
-                'account_type_id' => 14,
-                'name' => _l('acc_other_miscellaneous_service_cost'),
-                'note' => _l('acc_other_miscellaneous_service_cost_note'),
-                'order' => 124,
-            ],
-            [
-                'id' => 125,
-                'account_type_id' => 14,
-                'name' => _l('acc_other_selling_expenses'),
-                'note' => _l('acc_other_selling_expenses_note'),
-                'order' => 125,
-            ],
-            [
-                'id' => 126,
-                'account_type_id' => 14,
-                'name' => _l('acc_payroll_expenses'),
-                'note' => _l('acc_payroll_expenses_note'),
-                'order' => 126,
-            ],
-            [
-                'id' => 127,
-                'account_type_id' => 14,
-                'name' => _l('acc_rent_or_lease_of_buildings'),
-                'note' => _l('acc_rent_or_lease_of_buildings_note'),
-                'order' => 127,
-            ],
-            [
-                'id' => 128,
-                'account_type_id' => 14,
-                'name' => _l('acc_repair_and_maintenance'),
-                'note' => _l('acc_repair_and_maintenance_note'),
-                'order' => 128,
-            ],
-            [
-                'id' => 129,
-                'account_type_id' => 14,
-                'name' => _l('acc_shipping_and_delivery_expense'),
-                'note' => _l('acc_shipping_and_delivery_expense_note'),
-                'order' => 129,
-            ],
-            [
-                'id' => 130,
-                'account_type_id' => 14,
-                'name' => _l('acc_supplies_and_materials'),
-                'note' => _l('acc_supplies_and_materials_note'),
-                'order' => 130,
-            ],
-            [
-                'id' => 131,
-                'account_type_id' => 14,
-                'name' => _l('acc_taxes_paid'),
-                'note' => _l('acc_taxes_paid_note'),
-                'order' => 131,
-            ],
-            [
-                'id' => 132,
-                'account_type_id' => 14,
-                'name' => _l('acc_travel_expenses_general_and_admin_expenses'),
-                'note' => _l('acc_travel_expenses_general_and_admin_expenses_note'),
-                'order' => 132,
-            ],
-            [
-                'id' => 133,
-                'account_type_id' => 14,
-                'name' => _l('acc_travel_expenses_selling_expense'),
-                'note' => _l('acc_travel_expenses_selling_expense_note'),
-                'order' => 133,
-            ],
-            [
-                'id' => 134,
-                'account_type_id' => 14,
-                'name' => _l('acc_unapplied_cash_bill_payment_expense'),
-                'note' => _l('acc_unapplied_cash_bill_payment_expense_note'),
-                'order' => 134,
-            ],
-            [
-                'id' => 135,
-                'account_type_id' => 14,
-                'name' => _l('acc_utilities'),
-                'note' => _l('acc_utilities_note'),
-                'order' => 135,
-            ],
-            [
-                'id' => 136,
-                'account_type_id' => 15,
-                'name' => _l('acc_amortisation'),
-                'note' => _l('acc_amortisation_note'),
-                'order' => 136,
-            ],
-            [
-                'id' => 137,
-                'account_type_id' => 15,
-                'name' => _l('acc_depreciation'),
-                'note' => _l('acc_depreciation_note'),
-                'order' => 137,
-            ],
-            [
-                'id' => 138,
-                'account_type_id' => 15,
-                'name' => _l('acc_exchange_gain_or_loss'),
-                'note' => _l('acc_exchange_gain_or_loss_note'),
-                'order' => 138,
-            ],
-            [
-                'id' => 139,
-                'account_type_id' => 15,
-                'name' => _l('acc_other_expense'),
-                'note' => _l('acc_other_expense_note'),
-                'order' => 139,
-            ],
-            [
-                'id' => 140,
-                'account_type_id' => 15,
-                'name' => _l('acc_penalties_and_settlements'),
-                'note' => _l('acc_penalties_and_settlements_note'),
-                'order' => 140,
-            ],
-        ]);
-
-        usort($account_type_details, function ($a, $b) {
-            return $a['order'] - $b['order'];
-        });
-
-        $account_type_details_2 = $this->db->get(db_prefix() . 'acc_account_type_details')->result_array();
-
-        return array_merge($account_type_details, $account_type_details_2);
-    }
-
-    /**
-     * add default account
-     */
-    public function add_default_account()
-    {
-        if ($this->get_accounts()) {
-            return false;
-        }
-
-        $accounts = [
-            [
-                'name' => '',
-                'key_name' => 'acc_accounts_receivable',
-                'account_type_id' => 1,
-                'account_detail_type_id' => 1,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_accrued_holiday_payable',
-                'account_type_id' => 9,
-                'account_detail_type_id' => 61,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_accrued_liabilities',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 44,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_accrued_non_current_liabilities',
-                'account_type_id' => 9,
-                'account_detail_type_id' => 62,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_accumulated_depreciation_on_property_plant_and_equipment',
-                'account_type_id' => 4,
-                'account_detail_type_id' => 22,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_allowance_for_bad_debts',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 2,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_amortisation_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 106,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_assets_held_for_sale',
-                'account_type_id' => 5,
-                'account_detail_type_id' => 32,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_available_for_sale_assets_short_term',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 3,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_bad_debts',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 108,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_bank_charges',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 109,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_billable_expense_income',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 89,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_cash_and_cash_equivalents',
-                'account_type_id' => 3,
-                'account_detail_type_id' => 15,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_change_in_inventory_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_commissions_and_fees',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 111,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_cost_of_sales',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 104,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_deferred_tax_assets',
-                'account_type_id' => 5,
-                'account_detail_type_id' => 33,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_direct_labour_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_discounts_given_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_dividend_disbursed',
-                'account_type_id' => 10,
-                'account_detail_type_id' => 69,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_dividend_income',
-                'account_type_id' => 12,
-                'account_detail_type_id' => 92,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_dividends_payable',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 48,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_dues_and_subscriptions',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 113,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_equipment_rental',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 114,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_equity_in_earnings_of_subsidiaries',
-                'account_type_id' => 10,
-                'account_detail_type_id' => 70,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_freight_and_delivery_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_goodwill',
-                'account_type_id' => 5,
-                'account_detail_type_id' => 34,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_income_tax_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 116,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_income_tax_payable',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 50,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_insurance_disability',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 117,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_insurance_general',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 117,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_insurance_liability',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 117,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_intangibles',
-                'account_type_id' => 5,
-                'account_detail_type_id' => 35,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_interest_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 118,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_interest_income',
-                'account_type_id' => 12,
-                'account_detail_type_id' => 93,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_inventory',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 5,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_inventory_asset',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 5,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_legal_and_professional_fees',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 119,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_liabilities_related_to_assets_held_for_sale',
-                'account_type_id' => 9,
-                'account_detail_type_id' => 63,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_long_term_debt',
-                'account_type_id' => 9,
-                'account_detail_type_id' => 64,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_long_term_investments',
-                'account_type_id' => 5,
-                'account_detail_type_id' => 38,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_loss_on_discontinued_operations_net_of_tax',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 120,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_loss_on_disposal_of_assets',
-                'account_type_id' => 12,
-                'account_detail_type_id' => 94,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_management_compensation',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 121,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_materials_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_meals_and_entertainment',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 122,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_office_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 123,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_comprehensive_income',
-                'account_type_id' => 10,
-                'account_detail_type_id' => 73,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_general_and_administrative_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 123,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_operating_income_expenses',
-                'account_type_id' => 12,
-                'account_detail_type_id' => 97,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_selling_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 125,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_other_type_of_expenses_advertising_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 105,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_overhead_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_payroll_clearing',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 55,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_payroll_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 126,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_payroll_liabilities',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 56,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_prepaid_expenses',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 11,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_property_plant_and_equipment',
-                'account_type_id' => 4,
-                'account_detail_type_id' => 26,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_purchases',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 130,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_reconciliation_discrepancies',
-                'account_type_id' => 15,
-                'account_detail_type_id' => 139,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_rent_or_lease_payments',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 127,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_repair_and_maintenance',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 128,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_retained_earnings',
-                'account_type_id' => 10,
-                'account_detail_type_id' => 80,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_revenue_general',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 86,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_sales',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 89,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_sales_retail',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 87,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_sales_wholesale',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 88,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_sales_of_product_income',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 89,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_share_capital',
-                'account_type_id' => 10,
-                'account_detail_type_id' => 81,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_shipping_and_delivery_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 129,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_short_term_debit',
-                'account_type_id' => 8,
-                'account_detail_type_id' => 54,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_stationery_and_printing',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 123,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_subcontractors_cos',
-                'account_type_id' => 13,
-                'account_detail_type_id' => 100,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_supplies',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 130,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_travel_expenses_general_and_admin_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 132,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_travel_expenses_selling_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 133,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_unapplied_cash_payment_income',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 91,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_uncategorised_asset',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 10,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_uncategorised_expense',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 124,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_uncategorised_income',
-                'account_type_id' => 11,
-                'account_detail_type_id' => 89,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_undeposited_funds',
-                'account_type_id' => 2,
-                'account_detail_type_id' => 13,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_unrealised_loss_on_securities_net_of_tax',
-                'account_type_id' => 12,
-                'account_detail_type_id' => 99,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_utilities',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 135,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_wage_expenses',
-                'account_type_id' => 14,
-                'account_detail_type_id' => 126,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_credit_card',
-                'account_type_id' => 7,
-                'account_detail_type_id' => 43,
-            ],
-            [
-                'name' => '',
-                'key_name' => 'acc_accounts_payable',
-                'account_type_id' => 6,
-                'account_detail_type_id' => 42,
-            ],
-        ];
-
-        $affectedRows = $this->db->insert_batch(db_prefix() . 'acc_accounts', $accounts);
-
-        if ($affectedRows > 0) {
-            $this->db->where('name', 'acc_add_default_account');
-            $this->db->update(db_prefix() . 'options', [
-                'value' => 1,
-            ]);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * add default account new
-     */
-    public function add_default_account_new()
-    {
-        $this->db->where('key_name != ""');
-        $affectedRows = $this->db->update(db_prefix() . 'acc_accounts', ['default_account' => 1]);
-
-        if ($affectedRows > 0) {
-            $this->db->where('name', 'add_default_account_new');
-            $this->db->update(db_prefix() . 'options', [
-                'value' => 1,
-            ]);
-
-            return true;
-        }
-
-        return false;
+        $this->load->model('planocontas_model');
     }
 
     /**
      * Atualizar Configuracoes Gerais
-     *
      * @param array $data The data
-     *
      * @return     boolean
      */
     public function atualiza_configuracoes_gerais($data)
@@ -1655,56 +92,11 @@ class Planocontas_model extends App_Model
     }
 
     /**
-     * get accounts
-     * @param integer $id member group id
-     * @param array $where
-     * @return object
-     */
-    public function get_accounts($id = '', $where = [])
-    {
-        if (is_numeric($id)) {
-            $this->db->where('id', $id);
-            return $this->db->get(db_prefix() . 'acc_accounts')->row();
-        }
-
-        $this->db->where($where);
-        $this->db->where('active', 1);
-        $this->db->order_by('account_type_id,account_detail_type_id', 'desc');
-        $accounts = $this->db->get(db_prefix() . 'acc_accounts')->result_array();
-
-        $account_types = $this->accounting_model->get_account_types();
-        $detail_types = $this->accounting_model->get_account_type_details();
-
-        $account_type_name = [];
-        $detail_type_name = [];
-
-        foreach ($account_types as $key => $value) {
-            $account_type_name[$value['id']] = $value['name'];
-        }
-
-        foreach ($detail_types as $key => $value) {
-            $detail_type_name[$value['id']] = $value['name'];
-        }
-
-        foreach ($accounts as $key => $value) {
-            if ($value['name'] == '' && $value['key_name'] != '') {
-                $accounts[$key]['name'] = _l($value['key_name']);
-            }
-            $_account_type_name = isset($account_type_name[$value['account_type_id']]) ? $account_type_name[$value['account_type_id']] : '';
-            $_detail_type_name = isset($detail_type_name[$value['account_detail_type_id']]) ? $detail_type_name[$value['account_detail_type_id']] : '';
-            $accounts[$key]['account_type_name'] = $_account_type_name;
-            $accounts[$key]['detail_type_name'] = $_detail_type_name;
-        }
-
-        return $accounts;
-    }
-
-    /**
      * add new account
      * @param array $data
      * @return integer
      */
-    public function add_account($data)
+    public function adicionar_conta($data)
     {
         if (isset($data['id'])) {
             unset($data['id']);
@@ -1865,7 +257,7 @@ class Planocontas_model extends App_Model
      * @param integer $id
      * @return integer
      */
-    public function update_account($data, $id)
+    public function atualizar_conta($data, $id)
     {
         if (isset($data['id'])) {
             unset($data['id']);
@@ -8797,16 +7189,16 @@ class Planocontas_model extends App_Model
 
     /**
      * get account data tables
-     * @param array $aColumns table columns
-     * @param mixed $sIndexColumn main column in table for bettter performing
-     * @param string $sTable table name
-     * @param array $join join other tables
-     * @param array $where perform where in query
-     * @param array $additionalSelect select additional fields
-     * @param string $sGroupBy group results
+     * @param array $aColumns colunas da tabela
+     * @param mixed $sIndexColumn indice principal para melhor performance
+     * @param string $sTable nome da tabela
+     * @param array $join join para outras tabelas
+     * @param array $where executa where
+     * @param array $additionalSelect seleciona campos adicionais
+     * @param string $sGroupBy agrupado por
      * @return array
      */
-    function get_account_data_tables($aColumns, $sIndexColumn, $sTable, $join = [], $where = [], $additionalSelect = [], $sGroupBy = '', $searchAs = [])
+    function obter_datatable_planocontas($aColumns, $sIndexColumn, $sTable, $join = [], $where = [], $additionalSelect = [], $sGroupBy = '', $searchAs = [])
     {
         $CI = &get_instance();
         $__post = $CI->input->post();
@@ -8823,25 +7215,20 @@ class Planocontas_model extends App_Model
         }
 
         if (!$this->input->post('ft_account')) {
-            $this->db->where('(parent_account is null or parent_account = 0)');
+            $this->db->where('(conta_pai is null or conta_pai = 0)');
         }
 
-        $accounting_method = get_option('acc_accounting_method');
+        // Pega o somatorio de debito e creidto do histórico
+        $debit = '(SELECT sum(debito) as debito FROM ' . db_prefix() .
+            'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' .
+            db_prefix() . 'fin_planocontas.id))';
+        $credit = '(SELECT sum(credito) as credito FROM ' . db_prefix() . 'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' . db_prefix() . 'fin_planocontas.id))';
 
-        if ($accounting_method == 'cash') {
-            $debit = '(SELECT sum(debit) as debit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id) AND ((' . db_prefix() . 'acc_account_history.rel_type = "invoice" AND ' . db_prefix() . 'acc_account_history.paid = 1) or rel_type != "invoice")) as debit';
-            $credit = '(SELECT sum(credit) as credit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id) AND ((' . db_prefix() . 'acc_account_history.rel_type = "invoice" AND ' . db_prefix() . 'acc_account_history.paid = 1) or rel_type != "invoice")) as credit';
-        } else {
-            $debit = '(SELECT sum(debit) as debit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id)) as debit';
-            $credit = '(SELECT sum(credit) as credit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id)) as credit';
-        }
-
-
-        $this->db->select('id, number, name, parent_account, account_type_id, account_detail_type_id, balance, key_name, active, number, description, balance_as_of, ' . $debit . ', ' . $credit . ', default_account');
-        $this->db->limit(intval($CI->input->post('length')), intval($CI->input->post('start')));
+        $this->db->select('id, numeroconta, nomeconta, conta_pai, tipo_conta, saldo,chave_conta, ativo, descricao,  ' . $debit . ', ' . $credit );
+        // $this->db->limit(intval($CI->input->post('length')), intval($CI->input->post('start')));
         $this->db->order_by('id', 'desc');
 
-        $accounts = $this->db->get(db_prefix() . 'acc_accounts')->result_array();
+        $accounts = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
 
         $rResult = [];
 
@@ -8851,9 +7238,7 @@ class Planocontas_model extends App_Model
         }
 
         /* Data set length after filtering */
-        $sQuery = '
-        SELECT FOUND_ROWS()
-        ';
+        $sQuery = 'SELECT FOUND_ROWS()';
         $_query = $CI->db->query($sQuery)->result_array();
         $iFilteredTotal = $_query[0]['FOUND_ROWS()'];
 
@@ -8890,14 +7275,17 @@ class Planocontas_model extends App_Model
      */
     public function get_recursive_account($accounts, $account_id, $where, $number)
     {
-        $this->db->select('id, number, name, parent_account, account_type_id, account_detail_type_id, balance, key_name, active, number, description, balance_as_of, (SELECT sum(debit) as debit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id)) as debit, (SELECT sum(credit) as credit FROM ' . db_prefix() . 'acc_account_history where (account = ' . db_prefix() . 'acc_accounts.id or parent_account = ' . db_prefix() . 'acc_accounts.id)) as credit, default_account');
-        if ($where != '') {
+        $this->db->select('id, numeroconta, nomeconta, conta_pai, tipo_conta, saldo,chave_conta, ativo, descricao');
+        if ($where != '')
+        {
             $this->db->where($where);
         }
 
-        $this->db->where('parent_account', $account_id);
-        $this->db->order_by('number,name', 'asc');
-        $account_list = $this->db->get(db_prefix() . 'acc_accounts')->result_array();
+        $this->db->where('conta_pai', $account_id);
+        $this->db->order_by('numero, nomeconta', 'asc');
+        $account_list = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
+
+        echo(var_dump($accoun_list));
 
         if ($account_list) {
             foreach ($account_list as $key => $value) {
@@ -10899,78 +9287,13 @@ class Planocontas_model extends App_Model
         $tipos_de_conta = hooks()->apply_filters('before_get_account_types', [
             [
                 'id' => 1,
-                'name' => _l('acc_accounts_receivable'),
+                'name' => 'Crédito',
                 'order' => 1,
             ],
             [
                 'id' => 2,
-                'name' => _l('acc_current_assets'),
+                'name' => 'Débito',
                 'order' => 2,
-            ],
-            [
-                'id' => 3,
-                'name' => _l('acc_cash_and_cash_equivalents'),
-                'order' => 3,
-            ],
-            [
-                'id' => 4,
-                'name' => _l('acc_fixed_assets'),
-                'order' => 4,
-            ],
-            [
-                'id' => 5,
-                'name' => _l('acc_non_current_assets'),
-                'order' => 5,
-            ],
-            [
-                'id' => 6,
-                'name' => _l('acc_accounts_payable'),
-                'order' => 6,
-            ],
-            [
-                'id' => 7,
-                'name' => _l('acc_credit_card'),
-                'order' => 7,
-            ],
-            [
-                'id' => 8,
-                'name' => _l('acc_current_liabilities'),
-                'order' => 8,
-            ],
-            [
-                'id' => 9,
-                'name' => _l('acc_non_current_liabilities'),
-                'order' => 9,
-            ],
-            [
-                'id' => 10,
-                'name' => _l('acc_owner_equity'),
-                'order' => 10,
-            ],
-            [
-                'id' => 11,
-                'name' => _l('acc_income'),
-                'order' => 11,
-            ],
-            [
-                'id' => 12,
-                'name' => _l('acc_other_income'),
-                'order' => 12,
-            ],
-            [
-                'id' => 13,
-                'name' => _l('acc_cost_of_sales'),
-                'order' => 13,
-            ],
-            [
-                'id' => 14,
-                'name' => _l('acc_expenses'),
-                'order' => 14,
-            ],
-            [
-                'id' => 15,
-                'name' => _l('acc_other_expense'),
-                'order' => 15,
             ],
         ]);
 
@@ -10981,9 +9304,54 @@ class Planocontas_model extends App_Model
         return $tipos_de_conta;
     }
 
-
     /**
      * get accounts
+     * @param integer $id member group id
+     * @param array $where
+     * @return object
+     */
+    public function get_accounts($id = '', $where = [])
+    {
+        if (is_numeric($id)) {
+            $this->db->where('id', $id);
+            return $this->db->get(db_prefix() . 'acc_accounts')->row();
+        }
+
+        $this->db->where($where);
+        $this->db->where('active', 1);
+        $this->db->order_by('account_type_id,account_detail_type_id', 'desc');
+        $accounts = $this->db->get(db_prefix() . 'acc_accounts')->result_array();
+
+        $account_types = $this->accounting_model->get_account_types();
+        $detail_types = $this->accounting_model->get_account_type_details();
+
+        $account_type_name = [];
+        $detail_type_name = [];
+
+        foreach ($account_types as $key => $value) {
+            $account_type_name[$value['id']] = $value['name'];
+        }
+
+        foreach ($detail_types as $key => $value) {
+            $detail_type_name[$value['id']] = $value['name'];
+        }
+
+        foreach ($accounts as $key => $value) {
+            if ($value['name'] == '' && $value['key_name'] != '') {
+                $accounts[$key]['name'] = _l($value['key_name']);
+            }
+            $_account_type_name = isset($account_type_name[$value['account_type_id']]) ? $account_type_name[$value['account_type_id']] : '';
+            $_detail_type_name = isset($detail_type_name[$value['account_detail_type_id']]) ? $detail_type_name[$value['account_detail_type_id']] : '';
+            $accounts[$key]['account_type_name'] = $_account_type_name;
+            $accounts[$key]['detail_type_name'] = $_detail_type_name;
+        }
+
+        return $accounts;
+    }
+
+
+    /**
+     * Obter as contas do Plano de Contas
      * @param  integer $id    member group id
      * @param  array  $where
      * @return object
@@ -11000,32 +9368,30 @@ class Planocontas_model extends App_Model
         $this->db->order_by('tipo_conta', 'desc');
         $contas = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
 
-        $tipos_conta = $this->obter_tipos_conta();
-        $detalhes_tipo = $this->obter_detalhes_tipo_conta();
 
-        $tipo_conta_nome = [];
-        $detalhes_tipo_nome = [];
+
+        $tipos_conta = $this->planocontas_model->obter_tipos_conta();
+
+
+        $nome_tipo_conta = [];
 
         foreach ($tipos_conta as $key => $value) {
-            $tipo_conta_nome[$value['id']] = $value['name'];
+            $nome_tipo_conta[$value['id']] = $value['name'];
         }
 
-        foreach ($detalhes_tipo as $key => $value) {
-            $detalhes_tipo_nome[$value['id']] = $value['name'];
-        }
 
         foreach ($contas as $key => $value) {
-            if($value['name'] == '' && $value['key_name'] != ''){
-                $contas[$key]['name'] = _l($value['key_name']);
+            if ($value['nomeconta'] == '' && $value['chave_conta'] != '') {
+                $contas[$key]['nomeconta'] = _l($value['chave_conta']);
             }
+            $_nome_tipo_conta = isset($nome_tipo_conta[$value['tipo_conta']]) ? $nome_tipo_conta[$value['tipo_conta']] : '';
+            $contas[$key]['nome_tipo_conta'] = $_nome_tipo_conta;
 
-            $_account_type_name = isset( $tipo_conta_nome[$value['account_type_id']]) ?  $tipo_conta_nome[$value['account_type_id']] : '';
-            $_detail_type_name = isset($detalhes_tipo_nome[$value['account_detail_type_id']]) ? $detalhes_tipo_nome[$value['account_detail_type_id']] : '';
-            $contas[$key]['account_type_name'] = $_account_type_name;
-            $contas[$key]['detail_type_name'] = $_detail_type_name;
         }
 
+
         return $contas;
+
     }
 
    public function obter_contas_credito() {

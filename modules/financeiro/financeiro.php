@@ -4,8 +4,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: Gestão Financeira
 Description: Gerenciamento Financeiro da Organização
-Version: 1.0.9
-Requires at least: 1.0.*
+Version: 1.1.0
+Requires at least: 1.1.*
 Author: Synglia
 Author URI: https://synglia.com.br
 */
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'financeiro_load_js');
 hooks()->add_action('admin_init', 'financeiro_module_init_menu_items');
 hooks()->add_action('admin_init', 'financeiro_permissions');
 
-define('FINANCEIRO_REVISION', 109);
+define('FINANCEIRO_REVISION', 110);
 
 
 /**
@@ -90,6 +90,7 @@ function financeiro_load_js()
     if(!(strpos($viewuri, '/admin/financeiro/contaspagar') === false)){
         echo '<script src="' . module_dir_url(FINANCEIRO_MODULE_NAME, 'assets/js/financeiro.js') .'?v=' . FINANCEIRO_REVISION . '"></script>';
     }
+
 
 
     if (!(strpos($viewuri, '/admin/financeiro/dashboard') === false)) 

@@ -113,6 +113,16 @@
 <?php init_tail(); ?>
 <script>
     $(function() {
+
+     initDataTable(
+            '.table-invoicescontrato',
+            admin_url + 'crm/table_invoicescontrato/44',
+            "undefined",
+            "undefined",
+            [],
+            [2, "asc"]
+        );
+
         initDataTable('.table-contracts', admin_url + 'contracts/table', undefined, undefined, {},
             <?= hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'asc'])); ?>
         );
