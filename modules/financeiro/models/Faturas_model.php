@@ -130,38 +130,30 @@ class Faturas_model extends App_Model
         $this->db->from(db_prefix() . 'fin_faturas');
         $this->db->join(db_prefix() . 'currencies', '' . db_prefix() . 'currencies.id = ' . db_prefix() . 'fin_faturas.moeda', 'left');
         $this->db->where($where);
-        if (is_numeric($id)) {
+        if (is_numeric($id))
+        {
             $this->db->where(db_prefix() . 'fin_faturas' . '.id', $id);
             $fatura = $this->db->get()->row();
-
-     //       $myfile = fopen("fatura.txt", "w") or die("Unable to open file!");
-     //       fwrite($myfile, 'id = ' . $id);
-     //       fwrite($myfile, "Fatura = ");
-     //       fwrite($myfile, $fatura);
-     //       fclose($myfile);
 
 
             if ($fatura) {
                 $fatura->total_left_to_pay = obter_total_que_falta_fatura($fatura->id, $fatura->total);   // total a pagar que falta
 
                 $fatura->items       = get_items_by_type('fatura', $id);
-                $fatura->attachments = $this->obter_anexos($id);
+                $fatura->anexos = $this->obter_anexos($id);
 
                 if ($fatura->id_projeto) {
                     $this->load->model('projects_model');
                     $fatura->dados_projeto = $this->projects_model->get($fatura->id_projeto);
                 }
 
-                $fatura->visible_attachments_to_customer_found = false;
+                $fatura->anexos_encontrados = false;
                 foreach ($fatura->anexos as $attachment) {
                     if ($attachment['visible_to_customer'] == 1) {
-                        $fatura->visible_attachments_to_customer_found = true;
+                        $fatura->anexos_encontrados = true;
                         break;
                     }
                 }
-                $myfile = fopen("fatura.txt", "w") or die("Unable to open file!");
-                fwrite($myfile, "ID Fonrecedor = " . $fatura->id_fornecedor);
-                fclose($myfile);
 
                 $fornecedor  = $this->obter_fornecedor($fatura->id_fornecedor);
 
@@ -183,7 +175,9 @@ class Faturas_model extends App_Model
             return hooks()->apply_filters('get_invoice', $fatura);
         }
 
-        $this->db->order_by('numero,YEAR(data)', 'desc');   return $this->db->get()->result_array();
+        $this->db->order_by('numero,YEAR(data)', 'desc');
+
+        return $this->db->get()->result_array();
     }
 
     /**

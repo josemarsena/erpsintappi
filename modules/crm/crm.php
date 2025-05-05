@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 /*
 Module Name: CRM
 Description: Relacionamento com o Cliente
-Version: 1.0.1
+Version: 1.0.2
 Requires at least: 1.0.*
 Author: I3Software
 Author URI: https://i3software.i3c.com.br
@@ -22,7 +22,7 @@ hooks()->add_action('app_admin_footer', 'crm_load_js');
 hooks()->add_action('admin_init', 'crm_module_init_menu_items');
 hooks()->add_action('admin_init', 'crm_permissions');
 
-define('CRM_REVISION', 101);
+define('CRM_REVISION', 102);
 
 
 /**

@@ -12,10 +12,10 @@ class Financeiro extends AdminController
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('financeiro_model');
+    //    $this->load->model('financeiro_model');
         $this->load->model('bancos_model');
         $this->load->model('contasbancarias_model');
-        $this->load->model('planocontas_model');
+     //
 
     }
 
@@ -937,13 +937,18 @@ class Financeiro extends AdminController
      */
     public function planocontas()
     {
+        $this->load->model('planocontas_model');
+
         if (!has_permission('planocontas', '', 'view')) {
             access_denied('planocontas');
         }
 
         $data['title'] = 'Plano de Contas Gerencial';
+
         $data['tipos_conta'] = $this->planocontas_model->obter_tipos_conta();
-        $data['contas'] = $this->planocontas_model->obter_contas();
+        echo(var_dump($this->planocontas_model->obter_contas()));
+        $data['contas'] = $this->planocontas_model->obter_contas('',[]);
+
         $this->load->view('planocontas/gerenciar', $data);
 
     }
@@ -1010,6 +1015,7 @@ class Financeiro extends AdminController
         {
             $contas = $this->planocontas_model->obter_contas();
             $tiposconta = $this->planocontas_model->obter_tipos_conta();
+
             echo(var_dump($contas));
             fwrite($myfile, 'Contas = ' . var_dump($contas));
             fwrite($myfile, 'TiposContas = ' . var_dump($tiposconta));

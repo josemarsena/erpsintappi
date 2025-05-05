@@ -327,14 +327,42 @@
                                     </div>
                                 </div>
                             </div>
-                            <?php
-                            $selected = (isset($contract) ? $contract->contract_type : '');
-                            if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
-                                echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
-                            } else {
-                                echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
-                            }
-                            ?>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php  $parcelas = (isset($contract) ? $contract->nro_parcelas : ''); ?>
+                                    <?php echo render_input('nro_parcelas','Nro. de Parcelas',$parcelas,'number', array('min' => 0, 'max' => 24)); ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="checkbox checkbox-primary checkbox-inline">
+                                        <br>
+                                        <!-- Campo oculto para garantir envio quando desmarcado -->
+                                        <input type="hidden" name="tem_entrada" value="0">
+                                        <input type="checkbox" name="tem_entrada" id="tem_entrada" value="1"
+                                            <?= (($contract->tem_entrada ?? false) == 1) ? 'checked' : ''; ?>>
+                                        <label for="tem_entrada">
+                                            <?= 'Este contrato tem Entrada?'; ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <?php
+                                    $selected = (isset($contract) ? $contract->forma_pagto : '');
+                                    echo render_select('forma_pagto', $formapagto, [ 'id', ['id','name']], 'Forma de Pagamento', $selected, ['data-none-selected-text' => _l('dropdown_non_selected_tex')]);
+                                    ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?php
+                                    $selected = (isset($contract) ? $contract->contract_type : '');
+                                    if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
+                                        echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
+                                    } else {
+                                        echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
+                                    }
+                                    ?>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <?php $value = (isset($contract) ? _d($contract->datestart) : _d(date('Y-m-d'))); ?>
@@ -648,6 +676,15 @@
     </div>
 </div>
 <div id="modal-wrapper"></div>
+<!-- Spinner de carregamento -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div id="spinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.7); z-index: 9999; text-align: center;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+        <p>Processando...</p>
+    </div>
+</div>
 <?php init_tail(); ?>
 <?php if (isset($contract)) { ?>
 <!-- init table tasks -->
@@ -846,8 +883,31 @@
     }
 
 
-    function chama_gerador_faturas(contrato_id) {
-       $.post(admin_url + 'crm/gerar_faturas/' + contrato_id).done;
+    function chama_gerador_faturas(contrato_id)
+    {
+        if (!contrato_id) return;
+
+        // Mostrar o spinner
+        $('#spinner').fadeIn(200);
+
+        $.ajax({
+            url: admin_url + 'crm/gerar_faturas', // ajuste aqui para o seu endpoint correto
+            type: 'POST',
+            data: { id: contrato_id },
+            success: function(response) {
+                alert('Faturas geradas com sucesso!');
+
+                // Atualiza o DataTable
+                $('#DataTables_Table_0').DataTable().ajax.reload(null, false); // false para manter a página atual
+            },
+            error: function(xhr) {
+                alert('Erro ao gerar faturas.');
+            },
+            complete: function() {
+                // Ocultar o spinner após a conclusão da requisição
+                $('#spinner').fadeOut(200);
+            }
+        });
     }
 </script>
 </body>

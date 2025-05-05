@@ -1,1 +1,1 @@
-Resultado = Status = Tipos Conta = Where = 
+IniciandoContas = TiposContas = Antes do Resultados

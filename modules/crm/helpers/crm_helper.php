@@ -43,3 +43,6 @@ function carrega_faturascontrato_total_template()
 
     $CI->load->view('crm/contratos/faturascontrato_total_template', $data);
 }
+
+
+}
