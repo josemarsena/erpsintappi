@@ -17,7 +17,6 @@ $table_data = array(
   _l('tags'),
   _l('invoice_dt_table_heading_duedate'),
   _l('invoice_dt_table_heading_status'));
-
 $custom_fields = get_custom_fields('invoice',array('show_on_table'=>1));
 foreach($custom_fields as $field){
   array_push($table_data, [
@@ -27,4 +26,4 @@ foreach($custom_fields as $field){
 }
 $table_data = hooks()->apply_filters('invoices_table_columns', $table_data);
 render_datatable($table_data, (isset($class) ? $class : 'invoices'), [], ['id'=>$table_id ?? 'invoices']);
-
+?>

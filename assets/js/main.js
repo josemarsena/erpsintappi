@@ -3149,6 +3149,7 @@ function mainWrapperHeightFix() {
     "min-height",
     $(document).outerHeight(true) - headerH + "px"
   );
+  content_wrapper.css("height", '100%')
   // Set new height when content height is less then navigation
   if (contentH < navigationH) {
     content_wrapper.css("min-height", navigationH + "px");
@@ -4920,7 +4921,7 @@ function lead_profile_form_handler(form) {
   form = $(form);
   var data = form.serialize();
   var leadid = $("#lead-modal").find('input[name="leadid"]').val();
-  $(".lead-save-btn").addClass("disabled");
+  $(".lead-save-btn").addClass("disabled").attr('disabled', true);
   $.post(form.attr("action"), data)
     .done(function (response) {
       response = JSON.parse(response);
@@ -5776,7 +5777,7 @@ function recalculate_checklist_items_progress() {
   } else {
     $("#task-no-checklist-items").addClass("hide");
   }
-  if (total_checklist_items > 2) {
+  if (total_checklist_items >= 2) {
     task_progress_bar.parents(".progress").removeClass("hide");
     percent = (total_finished * 100) / total_checklist_items;
     if (percent == 0) {
@@ -6564,8 +6565,8 @@ function _init_timers_top_html(data) {
     : $ttIcon.addClass("hide");
 
   data.total_timers > 0
-    ? $("#top-timers").find("i").addClass("tw-animate-spin")
-    : $("#top-timers").find("i").removeClass("tw-animate-spin");
+    ? $("#top-timers").find("i").addClass("tw-animate-spin-slow")
+    : $("#top-timers").find("i").removeClass("tw-animate-spin-slow");
 
   $("#started-timers-top").html(data.html);
 }
@@ -7201,7 +7202,7 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
           }
           cf_html = cf.html();
         } else if (cf_field.is("select")) {
-          if ($(this).attr("data-custom-field-required") == "1") {
+          if ($(cf_field).attr("data-custom-field-required") == "1") {
             cf_has_required = true;
           }
 
@@ -7220,6 +7221,7 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
           selectNow.attr("name", cf_name);
 
           var $select = selectNow.clone();
+          $select.prop('required', 1);
           $wrapper.append($select);
           $.each(selected, function (i, e) {
             $wrapper
@@ -7272,7 +7274,7 @@ function add_item_to_table(data, itemid, merge_invoice, bill_expense) {
       "</td>";
 
     table_row +=
-      '<td><a href="#" class="btn btn-danger pull-left" onclick="delete_item(this,' +
+      '<td><a href="#" class="btn btn-danger pull-left !tw-px-3" onclick="delete_item(this,' +
       itemid +
       '); return false;"><i class="fa fa-trash"></i></a></td>';
 
@@ -7807,7 +7809,9 @@ function delete_proposal_attachment(id) {
 
 // Invoices quick total stats
 function init_invoices_total(manual) {
-  if ($("#invoices_total").length === 0) {
+  var _inv_total_wrapper = $("#invoices_total");
+
+  if (_inv_total_wrapper.length === 0) {
     return;
   }
   var _inv_total_inline = $(".invoices-total-inline");
@@ -7843,10 +7847,12 @@ function init_invoices_total(manual) {
   });
 
   var currency = $("body").find('select[name="total_currency"]').val();
+  
   var data = {
     currency: currency,
     years: years,
     init_total: true,
+    display_type: _inv_total_wrapper.attr('data-type')
   };
 
   var project_id = $('input[name="project_id"]').val();
@@ -7859,7 +7865,7 @@ function init_invoices_total(manual) {
   $.post(admin_url + "invoices/get_invoices_total", data).done(function (
     response
   ) {
-    $("#invoices_total").html(response);
+    _inv_total_wrapper.html(response);
   });
 }
 
@@ -9110,6 +9116,65 @@ function add_batch_payment() {
       });
     }
   );
+}
+
+function configure_ai_editor(editor) {
+  let items = [
+      {
+        type: 'menuitem',
+        text:app.lang.text_enhancement_make_polite,
+        icon: 'brightness',
+        onAction: function () {
+          make_ai_text_enhancement_request(editor, 'polite')
+        }
+      },
+      {
+        type: 'menuitem',
+        text: app.lang.text_enhancement_make_formal,
+        icon: 'accessibility-check',
+        onAction: function () {
+          make_ai_text_enhancement_request(editor, 'formal')
+        }
+      },
+      {
+        type: 'menuitem',
+        icon: 'emoji',
+        text: app.lang.text_enhancement_make_friendly,
+        onAction: function () {
+          make_ai_text_enhancement_request(editor, 'friendly')
+        }
+      }
+    ];
+
+    editor.ui.registry.addMenuButton('ai', {
+      icon: 'ai',
+      fetch: function (callback) {
+        callback(items);
+      }
+    });
+}
+
+function make_ai_text_enhancement_request(editor, type) {
+  const selectedText = editor.selection.getContent({ format: 'text' });
+
+  if (!selectedText.trim()) {
+      alert_float('warning', 'Please select text to enhance.');
+      return;
+  }
+
+  $.post(admin_url + 'ai/text_enhancement/' + type, {
+      text: selectedText,
+  })
+  .done(function (response) {
+      const result = JSON.parse(response);
+      if (result.success) {
+          editor.selection.setContent(result.message);
+      }
+  })
+  .catch(function (error) {
+      const result = JSON.parse(error.responseText);
+      alert_float('danger', result.error ? result.error : app.lang.something_went_wrong);
+  });
 }
 
 /**

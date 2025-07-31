@@ -32,7 +32,8 @@
                 </a>
                 <?php } ?>
                 <a href="<?= admin_url(! $this->input->get('project_id') ? ('tasks/switch_kanban/' . $switch_kanban) : ('projects/view/' . $this->input->get('project_id') . '?group=project_tasks')); ?>"
-                    class="btn btn-default mleft10 pull-left hidden-xs" data-toggle="tooltip" data-placement="top"
+                    class="btn btn-default tw-ml-1 pull-left hidden-xs !tw-px-3" data-toggle="tooltip"
+                    data-placement="top"
                     data-title="<?= $switch_kanban == 1 ? _l('switch_to_list_view') : _l('leads_switch_to_kanban'); ?>">
                     <?php if ($switch_kanban == 1) { ?>
                     <i class="fa-solid fa-table-list"></i>

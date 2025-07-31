@@ -12,17 +12,15 @@
         </h1>
 
         <div
-            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/10">
+            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/20">
             <?= form_open($this->uri->uri_string()); ?>
             <?= validation_errors('<div class="alert alert-danger text-center">', '</div>'); ?>
             <?php $this->load->view('authentication/includes/alerts'); ?>
             <?= render_input('password', 'admin_auth_set_password', '', 'password'); ?>
             <?= render_input('passwordr', 'admin_auth_set_password_repeat', '', 'password'); ?>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block">
-                    <?= _l('admin_auth_set_password_heading'); ?>
-                </button>
-            </div>
+            <button type="submit" class="btn btn-primary btn-block tw-font-semibold tw-py-2">
+                <?= _l('admin_auth_set_password_heading'); ?>
+            </button>
             <?= form_close(); ?>
         </div>
     </div>

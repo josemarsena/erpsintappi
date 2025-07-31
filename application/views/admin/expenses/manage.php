@@ -8,18 +8,18 @@
                     <?= _l('expenses'); ?>
                 </h4>
                 <div id="stats-top" class="tw-mb-6">
-                    <div id="expenses_total"></div>
+                    <div id="expenses_total" class="empty:tw-min-h-[61px]"></div>
                 </div>
                 <div class="tw-mb-2">
-                    <div class="_buttons">
+                    <div class="_buttons sm:tw-space-x-1 rtl:sm:tw-space-x-reverse">
                         <?php if (staff_can('create', 'expenses')) { ?>
                         <a href="<?= admin_url('expenses/expense'); ?>"
                             class="btn btn-primary">
-                            <i class="fa-regular fa-plus tw-mr-1"></i>
+                            <i class="fa-regular fa-plus"></i>
                             <?= _l('new_expense'); ?>
                         </a>
                         <a href="<?= admin_url('expenses/import'); ?>"
-                            class="hidden-xs tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold ltr:tw-ml-6 rtl:tw-mr-6">
+                            class="hidden-xs btn btn-default ">
                             <i class="fa-solid fa-upload tw-mr-1"></i>
                             <?= _l('import_expenses'); ?>
                         </a>
@@ -28,7 +28,9 @@
                         <a href="<?= admin_url('utilities/bulk_pdf_exporter?feature=expenses'); ?>"
                             data-toggle="tooltip"
                             title="<?= _l('bulk_pdf_exporter'); ?>"
-                            class="text-muted tw-p-2 tw-ml-2"><i class="fa-regular fa-file-pdf"></i></a>
+                            class="btn-with-tooltip btn btn-default !tw-px-3">
+                            <i class="fa-regular fa-file-pdf"></i>
+                        </a>
                         <?php } ?>
                         <div id="vueApp" class="tw-inline pull-right tw-ml-0 sm:tw-ml-1.5 rtl:tw-mr-1.5 rtl:tw-ml-0">
                             <app-filters id="<?= $table->id(); ?>"

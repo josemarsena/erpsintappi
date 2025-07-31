@@ -319,7 +319,10 @@ class Clients extends AdminController
                 ->get('clients')->row()->country ?? null;
 
             $clientCountry = get_country($clientCountryId);
-            $callingCode   = $clientCountry ? '+' . ltrim($clientCountry->calling_code, '+') : null;
+            
+            $callingCode   = $clientCountry && $clientCountry->calling_code ?
+                ($clientCountry ? '+' . ltrim($clientCountry->calling_code, '+') : null) : 
+                null;
         } else {
             $callingCode = null;
         }

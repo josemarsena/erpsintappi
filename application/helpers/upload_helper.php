@@ -62,13 +62,7 @@ function handle_estimate_request_attachments($estimateRequestId, $index_name = '
                     _maybe_create_upload_path($path);
 
                     $filename    = unique_filename($path, $_FILES[$index_name]['name'][$i]);
-                    // Custom modification by cijagani : Start
-                    if (defined('TENANT_NAME')) {
-                        _maybe_create_upload_path($path.TENANT_NAME.'/');
-                        $filename = TENANT_NAME.'/'.$filename;
-                    }
-                    // Custom modification by cijagani : Over
-                    $newFilePath = $path.$filename;
+                    $newFilePath = $path . $filename;
                     // Upload the file into the company uploads dir
                     if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                         $CI = & get_instance();
@@ -156,12 +150,6 @@ function handle_newsfeed_post_attachments($postid)
         if (!empty($tmpFilePath) && $tmpFilePath != '') {
             _maybe_create_upload_path($path);
             $filename = unique_filename($path, $_FILES['file']['name']);
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
             // In case client side validation is bypassed
             if (_upload_extension_allowed($filename)) {
                 $newFilePath = $path . $filename;
@@ -239,13 +227,7 @@ function handle_project_file_uploads($project_id)
             if (!empty($tmpFilePath) && $tmpFilePath != '') {
                 _maybe_create_upload_path($path);
                 $originalFilename = unique_filename($path, $_FILES['file']['name'][$i]);
-                $filename         = app_generate_hash().'.'.get_file_extension($originalFilename);
-                // Custom modification by cijagani : Start
-                if (defined('TENANT_NAME')) {
-                    _maybe_create_upload_path($path.TENANT_NAME.'/');
-                    $filename = TENANT_NAME.'/'.$filename;
-                }
-                // Custom modification by cijagani : Over
+                $filename = app_generate_hash() . '.' . get_file_extension($originalFilename);
 
                 // In case client side validation is bypassed
                 if (!_upload_extension_allowed($filename)) {
@@ -352,13 +334,7 @@ function handle_contract_attachment($id)
         if (!empty($tmpFilePath) && $tmpFilePath != '') {
             _maybe_create_upload_path($path);
             $filename    = unique_filename($path, $_FILES['file']['name']);
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
+            $newFilePath = $path . $filename;
             // Upload the file into the company uploads dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $CI           = & get_instance();
@@ -426,13 +402,8 @@ function handle_lead_attachments($leadid, $index_name = 'file', $form_activity =
 
                 _maybe_create_upload_path($path);
                 $filename = unique_filename($path, $_FILES[$index_name]['name'][$i]);
-                // Custom modification by cijagani : Start
-                if (defined('TENANT_NAME')) {
-                    _maybe_create_upload_path($path.TENANT_NAME.'/');
-                    $filename = TENANT_NAME.'/'.$filename;
-                }
-                // Custom modification by cijagani : Over
-                $newFilePath = $path.$filename;
+
+                $newFilePath = $path . $filename;
 
                 if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                     $CI->leads_model->add_attachment_to_database($leadid, [[
@@ -495,13 +466,7 @@ function handle_task_attachments_array($taskid, $index_name = 'attachments')
 
                 _maybe_create_upload_path($path);
                 $filename    = unique_filename($path, $_FILES[$index_name]['name'][$i]);
-                // Custom modification by cijagani : Start
-                if (defined('TENANT_NAME')) {
-                    _maybe_create_upload_path($path.TENANT_NAME.'/');
-                    $filename = TENANT_NAME.'/'.$filename;
-                }
-                // Custom modification by cijagani : Over
-                $newFilePath = $path.$filename;
+                $newFilePath = $path . $filename;
 
                 // Upload the file into the temp dir
                 if (move_uploaded_file($tmpFilePath, $newFilePath)) {
@@ -566,14 +531,7 @@ function handle_sales_attachments($rel_id, $rel_type)
             $type = $_FILES['file']['type'];
             _maybe_create_upload_path($path);
             $filename    = unique_filename($path, $_FILES['file']['name']);
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
-
+            $newFilePath = $path . $filename;
             // Upload the file into the temp dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $file_uploaded = true;
@@ -665,14 +623,7 @@ function handle_client_attachments_upload($id, $customer_upload = false)
 
                 _maybe_create_upload_path($path);
                 $filename    = unique_filename($path, $_FILES['file']['name'][$i]);
-                // Custom modification by cijagani : Start
-                if (defined('TENANT_NAME')) {
-                    _maybe_create_upload_path($path.TENANT_NAME.'/');
-                    $filename = TENANT_NAME.'/'.$filename;
-                }
-                // Custom modification by cijagani : Over
-                $newFilePath = $path.$filename;
-
+                $newFilePath = $path . $filename;
                 // Upload the file into the temp dir
                 if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                     $attachment   = [];
@@ -737,14 +688,7 @@ function handle_expense_attachments($id)
         if (!empty($tmpFilePath) && $tmpFilePath != '') {
             _maybe_create_upload_path($path);
             $filename    = $_FILES['file']['name'];
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
-
+            $newFilePath = $path . $filename;
             // Upload the file into the temp dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $attachment   = [];
@@ -803,14 +747,7 @@ function handle_ticket_attachments($ticketid, $index_name = 'attachments')
                     }
                     _maybe_create_upload_path($path);
                     $filename    = unique_filename($path, $_FILES[$index_name]['name'][$i]);
-                    // Custom modification by cijagani : Start
-                    if (defined('TENANT_NAME')) {
-                        _maybe_create_upload_path($path.TENANT_NAME.'/');
-                        $filename = TENANT_NAME.'/'.$filename;
-                    }
-                    // Custom modification by cijagani : Over
-                    $newFilePath = $path.$filename;
-
+                    $newFilePath = $path . $filename;
                     // Upload the file into the temp dir
                     if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                         array_push($uploaded_files, [
@@ -834,7 +771,7 @@ function handle_ticket_attachments($ticketid, $index_name = 'attachments')
  * Check for company logo upload
  * @return boolean
  */
-function handle_company_logo_upload($tenant = null)
+function handle_company_logo_upload()
 {
     $logoIndex = ['logo', 'logo_dark'];
     $success   = false;
@@ -873,28 +810,20 @@ function handle_company_logo_upload($tenant = null)
                         'gif',
                         'svg',
                     ];
-
+                    
                     $allowed_extensions = array_unique(
                         hooks()->apply_filters('company_logo_upload_allowed_extensions', $allowed_extensions)
                     );
-
+                    
                     if (!in_array($extension, $allowed_extensions)) {
                         set_alert('warning', 'Image extension not allowed.');
-
+                        
                         continue;
                     }
-
+                    
                     // Setup our new file path
-                    $filename    = md5($logo.time()).'.'.$extension;
-                    // Custom modification by cijagani : Start
-                    if (defined('TENANT_NAME') || !empty($tenant)) {
-                        $tenant = (defined('TENANT_NAME')) ? TENANT_NAME : $tenant;
-                        _maybe_create_upload_path($path);
-                        _maybe_create_upload_path($path.$tenant.'/');
-                        $filename = $tenant.'/'.$filename;
-                    }
-                    // Custom modification by cijagani : Over
-                    $newFilePath = $path.$filename;
+                    $filename    = md5($logo . time()) . '.' . $extension;
+                    $newFilePath = $path . $filename;
                     _maybe_create_upload_path($path);
                     // Upload the file into the company uploads dir
                     if (move_uploaded_file($tmpFilePath, $newFilePath)) {
@@ -914,7 +843,7 @@ function handle_company_logo_upload($tenant = null)
  * Check for company logo upload
  * @return boolean
  */
-function handle_company_signature_upload($tenant = null)
+function handle_company_signature_upload()
 {
     if (isset($_FILES['signature_image']) && _perfex_upload_error($_FILES['signature_image']['error'])) {
         set_alert('warning', _perfex_upload_error($_FILES['signature_image']['error']));
@@ -956,16 +885,8 @@ function handle_company_signature_upload($tenant = null)
                 return false;
             }
             // Setup our new file path
-            $filename    = 'signature.'.$extension;
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME') || !empty($tenant)) {
-                $tenant = (defined('TENANT_NAME')) ? TENANT_NAME : $tenant;
-                _maybe_create_upload_path($path);
-                _maybe_create_upload_path($path.$tenant.'/');
-                $filename = $tenant.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
+            $filename    = 'signature' . '.' . $extension;
+            $newFilePath = $path . $filename;
             _maybe_create_upload_path($path);
             // Upload the file into the company uploads dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
@@ -982,7 +903,7 @@ function handle_company_signature_upload($tenant = null)
  * Handle company favicon upload
  * @return boolean
  */
-function handle_favicon_upload($tenant = null)
+function handle_favicon_upload()
 {
     $hookData = hooks()->apply_filters('before_handle_favicon_upload', [
         'index_name' => 'favicon',
@@ -1007,16 +928,8 @@ function handle_favicon_upload($tenant = null)
             $extension  = $path_parts['extension'];
             $extension  = strtolower($extension);
             // Setup our new file path
-            $filename    = 'favicon.'.$extension;
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME') || !empty($tenant)) {
-                $tenant = (defined('TENANT_NAME')) ? TENANT_NAME : $tenant;
-                _maybe_create_upload_path($path);
-                _maybe_create_upload_path($path.$tenant.'/');
-                $filename = $tenant.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
+            $filename    = 'favicon' . '.' . $extension;
+            $newFilePath = $path . $filename;
             _maybe_create_upload_path($path);
             // Upload the file into the company uploads dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
@@ -1077,24 +990,14 @@ function handle_staff_profile_image_upload($staff_id = '')
             }
             _maybe_create_upload_path($path);
             $filename    = unique_filename($path, $_FILES['profile_image']['name']);
-            // Custom modification by cijagani : Start
-            $temFileName = $filename;
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.'/'.$filename;
-
+            $newFilePath = $path . '/' . $filename;
             // Upload the file into the company uploads dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $CI                       = & get_instance();
                 $config                   = [];
                 $config['image_library']  = 'gd2';
                 $config['source_image']   = $newFilePath;
-                // Custom modification by cijagani : Start
-                $config['new_image']      = 'thumb_' . $temFileName;
-                // Custom modification by cijagani : Over
+                $config['new_image']      = 'thumb_' . $filename;
                 $config['maintain_ratio'] = true;
                 $config['width']          = hooks()->apply_filters('staff_profile_image_thumb_width', 320);
                 $config['height']         = hooks()->apply_filters('staff_profile_image_thumb_height', 320);
@@ -1103,9 +1006,7 @@ function handle_staff_profile_image_upload($staff_id = '')
                 $CI->image_lib->clear();
                 $config['image_library']  = 'gd2';
                 $config['source_image']   = $newFilePath;
-                // Custom modification by cijagani : Start
-                $config['new_image']      = 'small_' . $temFileName;
-                // Custom modification by cijagani : Over
+                $config['new_image']      = 'small_' . $filename;
                 $config['maintain_ratio'] = true;
                 $config['width']          = hooks()->apply_filters('staff_profile_image_small_width', 96);
                 $config['height']         = hooks()->apply_filters('staff_profile_image_small_height', 96);
@@ -1173,13 +1074,7 @@ function handle_contact_profile_image_upload($contact_id = '')
             }
             _maybe_create_upload_path($path);
             $filename    = unique_filename($path, $_FILES['profile_image']['name']);
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $path = $path.TENANT_NAME.'/';
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
+            $newFilePath = $path . $filename;
             // Upload the file into the company uploads dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $CI                       = & get_instance();
@@ -1263,13 +1158,7 @@ function handle_project_discussion_comment_attachments($discussion_id, $post_dat
         if (!empty($tmpFilePath) && $tmpFilePath != '') {
             _maybe_create_upload_path($path);
             $filename    = unique_filename($path, $_FILES['file']['name']);
-            // Custom modification by cijagani : Start
-            if (defined('TENANT_NAME')) {
-                _maybe_create_upload_path($path.TENANT_NAME.'/');
-                $filename = TENANT_NAME.'/'.$filename;
-            }
-            // Custom modification by cijagani : Over
-            $newFilePath = $path.$filename;
+            $newFilePath = $path . $filename;
             // Upload the file into the temp dir
             if (move_uploaded_file($tmpFilePath, $newFilePath)) {
                 $insert_data['file_name'] = $filename;

@@ -29,12 +29,15 @@ class Settings extends AdminController
             if (staff_cant('edit', 'settings')) {
                 access_denied('settings');
             }
+
+            $post_data = $this->input->post();
+            hooks()->do_action('before_update_system_options', $post_data);
+
             $logo_uploaded     = (handle_company_logo_upload() ? true : false);
             $favicon_uploaded  = (handle_favicon_upload() ? true : false);
             $signatureUploaded = (handle_company_signature_upload() ? true : false);
 
-            $post_data = $this->input->post();
-            $tmpData   = $this->input->post(null, false);
+            $tmpData = $this->input->post(null, false);
 
             if (isset($post_data['settings']['email_header'])) {
                 $post_data['settings']['email_header'] = $tmpData['settings']['email_header'];
@@ -110,6 +113,9 @@ class Settings extends AdminController
             $data['group']['view']     = 'admin/settings/includes/' . $group;
             $data['group']['name']     = $group === 'info' ? ' System/Server Info' : _l('settings_update');
             $data['group']['children'] = [];
+            if ($group === 'info') {
+                $data['group']['without_submit_button'] = true;
+            }
         }
 
         if (! $data['group']) {

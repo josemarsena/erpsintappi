@@ -37,13 +37,13 @@
 
                 <div class="_buttons tw-mb-2">
                     <div class="tw-flex tw-items-center tw-justify-between tw-space-x-2 rtl:tw-space-x-reverse">
-                        <div class="tw-flex tw-items-center tw-space-x-3 rtl:tw-space-x-reverse">
+                        <div class="tw-flex tw-items-center tw-space-x-1 rtl:tw-space-x-reverse">
                             <a href="#" onclick="init_lead(); return false;" class="btn btn-primary">
                                 <i class="fa-regular fa-plus"></i>
                                 <?= _l('new_lead'); ?>
                             </a>
                             <a href="<?= admin_url('leads/switch_kanban/' . $switch_kanban); ?>"
-                                class="btn btn-default hidden-xs" data-toggle="tooltip" data-placement="top"
+                                class="btn btn-default hidden-xs !tw-px-3" data-toggle="tooltip" data-placement="top"
                                 data-title="<?= $switch_kanban == 1 ? _l('leads_switch_to_kanban') : _l('switch_to_list_view'); ?>">
                                 <?php if ($switch_kanban == 1) { ?>
                                 <i class="fa-solid fa-grip-vertical"></i>
@@ -53,7 +53,7 @@
                             </a>
                             <?php if (is_admin() || get_option('allow_non_admin_members_to_import_leads') == '1') { ?>
                             <a href="<?= admin_url('leads/import'); ?>"
-                                class="hidden-xs tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold !tw-ml-6">
+                                class="hidden-xs btn btn-default">
                                 <i class="fa-solid fa-upload tw-mr-1"></i>
                                 <?= _l('import_leads'); ?>
                             </a>

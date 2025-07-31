@@ -9,43 +9,36 @@
                 <div class="form-group">
                     <select class="selectpicker" name="range" id="range" data-width="100%"
                         onchange="render_customer_statement();">
-                        <option
-                            value='<?= e($period_today); ?>'
-                            <?php if ($period_selected == $period_today) {
-                                echo ' selected';
-                            } ?>>
+                        <option value='<?= e($period_today); ?>' <?php if ($period_selected == $period_today) {
+                            echo ' selected';
+                        } ?>>
                             <?= _l('today'); ?>
                         </option>
-                        <option
-                            value='<?= e($period_this_week); ?>'
+                        <option value='<?= e($period_this_week); ?>'
                             <?php if ($period_selected == $period_this_week) {
                                 echo ' selected';
                             } ?>>
                             <?= _l('this_week'); ?>
                         </option>
-                        <option
-                            value='<?= e($period_this_month); ?>'
+                        <option value='<?= e($period_this_month); ?>'
                             <?php if ($period_selected == $period_this_month) {
                                 echo ' selected';
                             } ?>>
                             <?= _l('this_month'); ?>
                         </option>
-                        <option
-                            value='<?= e($period_last_month); ?>'
+                        <option value='<?= e($period_last_month); ?>'
                             <?php if ($period_selected == $period_last_month) {
                                 echo ' selected';
                             } ?>>
                             <?= _l('last_month'); ?>
                         </option>
-                        <option
-                            value='<?= e($period_this_year); ?>'
+                        <option value='<?= e($period_this_year); ?>'
                             <?php if ($period_selected == $period_this_year) {
                                 echo ' selected';
                             } ?>>
                             <?= _l('this_year'); ?>
                         </option>
-                        <option
-                            value='<?= e($period_last_year); ?>'
+                        <option value='<?= e($period_last_year); ?>'
                             <?php if ($period_selected == $period_last_year) {
                                 echo ' selected';
                             } ?>>
@@ -73,14 +66,15 @@
             <div class="col-md-8">
                 <div class="text-right _buttons pull-right">
                     <a href="<?= site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to) . '&print=true'); ?>"
-                        id="statement_print" target="_blank" class="btn btn-default btn-with-tooltip mright5"
-                        data-toggle="tooltip"
+                        id="statement_print" target="_blank"
+                        class="btn btn-default btn-with-tooltip sm:!tw-px-3 mright5" data-toggle="tooltip"
                         title="<?= _l('print'); ?>"
                         data-placement="bottom">
                         <i class="fa fa-print"></i>
                     </a>
                     <a href="<?= site_url('clients/statement_pdf?from=' . urlencode($from) . '&to=' . urlencode($to)); ?>"
-                        id="statement_pdf" class="btn btn-default btn-with-tooltip mright5" data-toggle="tooltip"
+                        id="statement_pdf" class="btn btn-default btn-with-tooltip sm:!tw-px-3 mright5"
+                        data-toggle="tooltip"
                         title="<?= _l('view_pdf'); ?>"
                         data-placement="bottom">
                         <i class="fa-regular fa-file-pdf"></i>

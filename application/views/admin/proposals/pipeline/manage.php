@@ -15,7 +15,8 @@
                             </a>
                             <?php } ?>
                             <a href="<?= admin_url('proposals/pipeline/' . $switch_pipeline); ?>"
-                                class="btn btn-default mleft5 pull-left" data-toggle="tooltip" data-placement="top"
+                                class="btn btn-default pull-left !tw-px-3 tw-ml-1" data-toggle="tooltip"
+                                data-placement="top"
                                 data-title="<?= _l('switch_to_list_view'); ?>">
                                 <i class="fa-solid fa-table-list"></i>
                             </a>

@@ -95,7 +95,7 @@ echo form_open_multipart($actionUrl, $formAttributes);
                                 <?php $this->load->view($group['view']) ?>
                                 <?php hooks()->do_action('after_settings_group_view', $group); ?>
                             </div>
-                            <?php if ($group['without_submit_button'] ?? false !== true) { ?>
+                            <?php if (($group['without_submit_button'] ?? false) !== true) { ?>
                             <div class="panel-footer text-right">
                                 <button type="submit" class="btn btn-primary">
                                     <?= _l('settings_save'); ?>

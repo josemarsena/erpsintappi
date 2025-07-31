@@ -2,11 +2,10 @@
 <div class="col-md-12">
     <div class="row">
         <div class="col-md-12 tw-mb-2">
-            <div class="_buttons">
-                <?php $this->load->view('admin/invoices/invoices_top_stats'); ?>
+            <div class="_buttons sm:tw-space-x-1 rtl:sm:tw-space-x-reverse">
                 <?php if (staff_can('create', 'invoices')) { ?>
                 <a href="<?= admin_url('invoices/invoice'); ?>"
-                    class="btn btn-primary pull-left new new-invoice-list mright5">
+                    class="btn btn-primary pull-left new new-invoice-list">
                     <i class="fa-regular fa-plus tw-mr-1"></i>
                     <?= _l('create_new_invoice'); ?>
                 </a>
@@ -22,11 +21,13 @@
                 <a href="<?= admin_url('utilities/bulk_pdf_exporter?feature=invoices'); ?>"
                     data-toggle="tooltip"
                     title="<?= _l('bulk_pdf_exporter'); ?>"
-                    class="pull-left text-muted tw-p-2 tw-ml-2"><i class="fa-regular fa-file-pdf"></i></a>
+                    class="btn-with-tooltip pull-left btn btn-default !tw-px-3">
+                    <i class="fa-regular fa-file-pdf"></i>
+                </a>
                 <?php } ?>
                 <?php } ?>
                 <div class="display-block pull-right tw-space-x-0 sm:tw-space-x-1.5 rtl:tw-space-x-reverse">
-                    <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs"
+                    <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs sm:!tw-px-3"
                         onclick="toggle_small_view('.table-invoices','#invoice'); return false;" data-toggle="tooltip"
                         title="<?= _l('invoices_toggle_table_tooltip'); ?>"><i
                             class="fa fa-angle-double-left"></i>

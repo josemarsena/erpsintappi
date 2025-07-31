@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div id="header">
     <button type="button"
-        class="hide-menu tw-inline-flex tw-bg-transparent tw-border-0 tw-p-1 tw-mt-4 hover:tw-bg-neutral-600/10 tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 focus:tw-outline-none tw-rounded-md tw-mx-4 ltr:md:tw-ml-6 rtl:md:tw-mr-6 ltr:tw-float-left  rtl:tw-float-right">
+        class="hide-menu tw-inline-flex tw-bg-transparent tw-border-0 tw-p-1 tw-mt-4 hover:tw-bg-neutral-600/10 tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 focus:tw-outline-none tw-rounded-md tw-mx-4 ltr:md:tw-ml-4 rtl:md:tw-mr-4 ltr:tw-float-left  rtl:tw-float-right">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="tw-h-4 tw-w-4 tw-text-current">
             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M2.25 18.003h19.5m-19.5-6h19.5m-19.5-6h19.5"></path>
@@ -12,7 +12,20 @@
             <div class="tw-overflow-hidden tw-shrink-0">
                 <div id="logo"
                     class="tw-h-[57px] tw-hidden md:tw-flex tw-items-center [&_img]:tw-h-9 [&_img]:tw-w-auto">
-                    <?= get_company_logo(get_admin_uri() . '/', '!tw-mt-0', 'dark')?>
+                    <?php $logo = get_admin_header_logo_url(); ?>
+                    <?php if (! $logo) { ?>
+                    <a class="logo logo-text tw-text-2xl tw-font-semibold"
+                        href="<?= hooks()->apply_filters('admin_header_logo_href', admin_url()); ?>">
+                        <?= e(get_option('companyname')); ?>
+                    </a>
+                    <?php } else { ?>
+                    <a class="logo"
+                        href="<?= hooks()->apply_filters('admin_header_logo_href', admin_url()); ?>">
+                        <img src="<?= e($logo); ?>"
+                            class="img-responsive"
+                            alt="<?= e(get_option('companyname')); ?>" />
+                    </a>
+                    <?php } ?>
                 </div>
             </div>
             <div class="tw-flex tw-flex-1 sm:tw-flex-initial">
@@ -95,7 +108,7 @@
 
             <div class="mobile-menu tw-shrink-0 ltr:tw-ml-4 rtl:tw-mr-4">
                 <button type="button"
-                    class="navbar-toggle visible-md visible-sm visible-xs mobile-menu-toggle collapsed tw-ml-1.5"
+                    class="navbar-toggle visible-md visible-sm visible-xs mobile-menu-toggle collapsed tw-ml-1.5 tw-text-neutral-600 hover:tw-text-neutral-800"
                     data-toggle="collapse" data-target="#mobile-collapse" aria-expanded="false">
                     <i class="fa fa-chevron-down fa-lg"></i>
                 </button>
@@ -226,7 +239,6 @@
                     data-placement="bottom">
                     <?php $this->load->view('admin/includes/notifications'); ?>
                 </li>
-
 
                 <?php hooks()->do_action('admin_navbar_end'); ?>
             </ul>

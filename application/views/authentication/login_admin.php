@@ -8,12 +8,17 @@
             <?php get_dark_company_logo(); ?>
         </div>
 
-        <h1 class="tw-text-2xl tw-text-neutral-800 text-center tw-font-bold tw-mb-5">
-            <?= _l('admin_auth_login_heading'); ?>
-        </h1>
+        <div class=" text-center tw-mb-5">
+            <h1 class="tw-text-neutral-800 tw-text-2xl tw-font-bold tw-mb-1">
+                <?= _l('admin_auth_login_heading'); ?>
+            </h1>
+            <p class="tw-text-neutral-600">
+                <?= _l('welcome_back_sign_in'); ?>
+            </p>
+        </div>
 
         <div
-            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/10">
+            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/20">
 
             <?php $this->load->view('authentication/includes/alerts'); ?>
 
@@ -24,16 +29,23 @@
             <?php hooks()->do_action('after_admin_login_form_start'); ?>
 
             <div class="form-group">
-                <label for="email" class="control-label">
+                <label for="email" class="control-label !tw-mb-3">
                     <?= _l('admin_auth_login_email'); ?>
                 </label>
                 <input type="email" id="email" name="email" class="form-control" autofocus="1">
             </div>
 
-            <div class="form-group">
-                <label for="password" class="control-label">
-                    <?= _l('admin_auth_login_password'); ?>
-                </label>
+            <div class="form-group tw-mt-8">
+                <span class="tw-inline-flex tw-justify-between tw-items-end tw-w-full tw-mb-3">
+                    <label for="password" class="control-label !tw-m-0">
+                        <?= _l('admin_auth_login_password'); ?>
+                    </label>
+                    <a href="<?= admin_url('authentication/forgot_password'); ?>"
+                        class="text-muted">
+                        <?= _l('admin_auth_login_fp'); ?>
+                    </a>
+                </span>
+
                 <input type="password" id="password" name="password" class="form-control">
             </div>
 
@@ -45,23 +57,16 @@
 
             <div class="form-group">
                 <div class="checkbox checkbox-inline">
-                    <input type="checkbox" value="estimate" id="remember" name="remember">
+                    <input type="checkbox" id="remember" name="remember">
                     <label for="remember">
                         <?= _l('admin_auth_login_remember_me'); ?></label>
                 </div>
             </div>
 
-            <div class="form-group tw-mt-6">
-                <button type="submit" class="btn btn-primary btn-block">
+            <div class="tw-mt-6">
+                <button type="submit" class="btn btn-primary btn-block tw-font-semibold tw-py-2">
                     <?= _l('admin_auth_login_button'); ?>
                 </button>
-            </div>
-
-            <div class="form-group tw-text-center">
-                <a href="<?= admin_url('authentication/forgot_password'); ?>"
-                    class="text-muted">
-                    <?= _l('admin_auth_login_fp'); ?>
-                </a>
             </div>
 
             <?php hooks()->do_action('before_admin_login_form_close'); ?>

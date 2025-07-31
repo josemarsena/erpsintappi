@@ -8,18 +8,16 @@ return App_table::find('contracts')
 
         $base_currency = get_base_currency();
 
-
         $aColumns = [
             db_prefix() . 'contracts.id as id',
-            db_prefix() . 'contracts.subject as subject',
+            'subject',
             get_sql_select_client_company(),
-            'CASE WHEN tblcontracts.proposta_id != 0 THEN CONCAT("'.get_option('proposal_number_prefix').'", \'\', LPAD('.db_prefix().'proposals.id, '.get_option('number_padding_prefixes').', 0)) ELSE null end as proposta',
             db_prefix() . 'contracts_types.name as type_name',
             'contract_value',
             'datestart',
             'dateend',
             db_prefix() . 'projects.name as project_name',
-            db_prefix() . 'contracts.signature as signature',
+            'signature',
         ];
 
         $sIndexColumn = 'id';
@@ -29,8 +27,6 @@ return App_table::find('contracts')
             'LEFT JOIN ' . db_prefix() . 'clients ON ' . db_prefix() . 'clients.userid = ' . db_prefix() . 'contracts.client',
             'LEFT JOIN ' . db_prefix() . 'projects ON ' . db_prefix() . 'projects.id = ' . db_prefix() . 'contracts.project_id',
             'LEFT JOIN ' . db_prefix() . 'contracts_types ON ' . db_prefix() . 'contracts_types.id = ' . db_prefix() . 'contracts.contract_type',
-            'LEFT JOIN ' . db_prefix() . 'proposals ON ' . db_prefix() . 'proposals.id = ' . db_prefix() . 'contracts.proposta_id',
-            'LEFT JOIN ' . db_prefix() . 'estimates ON ' . db_prefix() . 'estimates.id = ' . db_prefix() . 'contracts.orcamento_id',
         ];
 
         $custom_fields = get_table_custom_fields('contracts');
@@ -75,7 +71,7 @@ return App_table::find('contracts')
             @$this->ci->db->query('SET SQL_BIG_SELECTS=1');
         }
 
-        $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'contracts.id', 'trash', 'client', db_prefix() . 'contracts.hash', 'marked_as_signed', db_prefix() . 'contracts.project_id', db_prefix() . 'contracts.proposta_id',]);
+        $result = data_tables_init($aColumns, $sIndexColumn, $sTable, $join, $where, [db_prefix() . 'contracts.id', 'trash', 'client', 'hash', 'marked_as_signed', 'project_id']);
 
         $output  = $result['output'];
         $rResult = $result['rResult'];
@@ -107,8 +103,6 @@ return App_table::find('contracts')
             $row[] = $subjectOutput;
 
             $row[] = '<a href="' . admin_url('clients/client/' . $aRow['client']) . '">' . e($aRow['company']) . '</a>';
-
-            $row[] = '<a href="' . admin_url('proposals/proposal/' . $aRow['proposal_id']) . '">' . e($aRow['proposta']) . '</a>';
 
             $row[] = e($aRow['type_name']);
 

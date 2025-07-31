@@ -46,6 +46,11 @@
                             </a>
                         </li>
                         <li role="presentation">
+                            <a href="#tab_tables" aria-controls="tab_tables" role="tab" data-toggle="tab">
+                                <?= _l('theme_style_tables'); ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
                             <a href="#tab_general_styling" aria-controls="tab_general_styling" role="tab"
                                 data-toggle="tab">
                                 <?= _l('theme_style_general'); ?>
@@ -163,6 +168,28 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div role="tabpanel" class="tab-pane" id="tab_tables">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <?php foreach (get_styling_areas('tables') as $area) { ?>
+                                    <label
+                                        class="bold mbot10 inline-block"><?= $area['name']; ?></label>
+                                    <?php render_theme_styling_picker(
+                                        $area['id'],
+                                        get_custom_style_values('tables', $area['id']),
+                                        $area['target'],
+                                        $area['css'],
+                                        $area['additional_selectors']
+                                    );
+                                        ?>
+                                    <?php if (isset($area['example'])) {
+                                        echo $area['example'];
+                                    } ?>
+                                    <hr />
+                                    <?php } ?>
                                 </div>
                             </div>
                         </div>

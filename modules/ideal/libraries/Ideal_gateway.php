@@ -12,6 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Ideal_gateway extends App_gateway
 {
+    private static StripeClient $stripeClient;
     public bool $processingFees = true;
     private StripeClient $stripe;
     private string $webhookEndPoint;
@@ -23,36 +24,52 @@ class Ideal_gateway extends App_gateway
         $this->setName('Stripe iDEAL V2');
         $this->setSettings([
             [
-                'name' => 'api_publishable_key',
+                'name'  => 'api_publishable_key',
                 'label' => 'ideal_api_publishable_key',
-                'type' => 'input'
+                'type'  => 'input',
             ],
             [
-                'name' => 'api_secret_key',
+                'name'      => 'api_secret_key',
                 'encrypted' => true,
-                'label' => 'ideal_api_secret_key',
-                'type' => 'input',
+                'label'     => 'ideal_api_secret_key',
+                'type'      => 'input',
             ],
             [
-                'name' => 'currencies',
-                'label' => 'settings_paymentmethod_currencies',
-                'default_value' => 'EUR',
+                'name'             => 'currencies',
+                'label'            => 'settings_paymentmethod_currencies',
+                'default_value'    => 'EUR',
                 'field_attributes' => ['disabled' => true],
             ],
             [
-                'name' => 'description_dashboard',
-                'label' => 'settings_paymentmethod_description',
-                'type' => 'textarea',
+                'name'          => 'description_dashboard',
+                'label'         => 'settings_paymentmethod_description',
+                'type'          => 'textarea',
                 'default_value' => 'Payment for Invoice {invoice_number}',
             ],
         ]);
 
-        $this->stripe = new StripeClient([
-            "api_key" => $this->decryptSetting('api_secret_key')
-        ]);
-
         $this->webhookEndPoint = site_url('ideal/webhook');
         hooks()->add_action('before_render_payment_gateway_settings', 'idealModuleWebhookCheck');
+    }
+
+    public function isGatewayKeyConfigured(): bool
+    {
+        if (empty($this->getSetting('api_secret_key'))) {
+            return true;
+        }
+
+        return $this->decryptSetting('api_secret_key') !== '' && $this->getSetting('api_publishable_key') !== '';
+    }
+
+    public function getClient(): StripeClient
+    {
+        if (! isset(self::$stripeClient)) {
+            self::$stripeClient = new StripeClient([
+                'api_key' => $this->decryptSetting('api_secret_key'),
+            ]);
+        }
+
+        return self::$stripeClient;
     }
 
     /**
@@ -60,18 +77,24 @@ class Ideal_gateway extends App_gateway
      */
     public function process_payment(array $data): void
     {
+        if (! $this->isGatewayKeyConfigured()) {
+            $this->markAsInactive();
+            set_alert('danger', _l('ideal_gateway_keys_not_configured'));
+            redirect(site_url('invoice/' . $data['invoice']->id . '/' . $data['invoice']->hash));
+        }
+
         if ($this->processingFees) {
             $this->ci->session->set_userdata([
-                'attempt_fee' => $data['payment_attempt']->fee,
+                'attempt_fee'    => $data['payment_attempt']->fee,
                 'attempt_amount' => $data['payment_attempt']->amount,
             ]);
         }
 
         $sessionData = [
             'payment_method_types' => ['ideal'],
-            'line_items' => [[
+            'line_items'           => [[
                 'price_data' => [
-                    'currency' => $this->getSetting('currencies'),
+                    'currency'     => $this->getSetting('currencies'),
                     'product_data' => [
                         'name' => $this->getDescription($data['invoiceid']),
                     ],
@@ -81,26 +104,26 @@ class Ideal_gateway extends App_gateway
             ]],
             'payment_intent_data' => [
                 'capture_method' => 'automatic',
-                'metadata' => [
-                    'invoice_id' => $data['invoice']->id,
+                'metadata'       => [
+                    'invoice_id'        => $data['invoice']->id,
                     'attempt_reference' => $data['payment_attempt']->reference,
-                    'attempt_fee' => $data['payment_attempt']->fee,
+                    'attempt_fee'       => $data['payment_attempt']->fee,
                 ],
             ],
-            'mode' => 'payment',
-            'ui_mode' => 'embedded',
+            'mode'       => 'payment',
+            'ui_mode'    => 'embedded',
             'return_url' => site_url("/ideal/callback/{$data['invoiceid']}/{$data['hash']}?session_id={CHECKOUT_SESSION_ID}"),
         ];
         if ($data['invoice']->client->stripe_id) {
-            $sessionData['customer'] = $data['invoice']->client->stripe_id;
+            $sessionData['customer']                     = $data['invoice']->client->stripe_id;
             $sessionData['saved_payment_method_options'] = ['payment_method_save' => 'enabled'];
         }
 
-        $session = $this->stripe->checkout->sessions->create($sessionData);
+        $session = $this->getClient()->checkout->sessions->create($sessionData);
 
         $this->ci->session->set_userdata([
-            'total_amount' => $data['amount'],
-            'ideal_client_secret' => $session->client_secret
+            'total_amount'        => $data['amount'],
+            'ideal_client_secret' => $session->client_secret,
         ]);
 
         redirect(site_url('/ideal/make_payment/' . $data['invoice']->id . '/' . $data['invoice']->hash));
@@ -114,28 +137,33 @@ class Ideal_gateway extends App_gateway
     public function getDescription($invoiceId): string
     {
         $invoiceNumber = format_invoice_number($invoiceId);
+
         return str_replace('{invoice_number}', $invoiceNumber, $this->getSetting('description_dashboard'));
     }
 
     /**
+     * @param mixed $sessionId
+     *
      * @throws ApiErrorException
      */
     public function retrieveSession($sessionId): Session
     {
-        return $this->stripe->checkout->sessions->retrieve($sessionId);
+        return $this->getClient()->checkout->sessions->retrieve($sessionId);
     }
 
     /**
+     * @param mixed $intentId
+     *
      * @throws ApiErrorException
      */
     public function retrievePaymentIntent($intentId): PaymentIntent
     {
-        return $this->stripe->paymentIntents->retrieve($intentId);
+        return $this->getClient()->paymentIntents->retrieve($intentId);
     }
 
     public function hasSecretKey(): bool
     {
-        return !empty($this->decryptSetting('api_secret_key'));
+        return ! empty($this->decryptSetting('api_secret_key'));
     }
 
     public function getWebhookEndPoint(): string
@@ -145,13 +173,11 @@ class Ideal_gateway extends App_gateway
 
     /**
      * Determine the Stripe environment based on the keys
-     *
-     * @return string
      */
     public function environment(): string
     {
         $environment = 'production';
-        $apiKey = $this->decryptSetting('api_secret_key');
+        $apiKey      = $this->decryptSetting('api_secret_key');
 
         if (str_contains($apiKey, 'sk_test')) {
             $environment = 'test';
@@ -161,28 +187,30 @@ class Ideal_gateway extends App_gateway
     }
 
     /**
-     * @return null|WebhookEndpoint
      * @throws ApiErrorException
      */
     public function getCurrentWebhookObject(): ?WebhookEndpoint
     {
         $webhook = null;
+
         foreach ($this->getAllWebhookObjects() as $endpoint) {
             if ($endpoint->url == $this->getWebhookEndPoint()) {
                 $webhook = $endpoint;
                 break;
             }
         }
+
         return $webhook;
     }
 
     /**
      * @return WebhookEndpoint[]
+     *
      * @throws ApiErrorException
      */
     public function getAllWebhookObjects(): array
     {
-        return $this->stripe->webhookEndpoints->all()->data;
+        return $this->getClient()->webhookEndpoints->all()->data;
     }
 
     /**
@@ -190,20 +218,20 @@ class Ideal_gateway extends App_gateway
      */
     public function deleteWebhook(WebhookEndpoint $webhookEndpoint): void
     {
-        $this->stripe->webhookEndpoints->delete($webhookEndpoint->id);
+        $this->getClient()->webhookEndpoints->delete($webhookEndpoint->id);
     }
 
     public function getIdentificationKey(): string
     {
-        return "ideal-gateway-v2-" . get_option('identification_key');
+        return 'ideal-gateway-v2-' . get_option('identification_key');
     }
 
     public function createWebhook(): WebhookEndpoint
     {
-        $webhook = $this->stripe->webhookEndpoints->create([
-            'url' => $this->webhookEndPoint,
+        $webhook = $this->getClient()->webhookEndpoints->create([
+            'url'            => $this->webhookEndPoint,
             'enabled_events' => idealModuleWebhookEvents(),
-            'metadata' => ['identification_key' => $this->getIdentificationKey()],
+            'metadata'       => ['identification_key' => $this->getIdentificationKey()],
         ]);
         update_option('ideal_module_stripe_webhook_id', $webhook->id);
         update_option('ideal_module_stripe_webhook_signing_secret', $webhook->secret);
@@ -216,19 +244,20 @@ class Ideal_gateway extends App_gateway
      */
     public function enableCurrentWebhookEndpoint(): void
     {
-        $this->stripe->webhookEndpoints->update(
+        $this->getClient()->webhookEndpoints->update(
             $this->getCurrentWebhookObject()?->id,
-            ['disabled' => false,]
+            ['disabled' => false]
         );
     }
 
     /**
      * @throws SignatureVerificationException
      */
-    public function validateAndReturnWebhookEvent(bool|string $payload): \Stripe\Event
+    public function validateAndReturnWebhookEvent(bool|string $payload): Stripe\Event
     {
         $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
-        $secret = get_option('ideal_module_stripe_webhook_signing_secret');
+        $secret     = get_option('ideal_module_stripe_webhook_signing_secret');
+
         return Webhook::constructEvent($payload, $sig_header, $secret);
     }
 }

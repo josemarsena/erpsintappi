@@ -3,7 +3,7 @@
     <?php foreach (tasks_summary_data(($rel_id ?? null), ($rel_type ?? null)) as $summary) { ?>
     <button type="button"
         @click="extra.tasksRules = <?= app\services\utilities\Js::from($tasks_table->findRule('status')->setValue([$summary['status_id']])); ?>"
-        class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2 tw-px-3.5 tw-rounded-lg tw-text-sm hover:tw-bg-neutral-100 tw-text-neutral-600 hover:tw-text-neutral-600 focus:tw-text-neutral-600 text-left">
+        class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2 tw-px-3.5 tw-rounded-lg tw-text-sm hover:tw-bg-neutral-100 tw-text-neutral-600 hover:tw-text-neutral-600 focus:tw-text-neutral-600 text-left odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
         <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
             <?= e($summary['total_tasks']); ?>
         </span>

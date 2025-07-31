@@ -403,6 +403,7 @@ body.page-small #header {
   padding-bottom: 20px;
   /* line-height: 57px; */
   height: 57px;
+  font-weight: 500;
 }
 
 .navbar-nav>li a>.icon-total-indicator {
@@ -535,7 +536,7 @@ body.page-small #header {
 
 .sidebar ul.nav li a {
   color: #4b5563;
-  padding: 7px 13px;
+  padding: 6px 13px;
   font-size: 14px;
   margin-top: 0.2rem;
   font-weight: 600;
@@ -615,17 +616,6 @@ body.page-small #header {
   content: "\f107";
 }
 
-.sidebar li a.logo-text {
-  font-size: 20px;
-  color: #f4f4f5;
-}
-
-.sidebar li a.logo-text:hover,
-.sidebar li a.logo-text:focus,
-.sidebar li a.logo-text:active {
-  color: #cbd5e1;
-}
-
 #setup-menu-wrapper {
   overflow: auto;
   display: none;
@@ -646,7 +636,7 @@ body.page-small #header {
 }
 
 #setup-menu>li>a {
-  padding: 5px 13px;
+  padding: 4px 13px;
 }
 
 #setup-menu li .nav-second-level li a {
@@ -1219,7 +1209,7 @@ label:not(.control-label) {
     top: -42px;
     width: 100%;
     height: calc(100% + 42px);
-    background-color: rgba(45, 62, 80, 0.79);
+    background-color: rgba(45, 62, 80, 0.30);
     pointer-events: auto;
     opacity: 1;
     z-index: 55;
@@ -1279,10 +1269,6 @@ label:not(.control-label) {
     display: none !important;
   }
 
-  .project-progress-bars {
-    margin-top: 20px;
-  }
-
   body.show-sidebar .screen-options-area,
   body.show-sidebar .screen-options-btn {
     display: none !important;
@@ -1330,9 +1316,8 @@ label:not(.control-label) {
 @media (max-width: 768px) {
   .mobile-menu-toggle {
     display: block;
-    color: #334155;
     margin-right: 10px;
-    line-height: 25px;
+    line-height: 22px;
     padding-left: 5px;
   }
 
@@ -3076,10 +3061,6 @@ a._timer:focus {
   margin-top: 4.5%;
 }
 
-.project-progress-bars i {
-  font-size: 24px;
-}
-
 .project_invoices .new-invoice-list {
   display: none;
 }
@@ -3249,9 +3230,14 @@ a._timer:focus {
   padding-bottom: 15px;
 }
 
-#side-menu.nav>li.pinned_project.active,
-#side-menu.nav>li.pinned_project:hover {
-  border-left-color: transparent;
+#side-menu.nav>li.pinned_project a {
+  border:transparent;
+}
+
+#side-menu.nav>li.pinned_project.active a,
+#side-menu.nav>li.pinned_project:hover a {
+  background: transparent !important;
+  border: transparent !important;
 }
 
 .tasks-overview thead {
@@ -4003,8 +3989,8 @@ li.task.overdue-task .panel-body {
 }
 
 .lead-info-heading:first-child {
-  margin-left: -15px;
-  padding-left: 15px;
+  margin-left: -20px;
+  padding-left: 20px;
 }
 
 .lead-info-heading {
@@ -4020,6 +4006,10 @@ li.task.overdue-task .panel-body {
   font-weight: 500;
   font-size: 13.5px;
   margin: 0px;
+}
+
+.lead-latest-activity .lead-info-heading {
+  margin-right: -20px;
 }
 
 .nav-tabs.lead-new {
@@ -4279,7 +4269,7 @@ input#tags {
 .popover-title {
   background: #f9fafc;
   border-bottom: 1px solid #e4e5e7;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 @media (min-width: 769px) {
@@ -4456,7 +4446,7 @@ body.system-popup {
   height: 100%;
   top: 0;
   left: 0;
-  background: #fff;
+  background: #f9fafb;
   z-index: 99999;
   text-align: center;
 }

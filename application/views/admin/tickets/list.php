@@ -21,14 +21,14 @@
                                 <?= _l('new_ticket'); ?>
                             </a>
 
-                            <a href="#" class="btn btn-default btn-with-tooltip" data-toggle="tooltip"
+                            <a href="#" class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-toggle="tooltip"
                                 data-placement="bottom"
                                 data-title="<?= _l('tickets_chart_weekly_opening_stats'); ?>"
                                 onclick="slideToggle('.weekly-ticket-opening', init_tickets_weekly_chart); return false;">
                                 <i class="fa fa-bar-chart"></i>
                             </a>
 
-                            <div class="md:tw-ml-6 rtl:md:tw-mr-6 tw-hidden md:tw-block">
+                            <div class="tw-grow md:tw-ml-6 rtl:md:tw-mr-6 tw-hidden md:tw-block">
                                 <?php $this->load->view('admin/tickets/summary', [
                                     'hrefAttrs' => function ($status) use ($table) {
                                         return '@click.prevent="extra.ticketsRules = ' . app\services\utilities\Js::from($table->findRule('status')->setValue([(int) $status['ticketstatusid']])) . '"';

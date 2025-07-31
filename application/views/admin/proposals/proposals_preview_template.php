@@ -128,7 +128,7 @@
                 <a href="<?= admin_url('proposals/proposal/' . $proposal->id); ?>"
                     data-placement="left" data-toggle="tooltip"
                     title="<?= _l('proposal_edit'); ?>"
-                    class="btn btn-default btn-with-tooltip" data-placement="bottom"><i
+                    class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-placement="bottom"><i
                         class="fa-regular fa-pen-to-square"></i></a>
                 <?php } ?>
                 <div class="btn-group">
@@ -155,8 +155,8 @@
                         </li>
                     </ul>
                 </div>
-                <a href="#" class="btn btn-default btn-with-tooltip" data-target="#proposal_send_to_customer"
-                    data-toggle="modal"><span data-toggle="tooltip" class="btn-with-tooltip"
+                <a href="#" class="btn btn-default btn-with-tooltip sm:!tw-px-3"
+                    data-target="#proposal_send_to_customer" data-toggle="modal"><span data-toggle="tooltip"
                         data-title="<?= _l('proposal_send_to_email'); ?>"
                         data-placement="bottom"><i class="fa-regular fa-envelope"></i></span></a>
                 <div class="btn-group ">

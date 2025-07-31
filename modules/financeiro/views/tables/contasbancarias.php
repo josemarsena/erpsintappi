@@ -102,13 +102,5 @@ foreach ($rResult as $aRow) {
         $row[] = $_data;
     }
 
- //   $rowName .= '</div>';
-
-
-//    $row[] = $rowName;
-
-
- //   $row['DT_RowClass'] = 'has-row-options';
-//    $row = hooks()->apply_filters('admin_bancos_table_row', $row, $aRow);
     $output['aaData'][] = $row;
 }

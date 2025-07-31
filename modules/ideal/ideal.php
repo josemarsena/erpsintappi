@@ -11,7 +11,7 @@ Requires at least: 3.1.6
 const IDEAL_MODULE_NAME       = 'ideal';
 const IDEAL_MODULE_GATEWAY_ID = 'Ideal_gateway';
 
-register_language_files(IDEAL_MODULE_NAME, [IDEAL_MODULE_NAME]);
+// register_language_files(IDEAL_MODULE_NAME, [IDEAL_MODULE_NAME]);
 register_payment_gateway(IDEAL_MODULE_GATEWAY_ID, IDEAL_MODULE_NAME);
 register_activation_hook(IDEAL_MODULE_NAME, 'idealModuleActivation');
 
@@ -80,5 +80,32 @@ function idealModuleWebhookCheck(array $gateway): void
                 echo '</div>';
             }
         }
+    }
+}
+
+hooks()->add_action('before_update_system_options', 'prevent_activate_ideal_gateway');
+function prevent_activate_ideal_gateway($systemOptions): void
+{
+    /** @var CI&object{'ideal_gateway': Ideal_gateway} $ci */
+    $ci = &get_instance();
+    $ci->load->library('ideal_gateway');
+    $options = $systemOptions['settings'];
+
+    if (!is_array($options)) {
+        // prevent bugs from module breaking the feature, e.g. third-party module developer did not wrap add value to settings[]
+        return;
+    }
+
+    if (! array_key_exists('paymentmethod_Ideal_gateway_active', $options)) {
+        return;
+    }
+
+    $idealKeyEmpty      = empty($options['paymentmethod_Ideal_gateway_api_publishable_key']) || empty($options['paymentmethod_Ideal_gateway_api_secret_key']);
+    $idealGatewayActive = $options['paymentmethod_Ideal_gateway_active'] == '1';
+
+    if ($idealKeyEmpty && $idealGatewayActive) {
+        $ci->ideal_gateway->markAsInactive();
+        set_alert('danger', _l('ideal_gateway_cannot_be_activated_keys_not_configured'));
+        redirect(admin_url('settings?group=payment_gateways&tab=online_payments_Ideal_gateway_tab'));
     }
 }

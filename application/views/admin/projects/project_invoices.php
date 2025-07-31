@@ -1,11 +1,9 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed'); ?>
 <div id="vueApp">
-    <a href="#"
-        class="invoices-total tw-text-neutral-500 hover:tw-text-neutral-700 focus:tw-text-neutral-700 tw-mb-1 tw-block"
-        onclick="slideToggle('#stats-top'); init_invoices_total(true); return false;">
-        <?= _l('view_financial_stats'); ?>
-    </a>
-    <?php include_once APPPATH . 'views/admin/invoices/invoices_top_stats.php'; ?>
+    <div class="sm:tw-flex tw-mb-3 md:tw-mb-6">
+        <div class="tw-flex-1"></div>
+        <div id="invoices_total" data-type="badge" class="tw-mt-2 md:tw-mt-0 empty:tw-min-h-[60px]"></div>
+    </div>
     <?php $this->load->view('admin/invoices/quick_stats'); ?>
     <div class="panel_s">
         <div class="panel-body">

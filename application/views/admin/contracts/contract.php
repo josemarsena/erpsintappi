@@ -141,15 +141,6 @@
                                 <?= _l('contract_content'); ?>
                             </a>
                         </li>
-
-
-                        <li role="presentation">
-                            <a href="#tab_faturas" aria-controls="tab_faturas" role="tab" data-toggle="tab"
-                               onclick="init_rel_invoicescontrato_table('', <?php echo($contract->id) ?>); return false;">
-                                <?= 'Faturas'; ?>
-                            </a>
-                        </li>
-
                         <li role="presentation"
                             class="<?= $this->input->get('tab') == 'attachments' ? 'active' : ''; ?>">
                             <a href="#attachments" aria-controls="attachments" role="tab" data-toggle="tab">
@@ -302,67 +293,27 @@
                             <i class="fa-regular fa-circle-question pull-left tw-mt-0.5 tw-mr-1" data-toggle="tooltip"
                                 title="<?= _l('contract_subject_tooltip'); ?>"></i>
                             <?= render_input('subject', 'contract_subject', $value); ?>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-                                    $selected = (isset($contract) ? $contract->proposta_id : '');
-                                    echo render_select('proposta_id', $proposals, [ 'id', ['id','subject']], 'Proposta Vinculada', $selected, ['data-none-selected-text' => _l('dropdown_non_selected_tex')]);
-                                    ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-
-                                        <label
-                                            for="contract_value"><?= _l('contract_value'); ?></label>
-                                        <div class="input-group" data-toggle="tooltip"
-                                            title="<?= isset($contract) && $isSignedOrMarkedSigned == 1 ? '' : _l('contract_value_tooltip'); ?>">
-                                            <input type="number" class="form-control" name="contract_value"
-                                                value="<?= $contract->contract_value ?? ''; ?>"
-                                                <?= isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
-                                            <div class="input-group-addon">
-                                                <?= e($base_currency->symbol); ?>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                <label
+                                    for="contract_value"><?= _l('contract_value'); ?></label>
+                                <div class="input-group" data-toggle="tooltip"
+                                    title="<?= isset($contract) && $isSignedOrMarkedSigned == 1 ? '' : _l('contract_value_tooltip'); ?>">
+                                    <input type="number" class="form-control" name="contract_value"
+                                        value="<?= $contract->contract_value ?? ''; ?>"
+                                        <?= isset($contract) && $isSignedOrMarkedSigned == 1 ? ' disabled' : ''; ?>>
+                                    <div class="input-group-addon">
+                                        <?= e($base_currency->symbol); ?>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php  $parcelas = (isset($contract) ? $contract->nro_parcelas : ''); ?>
-                                    <?php echo render_input('nro_parcelas','Nro. de Parcelas',$parcelas,'number', array('min' => 0, 'max' => 24)); ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="checkbox checkbox-primary checkbox-inline">
-                                        <br>
-                                        <!-- Campo oculto para garantir envio quando desmarcado -->
-                                        <input type="hidden" name="tem_entrada" value="0">
-                                        <input type="checkbox" name="tem_entrada" id="tem_entrada" value="1"
-                                            <?= (($contract->tem_entrada ?? false) == 1) ? 'checked' : ''; ?>>
-                                        <label for="tem_entrada">
-                                            <?= 'Este contrato tem Entrada?'; ?>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <?php
-                                    $selected = (isset($contract) ? $contract->forma_pagto : '');
-                                    echo render_select('forma_pagto', $formapagto, [ 'id', ['id','name']], 'Forma de Pagamento', $selected, ['data-none-selected-text' => _l('dropdown_non_selected_tex')]);
-                                    ?>
-                                </div>
-                                <div class="col-md-6">
-                                    <?php
-                                    $selected = (isset($contract) ? $contract->contract_type : '');
-                                    if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
-                                        echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
-                                    } else {
-                                        echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
-                                    }
-                                    ?>
-                                </div>
-                            </div>
+                            <?php
+                                                $selected = (isset($contract) ? $contract->contract_type : '');
+if (is_admin() || get_option('staff_members_create_inline_contract_types') == '1') {
+    echo render_select_with_input_group('contract_type', $types, ['id', 'name'], 'contract_type', $selected, '<div class="input-group-btn"><a href="#" class="btn btn-default" onclick="new_type();return false;"><i class="fa fa-plus"></i></a></div>');
+} else {
+    echo render_select('contract_type', $types, ['id', 'name'], 'contract_type', $selected);
+}
+?>
                             <div class="row">
                                 <div class="col-md-6">
                                     <?php $value = (isset($contract) ? _d($contract->datestart) : _d(date('Y-m-d'))); ?>
@@ -483,32 +434,6 @@
                             </div>
                             <?php } ?>
                         </div>
-
-                        <div role="tabpanel"  class="tab-pane<?= $this->input->get('tab') == 'tab_faturas' ? ' active' : ''; ?>" id="tab_faturas">
-                            <?php
-                                //   init_relation_contracts_table(['data-new-rel-id' => $contract->id, 'data-new-rel-type' => 'contract']);
-                                if (isset($contract->client)) {
-                            ?>
-                            <?php if (staff_can('create', 'invoices')) { ?>
-                            <a href="#"
-                               class="btn btn-primary mbot15<?= $contract->client == 0 ? ' disabled' : ''; ?>" onclick="chama_gerador_faturas(<?php echo($contract->id) ?>)">
-                                <i class="fa-regular fa-plus tw-mr-1"></i>
-                                <?= 'Gerar Faturas'; ?>
-                            </a>
-                            <?php } ?>
-                            <?php if (staff_can('view', 'invoices') || staff_can('view_own', 'invoices') || get_option('allow_staff_view_invoices_assigned') == '1') { ?>
-
-                            <div id="faturascontrato_total" class="tw-mb-5">
-                                <?php //  echo(carrega_faturascontrato_total_template()); ?>
-                            </div>
-                            <?php
-                            $this->load->view('crm/contratos/invoices_contrato_html', ['class' => 'invoicescontrato']);
-                            $this->load->view('admin/clients/modals/zip_invoices');
-                            ?>
-                            <?php } ?>
-                            <?php } ?>
-                        </div>
-
                         <div role="tabpanel"
                             class="tab-pane<?= $this->input->get('tab') == 'attachments' ? ' active' : ''; ?>"
                             id="attachments">
@@ -525,7 +450,7 @@
 
                             <div id="contract_attachments" class="mtop30">
                                 <?php
-                                    $data = '<div class="row">';
+            $data = '<div class="row">';
 
                             foreach ($contract->attachments as $attachment) {
                                 $href_url = site_url('download/file/contract/' . $attachment['attachment_key']);
@@ -633,7 +558,9 @@
                             </div>
                             <?php } ?>
                         </div>
-                        <div role="tabpanel"  class="tab-pane<?= $this->input->get('tab') == 'tab_tasks' ? ' active' : ''; ?>" id="tab_tasks">
+                        <div role="tabpanel"
+                            class="tab-pane<?= $this->input->get('tab') == 'tab_tasks' ? ' active' : ''; ?>"
+                            id="tab_tasks">
                             <?php init_relation_tasks_table(['data-new-rel-id' => $contract->id, 'data-new-rel-type' => 'contract']); ?>
                         </div>
                         <div role="tabpanel"
@@ -676,21 +603,11 @@
     </div>
 </div>
 <div id="modal-wrapper"></div>
-<!-- Spinner de carregamento -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<div id="spinner" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255,255,255,0.7); z-index: 9999; text-align: center;">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        <p>Processando...</p>
-    </div>
-</div>
 <?php init_tail(); ?>
 <?php if (isset($contract)) { ?>
 <!-- init table tasks -->
 <script>
     var contract_id = '<?= $contract->id; ?>';
-    var proposta_id = '<?php echo $contract->proposta_id; ?>';
 </script>
 <?php $this->load->view('admin/contracts/send_to_client'); ?>
 <?php $this->load->view('admin/contracts/renew_contract'); ?>
@@ -735,8 +652,7 @@
         appValidateForm($('#contract-form'), {
             client: 'required',
             datestart: 'required',
-            subject: 'required',
-            proposta_id: 'required'
+            subject: 'required'
         });
 
         appValidateForm($('#renew-contract-form'), {
@@ -879,34 +795,6 @@
         $.post(admin_url + 'contracts/add_external_attachment', data).done(function() {
             var location = window.location.href;
             window.location.href = location.split('?')[0] + '?tab=attachments';
-        });
-    }
-
-
-    function chama_gerador_faturas(contrato_id)
-    {
-        if (!contrato_id) return;
-
-        // Mostrar o spinner
-        $('#spinner').fadeIn(200);
-
-        $.ajax({
-            url: admin_url + 'crm/gerar_faturas', // ajuste aqui para o seu endpoint correto
-            type: 'POST',
-            data: { id: contrato_id },
-            success: function(response) {
-                alert('Faturas geradas com sucesso!');
-
-                // Atualiza o DataTable
-                $('#DataTables_Table_0').DataTable().ajax.reload(null, false); // false para manter a página atual
-            },
-            error: function(xhr) {
-                alert('Erro ao gerar faturas.');
-            },
-            complete: function() {
-                // Ocultar o spinner após a conclusão da requisição
-                $('#spinner').fadeOut(200);
-            }
         });
     }
 </script>

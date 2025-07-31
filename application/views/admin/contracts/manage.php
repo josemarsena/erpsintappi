@@ -10,21 +10,21 @@
                     </h4>
                     <div class="tw-grid tw-grid-cols-2 md:tw-grid-cols-3 lg:tw-grid-cols-5 tw-gap-2">
                         <div
-                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium">
+                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
                             <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
                                 <?= e($count_active); ?></span>
                             <span
                                 class="text-info"><?= _l('contract_summary_active'); ?></span>
                         </div>
                         <div
-                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium">
+                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
                             <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
                                 <?= e($count_expired); ?></span>
                             <span
                                 class="text-danger"><?= _l('contract_summary_expired'); ?></span>
                         </div>
                         <div
-                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium">
+                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
                             <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
                                 <?= count($expiring); ?>
                             </span>
@@ -32,14 +32,14 @@
                                 class="text-warning"><?= _l('contract_summary_about_to_expire'); ?></span>
                         </div>
                         <div
-                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium">
+                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
                             <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
                                 <?= e($count_recently_created); ?></span>
                             <span
                                 class="text-success"><?= _l('contract_summary_recently_added'); ?></span>
                         </div>
                         <div
-                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium">
+                            class="tw-bg-white tw-border-neutral-300/80 tw-shadow-sm tw-text-sm tw-border tw-border-solid tw-rounded-lg tw-px-4 tw-py-3 text-sm tw-flex-1 tw-flex tw-items-center tw-font-medium odd:last:tw-col-span-2 md:odd:last:tw-col-auto">
                             <span class="tw-font-semibold tw-mr-1 rtl:tw-ml-1">
                                 <?= e($count_trash); ?></span>
                             <span
@@ -113,16 +113,6 @@
 <?php init_tail(); ?>
 <script>
     $(function() {
-
-     initDataTable(
-            '.table-invoicescontrato',
-            admin_url + 'crm/table_invoicescontrato/44',
-            "undefined",
-            "undefined",
-            [],
-            [2, "asc"]
-        );
-
         initDataTable('.table-contracts', admin_url + 'contracts/table', undefined, undefined, {},
             <?= hooks()->apply_filters('contracts_table_default_order', json_encode([6, 'asc'])); ?>
         );

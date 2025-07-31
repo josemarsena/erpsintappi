@@ -88,7 +88,7 @@ if ($total_reminders > 0) {
                         <?php } ?>
                         <?php if (staff_can('edit', 'credit_notes') && $credit_note->status != 3) { ?>
                         <a href="<?= admin_url('credit_notes/credit_note/' . $credit_note->id); ?>"
-                            class="btn btn-default btn-with-tooltip" data-toggle="tooltip"
+                            class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-toggle="tooltip"
                             title="<?= e(_l('edit', _l('credit_note_lowercase'))); ?>"
                             data-placement="bottom">
                             <i class="fa-regular fa-pen-to-square"></i>
@@ -128,7 +128,7 @@ if ($total_reminders > 0) {
                             </ul>
                         </div>
                         <?php if ($credit_note->status != 3 && ! empty($credit_note->clientid)) { ?>
-                        <a href="#" class="credit-note-send-to-client btn btn-default" data-toggle="modal"
+                        <a href="#" class="credit-note-send-to-client btn btn-default sm:!tw-px-3" data-toggle="modal"
                             data-target="#credit_note_send_to_client_modal">
                             <i class="fa-regular fa-envelope"></i>
                         </a>

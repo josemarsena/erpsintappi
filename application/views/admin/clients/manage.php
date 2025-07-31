@@ -94,7 +94,7 @@
                 </div>
                 <?php } ?>
                 <div class="tw-flex tw-justify-between tw-items-center tw-gap-x-6">
-                    <div class="tw-flex tw-justify-between tw-items-center tw-gap-x-6">
+                    <div class="tw-flex tw-justify-between tw-items-center tw-gap-x-1">
                         <?php if (staff_can('create', 'customers')) { ?>
                         <a href="<?= admin_url('clients/client'); ?>"
                             class="btn btn-primary">
@@ -104,7 +104,7 @@
                         <?php } ?>
                         <?php if (staff_can('create', 'customers')) { ?>
                         <a href="<?= admin_url('clients/import'); ?>"
-                            class="hidden-xs tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold">
+                            class="hidden-xs btn btn-default">
                             <i class="fa-solid fa-upload tw-mr-1"></i>
                             <?= _l('import_customers'); ?>
                         </a>

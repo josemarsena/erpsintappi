@@ -5,7 +5,7 @@ if (staff_cant('view', 'projects')) {
 }
 ?>
 <div
-    class="_filters _hidden_inputs tw-flex sm:tw-flex-row tw-flex-col tw-gap-y-2 sm:tw-gap-x-2 tw-order-1 sm:-tw-order-none tw-mb-1 md:tw-mb-0">
+    class="_filters _hidden_inputs tw-mb-3 tw-flex tw-flex-col tw-gap-y-2 tw-order-1 sm:tw-flex-row sm:tw-gap-x-2 sm:-tw-order-none sm:tw-mr-2 md:tw-mb-0">
     <?php foreach ($statuses as $status) { ?>
     <?php $where = ($_where == '' ? '' : $_where . ' AND ') . 'status = ' . $status['id']; ?>
     <a href="#"

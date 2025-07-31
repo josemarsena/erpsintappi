@@ -42,7 +42,8 @@
                                         </th>
                                         <th><strong><?= _l('batch_payments_table_amount_received_heading'); ?></strong>
                                         </th>
-                                        <th><strong><?= _l('batch_payments_table_invoice_balance_due'); ?></strong>
+                                        <th class="text-right">
+                                            <strong><?= _l('batch_payments_table_invoice_balance_due'); ?></strong>
                                         </th>
                                     </tr>
                                 </thead>
@@ -88,7 +89,8 @@
                                         </td>
                                         <td><?= render_input('invoice[' . $index . '][amount]', '', '', 'number', ['max' => $invoice->total_left_to_pay]) ?>
                                         </td>
-                                        <td><?= app_format_money($invoice->total_left_to_pay, $invoice->currency) ?>
+                                        <td class="text-right">
+                                            <?= app_format_money($invoice->total_left_to_pay, $invoice->currency) ?>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -106,14 +108,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default close_btn"
-                        data-dismiss="modal"><?= _l('close'); ?></button>
-                    <button type="submit"
-                        class="btn btn-primary"><?= _l('apply'); ?></button>
-                </div>
-                <?= form_close(); ?>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default close_btn"
+                    data-dismiss="modal"><?= _l('close'); ?></button>
+                <button type="submit"
+                    class="btn btn-primary"><?= _l('apply'); ?></button>
+            </div>
+            <?= form_close(); ?>
         </div>
     </div>
 </div>

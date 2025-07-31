@@ -7,22 +7,22 @@
         <?php $this->load->view('admin/clients/groups/_statement_period_select', ['onChange' => 'render_customer_statement()']); ?>
     </div>
     <div class="col-md-8 col-xs-12">
-        <div class="text-right _buttons pull-right">
+        <div class="text-right _buttons pull-right tw-space-x-1">
 
-            <a href="#" id="statement_print" target="_blank" class="btn btn-default btn-with-tooltip mright5"
+            <a href="#" id="statement_print" target="_blank" class="btn btn-default btn-with-tooltip sm:!tw-px-3"
                 data-toggle="tooltip"
                 title="<?= _l('print'); ?>"
                 data-placement="bottom">
                 <i class="fa fa-print"></i>
             </a>
 
-            <a href="" id="statement_pdf" class="btn btn-default btn-with-tooltip mright5" data-toggle="tooltip"
+            <a href="" id="statement_pdf" class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-toggle="tooltip"
                 title="<?= _l('view_pdf'); ?>"
                 data-placement="bottom">
                 <i class="fa-regular fa-file-pdf"></i>
             </a>
 
-            <a href="#" class="btn-with-tooltip btn btn-default" data-toggle="modal"
+            <a href="#" class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-toggle="modal"
                 data-target="#statement_send_to_client"><span data-toggle="tooltip"
                     data-title="<?= _l('send_to_email'); ?>"
                     data-placement="bottom"><i class="fa-regular fa-envelope"></i></span></a>

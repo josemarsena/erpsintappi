@@ -28,11 +28,14 @@
                     </div>
 
                     <div id="contabanco">
-                        <?php
+                        <div class="form-group contabanco">
+                            <?php
                             // Se Pagamento é PIX, Débito, Transferencia, Boleto: Mostra Banco, Conta de Banco e Conta e Subconta Financeira
                             $selected = (isset($invoice) ? $invoice->conta_id : '');
-                            echo render_select('contasbancarias', $contasbancarias, ['id', 'conta'], 'Selecione a Conta Bancária', $selected, []);?>
+                            echo render_select('contasbancarias', $contasbancarias, ['id','nomeconta'], 'Selecione a Conta Bancária', $selected, []);?>
+                        </div>
                     </div>
+
 
                     <div id="contacaixa">
                         <?php
@@ -47,8 +50,9 @@
                         ?>
                     </div>
                     <?php
-                        // Se Pagamento é Cartao de Credito: Mostra a Conta de Cartao e Conta e Subconta Financeira
+                        // Mostrar Conta e Subconta Financeira
                         echo render_select('contascredito', $contascredito, ['id', 'nomeconta'], 'Conta Financeira', $selected, []);
+                        $subcontascredito = [];
                         echo render_select('subcontascredito', $subcontascredito, ['id', 'nomeconta'], 'SubConta Financeira', $selected, []);
                     ?>
 
@@ -65,10 +69,10 @@
                     if ($totalAllowed === 0) {
                         ?>
                     <div class="alert alert-info">
-                        Allowed payment modes not found for this invoice.<br />
-                        Click <a
-                            href="<?php echo admin_url('invoices/invoice/' . $invoice->id . '?allowed_payment_modes=1'); ?>">here</a>
-                        to edit the invoice and allow payment modes.
+                        Modos de pagamento permitidos não encontrados para esta fatura.<br />
+                        Clique <a
+                            href="<?php echo admin_url('invoices/invoice/' . $invoice->id . '?allowed_payment_modes=1'); ?>">aqui</a>
+                        para editar a fatura e permitir modos de pagamento.
                     </div>
                     <?php
                     } ?>
@@ -135,62 +139,62 @@
     /* Esconde a div por padrão */
     #contabanco {
         display: none;
-        padding: 10px;
+        padding: 1px;
         margin-top: 10px;
-        border: 1px solid #ccc;
+        border: none;
         background-color: #f9f9f9;
     }
     /* Esconde a div por padrão */
     #contacaixa {
         display: none;
-        padding: 10px;
+        padding: 1px;
         margin-top: 10px;
-        border: 1px solid #ccc;
+        border: none;
         background-color: #f9f9f9;
     }
     /* Esconde a div por padrão */
     #contacartao {
         display: none;
-        padding: 10px;
+        padding: 1px;
         margin-top: 10px;
-        border: 1px solid #ccc;
+        border: none;
         background-color: #f9f9f9;
     }
 </style>
 <script>
-    function verificaSelecao() {
 
-        let opcao = document.getElementById("paymentmode").value;
-        let divcontabanco = document.getElementById("contabanco");
-        let divcontacaixa = document.getElementById("contacaixa");
-        let divcontacartao = document.getElementById("contacartao");
+    $(function () {
 
-        // Exibe a div apenas se "opcao2" for selecionada
+        // dispara no carregamento da página e também quando o usuário troca a opção
+        $('#paymentmode')
+            .on('changed.bs.select change', verificaSelecao); // change normal + evento do selectpicker
 
-        if (opcao === "1") {    // Bancos
-            divcontabanco.style.display = "block";
-        } else {
-            divcontabanco.style.display = "none";
-            divcontacaixa.style.display = "none";
-            divcontacartao.style.display = "none";
+        verificaSelecao(); // executa logo que a página carrega
+
+        function verificaSelecao () {
+            const opcao = $('#paymentmode').val();  // SEMPRE pega o valor atual
+
+            // Mostra/oculta as divs de acordo com a opção escolhida
+            $('#contabanco').toggle(opcao === '1'); // Banco        (id = 1)
+            $('#contacaixa').toggle(opcao === '2'); // Caixa        (id = 2)
+            $('#contacartao').toggle(opcao === '3'); // Cartão       (id = 3)
+
+            // Se nenhuma das anteriores, todas ficam ocultas
         }
-    }
-$(function() {
-    init_selectpicker();
-    init_datepicker();
-    appValidateForm($('#record_payment_form'), {
-        amount: 'required',
-        date: 'required',
-        paymentmode: 'required'
+
+        /* o resto do seu código (init_selectpicker, appValidateForm, etc.) pode ficar aqui */
+        init_selectpicker();
+        init_datepicker();
+        appValidateForm($('#record_payment_form'), {
+            amount: 'required',
+            date: 'required',
+            paymentmode: 'required'
+        });
+        var $sMode = $('select[name="paymentmode"]');
+        var total_available_payment_modes = $sMode.find('option').length - 1;
+        if (total_available_payment_modes == 1) {
+            $sMode.selectpicker('val', $sMode.find('option').eq(1).attr('value'));
+            $sMode.trigger('change');
+        }
     });
-    var $sMode = $('select[name="paymentmode"]');
-    var total_available_payment_modes = $sMode.find('option').length - 1;
-    if (total_available_payment_modes == 1) {
-        $sMode.selectpicker('val', $sMode.find('option').eq(1).attr('value'));
-        $sMode.trigger('change');
-    }
-
-
-
-});
 </script>

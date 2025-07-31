@@ -105,7 +105,7 @@ if ($total_reminders > 0) {
                     <div class="pull-right _buttons">
                         <?php if (staff_can('edit', 'estimates')) { ?>
                         <a href="<?= admin_url('estimates/estimate/' . $estimate->id); ?>"
-                            class="btn btn-default btn-with-tooltip" data-toggle="tooltip"
+                            class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-toggle="tooltip"
                             title="<?= _l('edit_estimate_tooltip'); ?>"
                             data-placement="bottom"><i class="fa-regular fa-pen-to-square"></i></a>
                         <?php } ?>
@@ -149,7 +149,7 @@ if ($estimate->sent == 1) {
 }
 ?>
                         <?php if (! empty($estimate->clientid)) { ?>
-                        <a href="#" class="estimate-send-to-client btn btn-default btn-with-tooltip"
+                        <a href="#" class="estimate-send-to-client btn btn-default btn-with-tooltip sm:!tw-px-3"
                             data-toggle="tooltip"
                             title="<?= e($_tooltip); ?>"
                             data-placement="bottom"><span data-toggle="tooltip"

@@ -179,7 +179,7 @@ function app_init_settings_tabs()
             ],
             [
                 'name'     => _l('estimates'),
-                'view'     => 'admin/settings/includes/Estimates',
+                'view'     => 'admin/settings/includes/estimates',
                 'position' => 20,
                 'icon'     => 'fa-regular fa-file',
             ],
@@ -300,6 +300,19 @@ function app_init_settings_tabs()
                 'view'     => 'admin/settings/includes/misc',
                 'position' => 10,
                 'icon'     => 'fa-solid fa-gears',
+            ],
+        ],
+    ]);
+
+    $CI->app->add_settings_section('ai', [
+        'title'    => _l('settings_group_ai'),
+        'position' => 15,
+        'children' => [
+            [
+                'name'     => _l('settings_ai_general'),
+                'view'     => 'admin/settings/includes/ai',
+                'position' => 15,
+                'icon'     => 'fa fa-cog',
             ],
         ],
     ]);

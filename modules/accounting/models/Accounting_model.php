@@ -8919,7 +8919,6 @@ class Accounting_model extends App_Model
         $this->db->where('parent_account', $account_id);
         $this->db->order_by('number,name', 'asc');
         $account_list = $this->db->get(db_prefix().'acc_accounts')->result_array();
-
         if($account_list){
             foreach ($account_list as $key => $value) {
                 foreach ($accounts as $k => $val) {

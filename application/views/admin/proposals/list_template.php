@@ -6,7 +6,7 @@
 </div>
 <div class="col-md-12">
     <div class="tw-mb-2">
-        <div class="_buttons">
+        <div class="_buttons sm:tw-space-x-1 rtl:sm:tw-space-x-reverse">
             <?php if (staff_can('create', 'proposals')) { ?>
             <a href="<?= admin_url('proposals/proposal'); ?>"
                 class="btn btn-primary pull-left display-block new-proposal-btn">
@@ -15,7 +15,7 @@
             </a>
             <?php } ?>
             <a href="<?= admin_url('proposals/pipeline/' . $switch_pipeline); ?>"
-                class="btn btn-default mleft5 pull-left switch-pipeline hidden-xs" data-toggle="tooltip"
+                class="btn btn-default pull-left switch-pipeline hidden-xs !tw-px-3" data-toggle="tooltip"
                 data-placement="top"
                 data-title="<?= _l('switch_to_pipeline'); ?>">
                 <i class="fa-solid fa-grip-vertical"></i>
@@ -24,12 +24,14 @@
             <a href="<?= admin_url('utilities/bulk_pdf_exporter?feature=proposals'); ?>"
                 data-toggle="tooltip"
                 title="<?= _l('bulk_pdf_exporter'); ?>"
-                class="pull-left text-muted tw-p-2 tw-ml-2"><i class="fa-regular fa-file-pdf"></i></a>
+                class="btn-with-tooltip pull-left btn btn-default !tw-px-3">
+                <i class="fa-regular fa-file-pdf"></i>
+            </a>
             <?php } ?>
             <div class="pull-right">
                 <div id="vueApp" class="tw-inline">
                     <a href="#"
-                        class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs tw-mr-0 sm:tw-mr-1.5 rtl:sm:tw-ml-1.5 rtl:sm:tw-mr-0"
+                        class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs tw-mr-0 sm:tw-mr-1.5 rtl:sm:tw-ml-1.5 rtl:sm:tw-mr-0 sm:!tw-px-3"
                         onclick="toggle_small_view('.table-proposals','#proposal'); return false;" data-toggle="tooltip"
                         title="<?= _l('invoices_toggle_table_tooltip'); ?>">
                         <i class="fa fa-angle-double-left"></i>

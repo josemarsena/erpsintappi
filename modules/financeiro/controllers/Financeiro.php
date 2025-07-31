@@ -835,15 +835,27 @@ class Financeiro extends AdminController
         $this->load->model('payments_model');
         $this->load->model('contasbancarias_model');
         $this->load->model('caixa_model');
+        $this->load->model('planocontas_model');
         $this->load->model('cartaocredito_model');
         $data['payment_modes'] = $this->payment_modes_model->get('', [
             'expenses_only !=' => 1,
         ]);
 
-        $data['contasbancarias'] = $this->contasbancarias_model->get('');
+        $contasbanco = $this->contasbancarias_model->get('');
+        $this->load->model('bancos_model');
+        $contasbancarias = [];
+        foreach ($contasbanco as $conta) {
+            $banco = $this->bancos_model->get($conta['banco_id']);
+            $valor['id'] = $conta['conta'];
+            $valor['nomeconta'] = $banco->nomebanco . ' - ' . $conta['conta'];
+            array_push($contasbancarias, $valor );
+        }
+        //echo(var_dump($contasbancarias));
+        $data['contasbancarias'] = $contasbancarias;
         $data['contascaixa'] = $this->caixa_model->get('');
         $data['contascredito'] = $this->planocontas_model->obter_contas_credito();
-        $data['subcontascredito'] = $this->planocontas_model->obter_subcontas_credito();
+      //  echo(var_dump($data['contascredito']));
+       // $data['subcontascredito'] = $this->planocontas_model->obter_subcontas_credito();
         $data['invoice'] = $this->invoices_model->get($id);
         $data['payments'] = $this->payments_model->get_invoice_payments($id);
         $this->load->view('financeiro/contasreceber/template_registra_pagamento', $data);
@@ -946,8 +958,7 @@ class Financeiro extends AdminController
         $data['title'] = 'Plano de Contas Gerencial';
 
         $data['tipos_conta'] = $this->planocontas_model->obter_tipos_conta();
-        echo(var_dump($this->planocontas_model->obter_contas()));
-        $data['contas'] = $this->planocontas_model->obter_contas('',[]);
+        $data['contas'] = $this->planocontas_model->obter_contas('',['conta_pai', 'is null']);
 
         $this->load->view('planocontas/gerenciar', $data);
 
@@ -1000,7 +1011,7 @@ class Financeiro extends AdminController
     }
 
     /**
-     * accounts table
+     * Tabela de Planos de Contas
      * @return json
      */
     public function table_planocontas()
@@ -1008,39 +1019,15 @@ class Financeiro extends AdminController
 
         $this->load->model('planocontas_model');
 
-        $myfile = fopen("resultados.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, 'Iniciando');
-        echo('Iniciando...');
         if ($this->input->is_ajax_request())
         {
-            $contas = $this->planocontas_model->obter_contas();
-            $tiposconta = $this->planocontas_model->obter_tipos_conta();
+            $contas = $this->planocontas_model->obter_contas();    // obtem todas as contas financeiras
 
-            echo(var_dump($contas));
-            fwrite($myfile, 'Contas = ' . var_dump($contas));
-            fwrite($myfile, 'TiposContas = ' . var_dump($tiposconta));
+            $tiposconta = $this->planocontas_model->obter_tipos_conta();    // obtem os tipos de conta financeria 0 = Receita, 1 = Despesa
 
-            $nome_conta = [];
-            $nome_tipos_conta = [];
-
-            foreach ($contas as $key => $value)
-            {
-                $nome_conta[$value['id']] = $value['nomeconta'];
-            }
-
-            foreach ($tiposconta as $key => $value)
-            {
-                $nome_tipos_conta[$value['id']] = $value['name'];
-            }
-
-            $array_history = [2, 3, 4, 5, 7, 8, 9, 10];
-
-            $this->load->model('currencies_model');
-
-            $currency = $this->currencies_model->get_base_currency();
 
             $select = [
-                    '1', // bulk actions
+                    'id',
                     'chave_conta',
                     'nomeconta',
                     'conta_pai',
@@ -1056,9 +1043,9 @@ class Financeiro extends AdminController
             if ($this->input->post('ft_active')) {
                 $ft_active = $this->input->post('ft_active');
                 if ($ft_active == 'yes') {
-                    array_push($where, 'AND ativo = 1');
-                } elseif ($ft_active == 'no') {
                     array_push($where, 'AND ativo = 0');
+                } elseif ($ft_active == 'no') {
+                    array_push($where, 'AND ativo = 1');
                 }
             }
             if ($this->input->post('ft_account')) {
@@ -1074,118 +1061,57 @@ class Financeiro extends AdminController
                 array_push($where, 'AND tipo_conta IN (' . implode(', ', $ft_type) . ')');
             }
 
-            // Pega o somatorio de debito e creidto do histórico
-            //$debit = '(SELECT sum(debito) as debito FROM ' . db_prefix() . 'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' . db_prefix() . 'fin_planocontas.id)) as debito';
-            //$credit = '(SELECT sum(credito) as credito FROM ' . db_prefix() . 'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' . db_prefix() . 'fin_planocontas.id)) as credit';
-
 
             $aColumns = $select;
             $sIndexColumn = 'id';
             $sTable = db_prefix() . 'fin_planocontas';
             $join = [];
 
-            fwrite($myfile, 'Antes do Resultados' );
-
-            $result = $this->planocontas_model->obter_datatable_planocontas($aColumns, $sIndexColumn, $sTable, $join);
+             $result = $this->planocontas_model->obter_datatable_planocontas($aColumns, $sIndexColumn, $sTable, $join, $where, ['descricao', 'saldo']);
             // $result = $this->planocontas_model->obter_datatable_planocontas($aColumns, $sIndexColumn, $sTable, $join, $where, ['descricao', 'saldo', $debit, $credit]);
-
-            fwrite($myfile, 'TiposContas = ' . var_dump($result));
-
-            //$myfile = fopen("resultados.txt", "w") or die("Unable to open file!");
-            //fwrite($myfile, 'Conta = ' . var_dump($ft_account));
-            //fwrite($myfile, 'Status = ' . var_dump($ft_active));
-            //fwrite($myfile, 'Conta Pai = ' . var_dump($ft_parent_account));
-            //fwrite($myfile, 'Where = ' . var_dump($where));
-            //       fwrite($myfile, "Fatura = ");
-            //       fwrite($myfile, $fatura);
-            //fclose($myfile);
 
             $output = $result['output'];
             $rResult = $result['rResult'];
 
-            foreach ($rResult as $aRow) {
+            //$myfile = fopen("1.txt", "w") or die("Unable to open file!");
+            //fwrite($myfile, var_dump($rResult));
+           // fclose($myfile);
 
+            foreach ($rResult as $aRow)
+            {
                 $row = [];
 
                 for ($i = 0; $i < count($aColumns); $i++) {
+
                     $_data = $aRow[$aColumns[$i]];
 
+                    // Formata o Saldo Atual
+                    if ($aColumns[$i] == 'saldo') {
+                        $_data = app_format_money($aRow['saldo'],'R$ ');
+                    }
+
+                    if ($aColumns[$i] == 'ativo') {
+                        $checked = '';
+                        if ($aRow['ativo'] == 1) {
+                            $checked = 'checked';
+                        }
+                        $_data = '<div class="onoffswitch">
+                                <input type="checkbox" data-switch-url="' . admin_url() . 'financeiro/muda_status_contabancaria" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '" ' . $checked . '>
+                                <label class="onoffswitch-label" for="c_' . $aRow['id'] . '"></label>
+                                </div>';
+
+                    }
 
                     $row[] = $_data;
+
                 }
-
-                /****
-                $row = [];
-                $row[] = '<div class="checkbox"><input type="checkbox" value="' . $aRow['id'] . '"><label></label></div>';
-
-                $categoryOutput = '';
-                if (isset($aRow['level'])) {
-                    for ($i = 0; $i < $aRow['level']; $i++) {
-                        $categoryOutput .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                    }
-                }    ****/
-                /***
-                if ($acc_enable_account_numbers == 1 && $acc_show_account_numbers == 1 && $aRow['numero'] != '') {
-                    $categoryOutput .= $aRow['numero'] . ' - ';
-                }
-
-
-                $categoryOutput .= '<div class="row-options">';
-
-                if (has_permission('accounting_chart_of_accounts', '', 'edit')) {
-                    $categoryOutput .= '<a href="#" onclick="edit_account(' . $aRow['id'] . '); return false;">' . _l('edit') . '</a>';
-                }
-
-                if (has_permission('accounting_chart_of_accounts', '', 'delete') && $aRow['default_account'] == 0) {
-                    $categoryOutput .= ' | <a href="' . admin_url('accounting/delete_account/' . $aRow['id']) . '" class="text-danger _delete">' . _l('delete') . '</a>';
-                }
-
-                $categoryOutput .= '</div>';
-                $row[] = $categoryOutput;
-                if ($aRow['conta_pai'] != '' && $aRow['conta_pai'] != 0) {
-                    $row[] = (isset($account_name[$aRow['conta_pai']]) ? $account_name[$aRow['conta_pai']] : '');
-                } else {
-                    $row[] = '';
-                }
-                $row[] = isset($account_type_name[$aRow['account_type_id']]) ? $account_type_name[$aRow['account_type_id']] : '';
-                $row[] = isset($detail_type_name[$aRow['account_detail_type_id']]) ? $detail_type_name[$aRow['account_detail_type_id']] : '';
-                if ($aRow['account_type_id'] == 11 || $aRow['account_type_id'] == 12 || $aRow['account_type_id'] == 8 || $aRow['account_type_id'] == 9 || $aRow['account_type_id'] == 10 || $aRow['account_type_id'] == 7) {
-                    $row[] = app_format_money($aRow['credit'] - $aRow['debit'], $currency->name);
-                } else {
-                    $row[] = app_format_money($aRow['debit'] - $aRow['credit'], $currency->name);
-                }
-                $row[] = '';
-
-                $checked = '';
-                if ($aRow['ativo'] == 1) {
-                    $checked = 'checked';
-                }
-
-
-                ***/
-
-                /****
-                $_data = '<div class="onoffswitch">
-                    <input type="checkbox" ' . ((!has_permission('accounting_chart_of_accounts', '', 'edit') && !is_admin()) ? 'disabled' : '') . ' data-switch-url="' . admin_url() . 'accounting/change_account_status" name="onoffswitch" class="onoffswitch-checkbox" id="c_' . $aRow['id'] . '" data-id="' . $aRow['id'] . '" ' . $checked . '>
-                    <label class="onoffswitch-label" for="c_' . $aRow['id'] . '"></label>
-                </div>';
-                // For exporting
-                $_data .= '<span class="hide">' . ($checked == 'checked' ? _l('is_active_export') : _l('is_not_active_export')) . '</span>';
-                $row[] = $_data;
-
-                $options = '';
-                if (in_array($aRow['account_type_id'], $array_history)) {
-                    $options = icon_btn(admin_url('accounting/rp_account_history?account=' . $aRow['id']), 'history', 'btn-default', [
-                        'title' => _l('account_history'),
-                    ]);
-                }
-                $row[] = $options;
 
                 $output['aaData'][] = $row;
-                *****/
+
             }
 
-            echo json_encode($output);
+            //fclose($myfile);
+
             die();
         }
     }

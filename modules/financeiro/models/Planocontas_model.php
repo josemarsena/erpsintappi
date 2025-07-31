@@ -1194,27 +1194,23 @@ class Planocontas_model extends App_Model
             $this->db->where($where);
         }
 
-        if (!$this->input->post('ft_account')) {
+        if ($this->input->post('ft_account')) {
             $this->db->where('(conta_pai is null or conta_pai = 0)');
         }
 
-        // Pega o somatorio de debito e creidto do histórico
-        $debit = '(SELECT sum(debito) as debito FROM ' . db_prefix() .
-            'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' .
-            db_prefix() . 'fin_planocontas.id))';
-        $credit = '(SELECT sum(credito) as credito FROM ' . db_prefix() . 'fin_historico_contas where (conta_id = ' . db_prefix() . 'fin_planocontas.id or subconta_id = ' . db_prefix() . 'fin_planocontas.id))';
+        $this->db->select('id, chave_conta, nomeconta, conta_pai, tipo_conta, descricao, saldo, ativo');
 
-        $this->db->select('id, numeroconta, nomeconta, conta_pai, tipo_conta, saldo,chave_conta, ativo, descricao,  ' . $debit . ', ' . $credit );
-        // $this->db->limit(intval($CI->input->post('length')), intval($CI->input->post('start')));
         $this->db->order_by('id', 'desc');
 
         $accounts = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
 
+
         $rResult = [];
 
-        foreach ($accounts as $key => $value) {
+        foreach ($accounts as $key => $value)
+        {
             $rResult[] = $value;
-            $rResult = $this->get_recursive_account($rResult, $value['id'], $where, 1);
+        //    $rResult = $this->obter_conta_recursiva($rResult, $value['id'], $where, 1);
         }
 
         /* Data set length after filtering */
@@ -1253,19 +1249,17 @@ class Planocontas_model extends App_Model
      * @param integer $number
      * @return array
      */
-    public function get_recursive_account($accounts, $account_id, $where, $number)
+    public function obter_conta_recursiva($accounts, $account_id, $where, $number)
     {
-        $this->db->select('id, numeroconta, nomeconta, conta_pai, tipo_conta, saldo,chave_conta, ativo, descricao');
+        $this->db->select('id, chave_conta, nomeconta, conta_pai, tipo_conta, descricao, saldo, ativo');
         if ($where != '')
         {
             $this->db->where($where);
         }
 
         $this->db->where('conta_pai', $account_id);
-        $this->db->order_by('numero, nomeconta', 'asc');
+        $this->db->order_by('numeroconta, nomeconta', 'asc');
         $account_list = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
-
-        echo(var_dump($accoun_list));
 
         if ($account_list) {
             foreach ($account_list as $key => $value) {
@@ -1275,9 +1269,9 @@ class Planocontas_model extends App_Model
                     }
                 }
 
-                $value['level'] = $number;
-                array_push($accounts, $value);
-                $accounts = $this->get_recursive_account($accounts, $value['id'], $where, $number + 1);
+                //$value['level'] = $number;
+                //array_push($accounts, $value);
+                $accounts = $this->obter_conta_recursiva($accounts, $value['id'], $where, $number + 1);
             }
         }
 
@@ -1296,12 +1290,12 @@ class Planocontas_model extends App_Model
         // Aplica filtro antes_tipo_contas?
         $tipos_de_conta = hooks()->apply_filters('before_get_account_types', [
             [
-                'id' => 1,
+                'id' => 0,
                 'name' => 'Crédito',
                 'order' => 1,
             ],
             [
-                'id' => 2,
+                'id' => 1,
                 'name' => 'Débito',
                 'order' => 2,
             ],
@@ -1315,57 +1309,12 @@ class Planocontas_model extends App_Model
         return $tipos_de_conta;
     }
 
-    /**
-     * get accounts
-     * @param integer $id member group id
-     * @param array $where
-     * @return object
-     */
-    public function get_accounts($id = '', $where = [])
-    {
-        if (is_numeric($id)) {
-            $this->db->where('id', $id);
-            return $this->db->get(db_prefix() . 'acc_accounts')->row();
-        }
-
-        $this->db->where($where);
-        $this->db->where('active', 1);
-        $this->db->order_by('account_type_id,account_detail_type_id', 'desc');
-        $accounts = $this->db->get(db_prefix() . 'acc_accounts')->result_array();
-
-        $account_types = $this->accounting_model->get_account_types();
-        $detail_types = $this->accounting_model->get_account_type_details();
-
-        $account_type_name = [];
-        $detail_type_name = [];
-
-        foreach ($account_types as $key => $value) {
-            $account_type_name[$value['id']] = $value['name'];
-        }
-
-        foreach ($detail_types as $key => $value) {
-            $detail_type_name[$value['id']] = $value['name'];
-        }
-
-        foreach ($accounts as $key => $value) {
-            if ($value['name'] == '' && $value['key_name'] != '') {
-                $accounts[$key]['name'] = _l($value['key_name']);
-            }
-            $_account_type_name = isset($account_type_name[$value['account_type_id']]) ? $account_type_name[$value['account_type_id']] : '';
-            $_detail_type_name = isset($detail_type_name[$value['account_detail_type_id']]) ? $detail_type_name[$value['account_detail_type_id']] : '';
-            $accounts[$key]['account_type_name'] = $_account_type_name;
-            $accounts[$key]['detail_type_name'] = $_detail_type_name;
-        }
-
-        return $accounts;
-    }
-
 
     /**
      * Obter as contas do Plano de Contas
      * @param  integer $id    member group id
      * @param  array  $where
-     * @return object
+     * @return array|array[]
      */
     public function obter_contas($id = '', $where = [])
     {
@@ -1377,8 +1326,11 @@ class Planocontas_model extends App_Model
         $this->db->where($where);
         $this->db->where('ativo', 1);
         $this->db->order_by('tipo_conta', 'desc');
-        $contas = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
 
+        return $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
+
+
+        /****************
         $tipos_conta = $this->planocontas_model->obter_tipos_conta();
         $nome_tipo_conta = [];
 
@@ -1398,18 +1350,46 @@ class Planocontas_model extends App_Model
             $contas[$key]['nome_tipo_conta'] = $_nome_tipo_conta;
 
         }
+        ***************/
 
-
-        return $contas;
+        //return $contas;
 
     }
 
    public function obter_contas_credito() {
 
+
+       $this->db->where('tipo_conta', 1);
+       $this->db->where('ativo', 1);
+       $this->db->order_by('tipo_conta', 'desc');
+       $contas = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
+
+
+       return $contas;
+
+
    }
 
    public function obter_subcontas_credito() {
 
+       $this->db->where('tipo_conta', 2);
+       $this->db->where('ativo', 1);
+       $this->db->order_by('tipo_conta', 'desc');
+       $contas = $this->db->get(db_prefix() . 'fin_planocontas')->result_array();
+
+       foreach ($contas as $key => $value)
+       {
+           if ($value['nomeconta'] == '' && $value['chave_conta'] != '')
+           {
+               $contas[$key]['nomeconta'] = _l($value['chave_conta']);
+           }
+           $_nome_tipo_conta = isset($nome_tipo_conta[$value['tipo_conta']]) ? $nome_tipo_conta[$value['tipo_conta']] : '';
+           $contas[$key]['nome_tipo_conta'] = $_nome_tipo_conta;
+
+       }
+
+
+       return $contas;
    }
 
 }

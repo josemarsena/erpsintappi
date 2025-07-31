@@ -53,13 +53,13 @@
                 </div>
 
                 <?php if (staff_can('create', 'items')) { ?>
-                <div class="_buttons tw-mb-2 tw-flex tw-items-center tw-gap-x-6">
+                <div class="_buttons tw-mb-2 tw-flex tw-items-center tw-gap-1">
                     <a href="#" class="btn btn-primary pull-left" data-toggle="modal" data-target="#sales_item_modal">
                         <i class="fa-regular fa-plus tw-mr-1"></i>
                         <?= _l('new_invoice_item'); ?>
                     </a>
                     <a href="<?= admin_url('invoice_items/import'); ?>"
-                        class="hidden-xs tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold">
+                        class="hidden-xs btn btn-default">
                         <i class="fa-solid fa-upload tw-mr-1"></i>
                         <?= _l('import_items'); ?>
                     </a>

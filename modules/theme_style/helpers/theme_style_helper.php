@@ -94,9 +94,56 @@ function get_styling_areas($type = 'admin')
             [
                 'name'                 => _l('theme_style_top_header_bg_links_color'),
                 'id'                   => 'top-header-links',
-                'target'               => '.admin .navbar-nav > li > a, .admin .navbar-nav > li > a > span > i, ul.mobile-icon-menu>li>a,.mobile-menu-toggle, .open-customizer-mobile',
+                'target'               => '.admin .navbar-nav > li > a, .admin .navbar-nav > li > a > span > i, ul.mobile-icon-menu>li>a,.mobile-menu-toggle, .open-customizer-mobile, .admin .navbar-nav a.top-timers:hover i, .admin .navbar-nav a.notifications-icon:hover i',
                 'css'                  => 'color',
                 'additional_selectors' => '.admin button.hide-menu|color',
+            ],
+            [
+                'name'                 => _l('theme_style_content_background_color'),
+                'id'                   => 'content',
+                'target'               => 'body.admin,.admin #wrapper',
+                'css'                  => 'background',
+                'additional_selectors' => '.admin button.hide-menu|color',
+            ],
+        ],
+        'tables' => [
+            [
+                'name'                 => _l('theme_style_table_links_color'),
+                'id'                   => 'table-links-color',
+                'target'               => '.dataTables_wrapper table tbody a:not(.text-muted,.text-primary,.text-danger,.text-warning,.text-success,.text-info)',
+                'css'                  => 'color',
+                'additional_selectors' => '',
+            ],
+            [
+                'name'                 => _l('theme_style_table_links_hover_focus_color'),
+                'id'                   => 'table-links-hover-focus-color',
+                'target'               => '.dataTables_wrapper table tbody a:hover:not(.text-muted,.text-primary,.text-danger,.text-warning,.text-success,.text-info),.dataTables_wrapper table tbody a:focus:not(.text-muted,.text-primary,.text-danger,.text-warning,.text-success,.text-info)',
+                'css'                  => 'color',
+                'additional_selectors' => '',
+            ],
+            [
+                'name'                 => _l('theme_style_table_headings_color'),
+                'id'                   => 'table-headings',
+                'target'               => 'table.dataTable thead tr>th, .table.dataTable>thead:first-child>tr:first-child>th',
+                'css'                  => 'color',
+                'additional_selectors' => '',
+                'example'              => '<table class="table dataTable"><thead><tr><th style="border-bottom: 1px solid #f0f0f0" class="sorting">' . _l('theme_style_example_table_heading') . ' 1</th><th style="border-bottom: 1px solid #f0f0f0" class="sorting">' . _l('theme_style_example_table_heading') . ' 2</th></tr></thead></table>',
+            ],
+            [
+                'name'                 => 'Items Table Headings Background Color',
+                'id'                   => 'table-items-heading',
+                'target'               => '.table.items thead',
+                'css'                  => 'background',
+                'additional_selectors' => '.table.items>thead>tr>th|border-top-color+.table.items>thead>tr>th|border-bottom-color+.table.items>thead>tr>th|border-right-color+.table.items>thead>tr>th|border-left-color+.table.items>thead:first-child>tr:first-child>th|border-color',
+                'example'              => '<table class="table items"><thead><tr><th>' . _l('theme_style_example_table_heading') . ' 1</th><th>' . _l('theme_style_example_table_heading') . ' 2</th></tr></thead></table>',
+            ],
+            [
+                'name'                 => 'Items Table Headings Text Color',
+                'id'                   => 'table-items-heading-text-color',
+                'target'               => '.table.items thead th',
+                'css'                  => 'color',
+                'additional_selectors' => '',
+                'example'              => '',
             ],
         ],
         'customers' => [
@@ -144,30 +191,7 @@ function get_styling_areas($type = 'admin')
                 'css'                  => 'color',
                 'additional_selectors' => '',
             ],
-            [
-                'name'                 => _l('theme_style_table_headings_color'),
-                'id'                   => 'table-headings',
-                'target'               => 'table.dataTable thead tr>th, .table.dataTable>thead:first-child>tr:first-child>th',
-                'css'                  => 'color',
-                'additional_selectors' => '',
-                'example'              => '<table class="table dataTable"><thead><tr><th style="border-bottom: 1px solid #f0f0f0" class="sorting">' . _l('theme_style_example_table_heading') . ' 1</th><th style="border-bottom: 1px solid #f0f0f0" class="sorting">' . _l('theme_style_example_table_heading') . ' 2</th></tr></thead></table>',
-            ],
-            [
-                'name'                 => 'Items Table Headings Background Color',
-                'id'                   => 'table-items-heading',
-                'target'               => '.table.items thead',
-                'css'                  => 'background',
-                'additional_selectors' => '.table.items>thead>tr>th|border-top-color+.table.items>thead>tr>th|border-bottom-color+.table.items>thead>tr>th|border-right-color+.table.items>thead>tr>th|border-left-color+.table.items>thead:first-child>tr:first-child>th|border-color',
-                'example'              => '<table class="table items"><thead><tr><th>' . _l('theme_style_example_table_heading') . ' 1</th><th>' . _l('theme_style_example_table_heading') . ' 2</th></tr></thead></table>',
-            ],
-            [
-                'name'                 => 'Items Table Headings Text Color',
-                'id'                   => 'table-items-heading-text-color',
-                'target'               => '.table.items thead th',
-                'css'                  => 'color',
-                'additional_selectors' => '',
-                'example'              => '',
-            ],
+
             [
                 'name'                 => _l('theme_style_admin_login_background'),
                 'id'                   => 'admin-login-background',
@@ -400,7 +424,7 @@ function theme_style_render($type)
                         .open > .dropdown-toggle' . $_area['target'] . '.focus,
                         ' . $_area['target'] . ':active,
                         ' . $_area['target'] . '.active,
-                        .open > .dropdown-toggle' . $_area['target'] . '{background-color:' . adjust_color_brightness($applied_style->color, -50) . ';color:#fff;border-color:' . adjust_color_brightness($applied_style->color, -50) . ';--tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) ' . $applied_style->color . ';}';
+                        .open > .dropdown-toggle' . $_area['target'] . '{background-color:' . adjust_color_brightness($applied_style->color, -50) . ';color:#fff;border-color:' . adjust_color_brightness($applied_style->color, -50) . ';' . $applied_style->color . ';}';
                         echo '
                         ' . $_area['target'] . '.disabled,
                         ' . $_area['target'] . '[disabled],
@@ -473,4 +497,72 @@ function render_theme_styling_picker($id, $value, $target, $css, $additional = '
     <input type="text" value="' . $value . '" data-id="' . $id . '" class="form-control" />
     <span class="input-group-addon"><i></i></span>
     </div>';
+}
+
+function is_admin_sidebar_background_light()
+{
+    if (! function_exists('determine_color_type')) {
+        return true;
+    }
+
+    $styles = (array) get_applied_styling_area();
+
+    $darkThreshold  = 40;
+    $lightThreshold = 55;
+
+    if (! empty($styles)) {
+        $sidebarBgStyle = collect($styles)->first(fn ($style) => $style->id === 'admin-menu');
+
+        if ($sidebarBgStyle) {
+            $sidebarBgColor = $sidebarBgStyle->color;
+
+            if (! empty($sidebarBgColor)) {
+                $type = determine_color_type($sidebarBgColor);
+
+                $isDarkAndLowBrightness  = $type['type'] === 'dark' && $type['percentage'] < $darkThreshold;
+                $isLightAndLowBrightness = $type['type'] === 'light' && $type['percentage'] < $lightThreshold;
+
+                return $isDarkAndLowBrightness || $isLightAndLowBrightness;
+            }
+        }
+    }
+
+    return false;
+}
+
+function determine_header_logo_url_based_on_background_color($url)
+{
+    if (! function_exists('determine_color_type')) {
+        return $url;
+    }
+
+    $styles = (array) get_applied_styling_area();
+
+    $darkThreshold  = 40;
+    $lightThreshold = 55;
+
+    if (! empty($styles)) {
+        $headerBgStyle = collect($styles)->first(fn ($style) => $style->id === 'top-header');
+
+        if ($headerBgStyle) {
+            $headerBgColor = $headerBgStyle->color;
+
+            if (! empty($headerBgColor)) {
+                $type = determine_color_type($headerBgColor);
+
+                $isDarkAndLowBrightness  = $type['type'] === 'dark' && $type['percentage'] < $darkThreshold;
+                $isLightAndLowBrightness = $type['type'] === 'light' && $type['percentage'] < $lightThreshold;
+
+                if ($isDarkAndLowBrightness || $isLightAndLowBrightness) {
+                    $light_logo = get_option('company_logo');
+
+                    if (! empty($light_logo)) {
+                        $url = base_url('uploads/company/' . $light_logo);
+                    }
+                }
+            }
+        }
+    }
+
+    return $url;
 }

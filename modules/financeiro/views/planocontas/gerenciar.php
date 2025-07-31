@@ -33,8 +33,7 @@
           <a href="#" data-toggle="modal" data-target="#accounts_bulk_actions" class="hide bulk-actions-btn table-btn" data-table=".table-planocontas"><?php echo _l('bulk_actions'); ?></a>
           <table class="table table-planocontas">
             <thead>
-              <th><span class="hide"> - </span>
-                  <div class="checkbox mass_select_all_wrap"><input type="checkbox" id="mass_select_all" data-to-table="planocontas"><label></label></div></th>
+              <th><?php echo 'ID'; ?></th>
               <th><?php echo 'Chave'; ?></th>
               <th><?php echo 'Nome da Conta'; ?></th>
               <th><?php echo 'Conta Pai'; ?></th>

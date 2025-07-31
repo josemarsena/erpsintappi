@@ -40,7 +40,8 @@ echo form_hidden('not_invoiced');
     </a>
     <?php } ?>
     <a href="<?= admin_url('estimates/pipeline/' . $switch_pipeline); ?>"
-        class="btn btn-default mleft5 pull-left switch-pipeline hidden-xs" data-toggle="tooltip" data-placement="top"
+        class="btn btn-default mleft5 pull-left switch-pipeline hidden-xs !tw-px-3" data-toggle="tooltip"
+        data-placement="top"
         data-title="<?= _l('switch_to_pipeline'); ?>">
         <i class="fa-solid fa-grip-vertical"></i>
     </a>
@@ -48,10 +49,12 @@ echo form_hidden('not_invoiced');
     <a href="<?= admin_url('utilities/bulk_pdf_exporter?feature=estimates'); ?>"
         data-toggle="tooltip"
         title="<?= _l('bulk_pdf_exporter'); ?>"
-        class="pull-left text-muted tw-p-2 tw-ml-2"><i class="fa-regular fa-file-pdf"></i></a>
+        class="btn-with-tooltip pull-left btn btn-default tw-ml-1 !tw-px-3">
+        <i class="fa-regular fa-file-pdf"></i>
+    </a>
     <?php } ?>
     <div class="display-block pull-right tw-space-x-0 sm:tw-space-x-1.5 rtl:tw-space-x-reverse">
-        <a href="#" class="btn btn-default btn-with-tooltip toggle-small-view hidden-xs"
+        <a href="#" class="btn btn-default btn-with-tooltip sm:!tw-px-3 toggle-small-view hidden-xs"
             onclick="toggle_small_view('.table-estimates','#estimate'); return false;" data-toggle="tooltip"
             title="<?= _l('estimates_toggle_table_tooltip'); ?>"><i
                 class="fa fa-angle-double-left"></i></a>

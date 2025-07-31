@@ -173,7 +173,7 @@ if ($invoice->sent == 1 && is_date($invoice->datesend)) {
                         <a href="<?= admin_url('invoices/invoice/' . $invoice->id); ?>"
                             data-toggle="tooltip"
                             title="<?= _l('edit_invoice_tooltip'); ?>"
-                            class="btn btn-default btn-with-tooltip" data-placement="bottom"><i
+                            class="btn btn-default btn-with-tooltip sm:!tw-px-3" data-placement="bottom"><i
                                 class="fa-regular fa-pen-to-square"></i></a>
                         <?php } ?>
                         <div class="btn-group">
@@ -205,7 +205,7 @@ if ($invoice->sent == 1 && is_date($invoice->datesend)) {
                             data-toggle="tooltip"
                             data-title="<?= _l('invoice_cancelled_email_disabled'); ?>"
                             <?php } ?>>
-                            <a href="#" class="invoice-send-to-client btn-with-tooltip btn btn-default<?php if ($invoice->status == Invoices_model::STATUS_CANCELLED) {
+                            <a href="#" class="invoice-send-to-client btn-with-tooltip sm:!tw-px-3 btn btn-default<?php if ($invoice->status == Invoices_model::STATUS_CANCELLED) {
                                 echo ' disabled';
                             } ?>" data-toggle="tooltip"
                                 title="<?= e($_tooltip); ?>"

@@ -36,7 +36,7 @@ class Invoices extends AdminController
         $data['invoices_sale_agents'] = $this->invoices_model->get_sale_agents();
         $data['invoices_statuses']    = $this->invoices_model->get_statuses();
         $data['invoices_table'] = App_table::find('invoices');
-        $data['bodyclass']            = 'invoices-total-manual';
+        
         $this->load->view('admin/invoices/manage', $data);
     }
 

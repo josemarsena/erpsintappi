@@ -127,7 +127,7 @@ if ($total_reminders > 0) {
                         </div>
                     </div>
                     <?php if (staff_can('edit', 'expenses')) { ?>
-                    <a class="btn btn-default pull-right ltr:tw-mr-1 rtl:tw-ml-1" data-toggle="tooltip"
+                    <a class="btn btn-default pull-right ltr:tw-mr-1 rtl:tw-ml-1 !tw-px-3" data-toggle="tooltip"
                         title="<?= _l('expense_edit'); ?>"
                         href="<?= admin_url('expenses/expense/' . $expense->expenseid); ?>">
                         <i class="fa-regular fa-pen-to-square"></i>

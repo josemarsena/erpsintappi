@@ -357,8 +357,10 @@ function init_relation_tasks_table($table_attributes = [], $filtersWrapperId = '
     }
 
     if ($table_attributes['data-new-rel-type'] == 'project') {
-        echo "<div class='tw-mb-4 tw-space-x-3 rtl:tw-space-x-reverse'><a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default mright5 hidden-xs' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
-        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='tw-text-neutral-600 hover:tw-text-neutral-800 focus:tw-text-neutral-800 tw-font-semibold'>" . _l('detailed_overview') . ' &rarr;</a></div>';
+        echo "<div class='tw-mb-4 tw-space-x-1 rtl:tw-space-x-reverse'>";
+        echo "<a href='" . admin_url('tasks/detailed_overview?project_id=' . $table_attributes['data-new-rel-id']) . "' class='btn btn-primary'>" . _l('detailed_overview') . '</a>';
+        echo "<a href='" . admin_url('tasks/list_tasks?project_id=' . $table_attributes['data-new-rel-id'] . '&kanban=true') . "' class='btn btn-default hidden-xs !tw-px-3' data-toggle='tooltip' data-title='" . _l('view_kanban') . "' data-placement='top'><i class='fa-solid fa-grip-vertical'></i></a>";
+        echo '</div>';
         echo '<div class="clearfix"></div>';
         echo $CI->load->view('admin/tasks/_bulk_actions', ['table' => '.table-rel-tasks'], true);
         echo '<div class="tw-mb-4">';

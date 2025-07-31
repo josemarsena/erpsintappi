@@ -16,7 +16,7 @@
         </p>
         <?php } ?>
     </div>
-    <dl class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-5 tw-gap-2">
+    <dl class="tw-grid tw-grid-cols-2 md:tw-grid-cols-2 lg:tw-grid-cols-5 tw-gap-2">
         <div
             class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2.5 tw-px-3.5 tw-rounded-lg tw-text-sm tw-text-neutral-600">
             <div class="tw-font-semibold tw-text-base tw-truncate"
@@ -62,7 +62,7 @@
         </div>
 
         <div
-            class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2.5 tw-px-3.5 tw-rounded-lg tw-text-sm tw-text-neutral-600">
+            class="tw-bg-white tw-border tw-border-solid tw-border-neutral-300/80 tw-shadow-sm tw-py-2.5 tw-px-3.5 tw-rounded-lg tw-text-sm tw-text-neutral-600 tw-col-span-2 md:tw-col-auto">
             <div class="tw-font-semibold tw-text-base tw-truncate"
                 title="<?= _l('staff_stats_this_week_total_logged_time'); ?>">
                 <?= _l('staff_stats_this_week_total_logged_time'); ?>

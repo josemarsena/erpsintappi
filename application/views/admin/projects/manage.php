@@ -20,7 +20,7 @@
                             <a href="<?= admin_url('projects/gantt'); ?>"
                                 data-toggle="tooltip"
                                 data-title="<?= _l('project_gant'); ?>"
-                                class="btn btn-default btn-with-tooltip">
+                                class="btn btn-default btn-with-tooltip sm:!tw-px-3">
                                 <i class="fa fa-align-left" aria-hidden="true"></i>
                             </a>
                             <div class="tw-hidden md:tw-block md:tw-ml-6 rtl:md:tw-mr-6">

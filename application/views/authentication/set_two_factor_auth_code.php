@@ -16,7 +16,7 @@
         </h3>
 
         <div
-            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/10">
+            class="tw-bg-white tw-mx-2 sm:tw-mx-6 tw-py-8 tw-px-6 sm:tw-px-8 tw-shadow-sm tw-rounded-lg tw-border tw-border-solid tw-border-neutral-600/20">
 
             <?= form_open($this->uri->uri_string()); ?>
             <?= validation_errors('<div class="alert alert-danger text-center">', '</div>'); ?>
@@ -24,12 +24,13 @@
             <?= render_input('code', 'two_factor_authentication_code'); ?>
             <div class="form-group">
                 <a
-                    href="<?= admin_url('authentication'); ?>"><?= _l('back_to_login'); ?></a>
+                    href="<?= admin_url('authentication'); ?>">
+                    <?= _l('back_to_login'); ?>
+                </a>
             </div>
-            <div class="form-group">
-                <button type="submit"
-                    class="btn btn-primary btn-block"><?= _l('confirm'); ?></button>
-            </div>
+            <button type="submit" class="btn btn-primary btn-block tw-font-semibold tw-py-2">
+                <?= _l('confirm'); ?>
+            </button>
             <?= form_close(); ?>
         </div>
     </div>
