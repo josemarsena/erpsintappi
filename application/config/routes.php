@@ -81,7 +81,7 @@ $route['admin/items/search'] = 'admin/invoice_items/search';
 /**
  * In case if client access directly to url without the arguments redirect to clients url
  */
-$route['/'] = 'clients';
+$route['/'] = 'admin';
 
 /**
  * @deprecated
