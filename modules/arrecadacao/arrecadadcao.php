@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
-Module Name: Gestão Fiscal
+Module Name: Gestão da Arrecadacao
 Description: Gerencia a Eissão de NFe/NFS-e, CT-e, etc, etc
 Version: 1.0.1
 Requires at least: 1.0.*
@@ -11,11 +11,11 @@ Author URI: https:/singlia.com.br
 */
 
 
-define('FISCAL_MODULE_NAME', 'fiscal');
-define('FISCALF_MODULE_UPLOAD_FOLDER', module_dir_path(FISCAL_MODULE_NAME, 'uploads'));
-define('FISCAL_IMPORT_ITEM_ERROR', 'modules/fiscal/uploads/import_item_error/');
-define('FISCAL_ERROR', FCPATH );
-define('FISCAL_EXPORT_XLSX', 'modules/fiscal/uploads/export_xlsx/');
+define('ARRECADACAO_MODULE_NAME', 'arrecadacao');
+define('ARRECADACAO_MODULE_UPLOAD_FOLDER', module_dir_path(FISCAL_MODULE_NAME, 'uploads'));
+define('ARRECADACAO_IMPORT_ITEM_ERROR', 'modules/arrecadacao/uploads/import_item_error/');
+define('ARRECADACAO_ERROR', FCPATH );
+define('ARRECADACAO_EXPORT_XLSX', 'modules/arrecadacao/uploads/export_xlsx/');
 
 hooks()->add_action('app_admin_head', 'fiscal_add_head_component');
 hooks()->add_action('app_admin_footer', 'fiscal_load_js');
@@ -30,12 +30,12 @@ define('fiscal_REVISION', 101);
  *  Registrar hook de ativação do módulo
  */
 
-register_activation_hook(FISCAL_MODULE_NAME, 'fiscal_module_activation_hook');
+register_activation_hook(ARRECADACAO_MODULE_NAME, 'fiscal_module_activation_hook');
 
 /**
  * Registre arquivos de idioma, deve ser registrado se o módulo estiver usando idiomas
  */
-register_language_files(FISCAL_MODULE_NAME, [FISCAL_MODULE_NAME]);
+register_language_files(ARRECADACAO_MODULE_NAME, [FISCAL_MODULE_NAME]);
 
 /**
  * Gancho (hook) de Ativação ONline
@@ -57,8 +57,8 @@ function fiscal_add_head_component()
 
     // Inicializa e cria o Cabeçalho do Modulo Dashboard/FATURAMENTO
     if(!(strpos($viewuri,'admin/fiscal/dashboard') === false)){
-        echo '<link href="' . module_dir_url(FISCAL_MODULE_NAME, 'assets/css/box_loading.css') . '?v=' . FISCAL_REVISION. '"  rel="stylesheet" type="text/css" />';
-        echo '<link href="' . module_dir_url(FISCAL_MODULE_NAME, 'assets/css/dashboard.css') . '?v=' . FISCAL_REVISION. '"  rel="stylesheet" type="text/css" />';
+        echo '<link href="' . module_dir_url(ARRECADACAO_MODULE_NAME, 'assets/css/box_loading.css') . '?v=' . ARRECADACAO_REVISION. '"  rel="stylesheet" type="text/css" />';
+        echo '<link href="' . module_dir_url(ARRECADACAO_MODULE_NAME, 'assets/css/dashboard.css') . '?v=' . ARRECADACAO_REVISION. '"  rel="stylesheet" type="text/css" />';
     }
 }
 
